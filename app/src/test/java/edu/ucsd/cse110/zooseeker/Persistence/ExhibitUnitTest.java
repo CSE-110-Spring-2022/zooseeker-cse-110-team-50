@@ -1,5 +1,8 @@
 package edu.ucsd.cse110.zooseeker.Persistence;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import android.content.Context;
 
 import androidx.room.Room;
@@ -12,6 +15,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
+import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
 public class ExhibitUnitTest {
@@ -31,6 +35,18 @@ public class ExhibitUnitTest {
     @After
     public void closeDb() throws IOException {
         mainDb.close();
+    }
+
+    @Test
+    public void testInsert() {
+        Exhibit exhibit = new Exhibit("lion_kingdom", "Lion Kingdom", "exhibit");
+        exhibitDao.insert(exhibit);
+
+        List<Exhibit> allFoundExhibits = exhibitDao.getAll();
+        Exhibit foundExhibit = exhibitDao.get(exhibit.exhibitId);
+        assertEquals(allFoundExhibits.size(), 1);
+        assertNotNull(foundExhibit);
+        assertEquals(foundExhibit.name, "Lion Kingdom");
     }
 
 }
