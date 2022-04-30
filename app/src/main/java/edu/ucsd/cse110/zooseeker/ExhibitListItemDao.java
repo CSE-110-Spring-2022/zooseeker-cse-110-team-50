@@ -14,16 +14,16 @@ public interface ExhibitListItemDao {
     @Insert
     long insert(ExhibitListItem exhibitListItem);
 
-    @Query("SELECT * FROM `exhibit_list_item` WHERE `id`=:id")
+    @Query("SELECT * FROM `exhibit_list_items` WHERE `id`=:id")
     ExhibitListItem get(long id);
 
-    @Query("SELECT * FROM `exhibit_list_item` ORDER BY `name`")
+    @Query("SELECT * FROM `exhibit_list_items` ORDER BY `name`")
     List<ExhibitListItem> getAll();
 
-    @Query("SELECT * FROM `exhibit_list_item` ORDER BY `name`")
+    @Query("SELECT * FROM `exhibit_list_items` ORDER BY `name`")
     LiveData<List<ExhibitListItem>> getAllLive();
 
-    @Query("SELECT `name` + 1 FROM `exhibit_list_item` ORDER BY `name` DESC LIMIT 1")
+    @Query("SELECT `name` + 1 FROM `exhibit_list_items` ORDER BY `name` DESC LIMIT 1")
     int getOrderForAppend();
 
     @Insert
