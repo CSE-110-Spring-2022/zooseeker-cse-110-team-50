@@ -1,18 +1,15 @@
-package edu.ucsd.cse110.zooseeker;
+package edu.ucsd.cse110.zooseeker.ExhibitList;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import java.util.List;
+
+import edu.ucsd.cse110.zooseeker.R;
 
 public class ExhibitListActivity extends AppCompatActivity {
     public RecyclerView recyclerView;

@@ -1,4 +1,4 @@
-package edu.ucsd.cse110.zooseeker;
+package edu.ucsd.cse110.zooseeker.ExhibitList;
 
 import android.app.Application;
 import android.content.Context;

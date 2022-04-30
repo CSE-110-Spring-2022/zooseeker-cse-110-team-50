@@ -11,6 +11,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 import edu.ucsd.cse110.zooseeker.Plan.PlanFragment;
+import edu.ucsd.cse110.zooseeker.R;
 import edu.ucsd.cse110.zooseeker.Search.SearchFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
