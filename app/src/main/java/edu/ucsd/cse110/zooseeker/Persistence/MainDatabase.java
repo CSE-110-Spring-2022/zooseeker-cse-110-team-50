@@ -14,8 +14,7 @@ public abstract class MainDatabase extends RoomDatabase {
 
     // DAOs
     public abstract ExhibitDao exhibitDao();
-    public abstract Tag tag();
-    public abstract ExhibitTagCrossRef exhibitTagCrossRef();
+    public abstract TagDao tagDao();
 
 
     public synchronized static MainDatabase getSingleton(Context context) {

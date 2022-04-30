@@ -8,14 +8,15 @@ import androidx.room.PrimaryKey;
 public class Exhibit {
 
     @PrimaryKey(autoGenerate = false)
+    @NonNull
     public String exhibitId;
 
     @NonNull
     public String name;
     public String kind;
 
-    Exhibit(@NonNull String id, String name, String kind) {
-        this.exhibitId = id;
+    Exhibit(@NonNull String exhibitId, String name, String kind) {
+        this.exhibitId = exhibitId;
         this.name = name;
         this.kind = kind;
     }
