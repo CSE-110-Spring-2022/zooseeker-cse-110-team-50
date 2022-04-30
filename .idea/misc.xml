@@ -10,6 +10,8 @@
         <entry key="app/src/main/res/layout/fragment_plan.xml" value="0.28396739130434784" />
         <entry key="app/src/main/res/layout/search_fragment.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/menu/bottom_navigation_menu.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_exhibit_list.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/exhibit_list_item.xml" value="0.375" />
       </map>
     </option>
   </component>

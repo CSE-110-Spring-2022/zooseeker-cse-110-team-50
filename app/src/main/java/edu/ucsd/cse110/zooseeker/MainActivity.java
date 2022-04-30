@@ -3,6 +3,7 @@ package edu.ucsd.cse110.zooseeker;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -44,3 +45,5 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         return false;
     }
 }
+
+//dummy comment
