@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class ExhibitListActivity extends AppCompatActivity {
     public RecyclerView recyclerView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
