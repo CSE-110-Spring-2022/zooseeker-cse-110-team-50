@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,9 +23,14 @@ public class SearchFragment extends Fragment {
         return new SearchFragment();
     }
 
+    RecyclerView searchResultRecyclerView;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+
+        searchResultRecyclerView = container.findViewById(R.id.search_result_list);
+
         return inflater.inflate(R.layout.search_fragment, container, false);
     }
 

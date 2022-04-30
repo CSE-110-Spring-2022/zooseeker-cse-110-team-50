@@ -5,9 +5,31 @@
     android:layout_height="match_parent"
     tools:context=".Search.SearchFragment">
 
-    <TextView
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="This is Search Fragment" />
+        android:orientation="vertical">
 
+        <EditText
+            android:id="@+id/search_bar_text_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:hint="Search for your favorite animal"
+            android:text=""
+            android:background="@drawable/search_bar_text_field_bg"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="20dp"
+            android:paddingVertical="12dp"
+            android:paddingHorizontal="20dp"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/search_result_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
 </FrameLayout>
