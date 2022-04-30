@@ -28,6 +28,7 @@ public class ExhibitListItem {
     public String kind;
     public String name;
     public List<String> tags;
+    public boolean checked;  // TODO: maybe change this later
 
     //Constructor
     public ExhibitListItem(String kind, String name, List<String> tags) {

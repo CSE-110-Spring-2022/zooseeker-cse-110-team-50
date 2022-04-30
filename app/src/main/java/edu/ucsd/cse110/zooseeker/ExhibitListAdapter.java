@@ -49,13 +49,13 @@ public class ExhibitListAdapter extends RecyclerView.Adapter<ExhibitListAdapter.
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView textView;
-        //private final CheckBox checkBox;
+//        private final CheckBox checkBox;
         private ExhibitListItem exhibitItem;
 
         public ViewHolder(@NonNull View itemView){
             super(itemView);
             this.textView = itemView.findViewById(R.id.exhibit_item_txt);
-            //this.checkBox = itemView.findViewById(R.id.checked);
+//            this.checkBox = itemView.findViewById(R.id.checked);
         }
 
 //        this.checkBox.setOnClickedListener(view -> {
