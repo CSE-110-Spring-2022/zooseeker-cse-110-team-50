@@ -31,9 +31,6 @@ dependencies {
     def gson_version = "2.9.0"
     def room_version = "2.4.2"
 
-    def gson_version = "2.9.0"
-    def room_version = "2.4.2"
-
     implementation "com.google.code.gson:gson:$gson_version"
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
