@@ -2,15 +2,21 @@ package edu.ucsd.cse110.zooseeker.Persistence;
 
 import android.content.Context;
 
+import androidx.annotation.VisibleForTesting;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {Exhibit.class}, version = 1)
+@Database(entities = {Exhibit.class, ExhibitTagCrossRef.class, Tag.class}, version = 1)
 public abstract class MainDatabase extends RoomDatabase {
 
     private static MainDatabase singleton = null;
+
+    // DAOs
     public abstract ExhibitDao exhibitDao();
+    public abstract Tag tag();
+    public abstract ExhibitTagCrossRef exhibitTagCrossRef();
+
 
     public synchronized static MainDatabase getSingleton(Context context) {
         if (singleton == null) singleton = makeDatabase(context);
@@ -22,4 +28,11 @@ public abstract class MainDatabase extends RoomDatabase {
                 .allowMainThreadQueries()
                 .build();
     }
+
+    @VisibleForTesting
+    public static void injectDatabase(MainDatabase db) {
+        if (singleton != null) singleton.close();
+        singleton = db;
+    }
+
 }
