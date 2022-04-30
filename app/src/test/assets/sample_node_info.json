@@ -1,0 +1,73 @@
+[
+    {
+        "id": "entrance_exit_gate",
+        "kind": "gate",
+        "name": "Entrance and Exit Gate",
+        "tags": [
+            "enter",
+            "leave",
+            "start",
+            "begin",
+            "entrance",
+            "exit"
+        ]
+    },
+    {
+        "id": "entrance_plaza",
+        "kind": "intersection",
+        "name": "Entrance Plaza",
+        "tags": []
+    },
+    {
+        "id": "gorillas",
+        "kind": "exhibit",
+        "name": "Gorillas",
+        "tags": [
+            "gorilla",
+            "monkey",
+            "ape",
+            "mammal"
+        ]
+    },
+    {
+        "id": "gators",
+        "kind": "exhibit",
+        "name": "Alligators",
+        "tags": [
+            "alligator",
+            "reptile",
+            "gator"
+        ]
+    },
+    {
+        "id": "lions",
+        "kind": "exhibit",
+        "name": "Lions",
+        "tags": [
+            "lions",
+            "cats",
+            "mammal",
+            "africa"
+        ]
+    },
+    {
+        "id": "elephant_odyssey",
+        "kind": "exhibit",
+        "name": "Elephant Odyssey",
+        "tags": [
+            "elephant",
+            "mammal",
+            "africa"
+        ]
+    },
+    {
+        "id": "arctic_foxes",
+        "kind": "exhibit",
+        "name": "Arctic Foxes",
+        "tags": [
+            "arctic",
+            "fox",
+            "mammal"
+        ]
+    }
+]
