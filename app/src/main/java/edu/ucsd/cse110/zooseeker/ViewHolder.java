@@ -17,4 +17,9 @@ public class ViewHolder extends RecyclerView.ViewHolder{
     }
 
     public ExhibitListItem getExhibitItem(){return exhibitItem;}
+
+    public void setExhibitItem(ExhibitListItem exhibitItem){
+        this.exhibitItem = exhibitItem;
+        this.textView.setText(exhibitItem.name);
+    }
 }
