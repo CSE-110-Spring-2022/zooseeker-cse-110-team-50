@@ -1,0 +1,42 @@
+[
+  {
+    "id": "elephant_odyssey",
+    "kind": "exhibit",
+    "name": "Elephant Odyssey",
+    "tags": [
+      "elephant",
+      "mammal",
+      "africa"
+    ]
+  },
+  {
+    "id": "monkey_forest",
+    "kind": "exhibit",
+    "name": "Money Forest",
+    "tags": [
+      "money",
+      "mammal",
+      "africa"
+    ]
+  },
+  {
+    "id": "parrot_world",
+    "kind": "exhibit",
+    "name": "Parrot World",
+    "tags": [
+      "parrot",
+      "bird",
+      "asia"
+    ]
+  },
+  {
+    "id": "lion_kingdom",
+    "kind": "exhibit",
+    "name": "Lion Kingdom",
+    "tags": [
+      "Lion",
+      "mammal",
+      "africa"
+    ]
+  }
+]
