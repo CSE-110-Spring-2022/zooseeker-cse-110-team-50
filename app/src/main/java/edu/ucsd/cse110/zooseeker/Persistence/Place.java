@@ -4,19 +4,19 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "exhibit")
-public class Exhibit {
+@Entity(tableName = "place")
+public class Place {
 
     @PrimaryKey(autoGenerate = false)
     @NonNull
-    public String exhibitId;
+    public String placeId;
 
     @NonNull
     public String name;
     public String kind;
 
-    Exhibit(@NonNull String exhibitId, String name, String kind) {
-        this.exhibitId = exhibitId;
+    public Place(@NonNull String placeId, String name, String kind) {
+        this.placeId = placeId;
         this.name = name;
         this.kind = kind;
     }
@@ -24,7 +24,7 @@ public class Exhibit {
     @Override
     public String toString() {
         return "Exhibit{" +
-                "id='" + exhibitId + '\'' +
+                "id='" + placeId + '\'' +
                 ", name='" + name + '\'' +
                 ", kind='" + kind + '\'' +
                 '}';

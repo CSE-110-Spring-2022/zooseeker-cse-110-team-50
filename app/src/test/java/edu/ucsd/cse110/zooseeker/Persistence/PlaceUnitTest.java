@@ -18,9 +18,10 @@ import java.io.IOException;
 import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
-public class ExhibitUnitTest {
+public class PlaceUnitTest {
     private MainDatabase mainDb;
-    private ExhibitDao exhibitDao;
+    private PlaceDao placeDao;
+    private TagDao tagDao;
 
     @Before
     public void createDb() {
@@ -29,7 +30,8 @@ public class ExhibitUnitTest {
                 .allowMainThreadQueries()
                 .build();
 
-        exhibitDao = mainDb.exhibitDao();
+        placeDao = mainDb.placeDao();
+        tagDao = mainDb.tagDao();
     }
 
     @After
@@ -39,14 +41,22 @@ public class ExhibitUnitTest {
 
     @Test
     public void testInsert() {
-        Exhibit exhibit = new Exhibit("lion_kingdom", "Lion Kingdom", "exhibit");
-        exhibitDao.insert(exhibit);
+        Place place = new Place("lion_kingdom", "Lion Kingdom", "exhibit");
+        placeDao.insert(place);
 
-        List<Exhibit> allFoundExhibits = exhibitDao.getAll();
-        Exhibit foundExhibit = exhibitDao.get(exhibit.exhibitId);
-        assertEquals(allFoundExhibits.size(), 1);
+        List<Place> allFoundPlaces = placeDao.getAll();
+        Place foundExhibit = placeDao.get(place.placeId);
+        assertEquals(allFoundPlaces.size(), 1);
         assertNotNull(foundExhibit);
         assertEquals(foundExhibit.name, "Lion Kingdom");
+    }
+
+    @Test
+    public void testInsertWithTag() {
+        Place place = new Place("lion_kingdom", "Lion Kingdom", "exhibit");
+        placeDao.insert(place);
+
+
     }
 
 }

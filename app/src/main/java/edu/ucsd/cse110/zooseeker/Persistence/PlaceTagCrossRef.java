@@ -5,17 +5,17 @@ import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(primaryKeys = {"exhibitId", "tagId"}, indices = {@Index("tagId")})
-public class ExhibitTagCrossRef {
+@Entity(primaryKeys = {"placeId", "tagId"}, indices = {@Index("tagId")})
+public class PlaceTagCrossRef {
 
     @NonNull
-    public String exhibitId;
+    public String placeId;
 
     @NonNull
     public long tagId;
 
-    public ExhibitTagCrossRef(@NonNull String exhibitId, long tagId) {
-        this.exhibitId = exhibitId;
+    public PlaceTagCrossRef(@NonNull String placeId, long tagId) {
+        this.placeId = placeId;
         this.tagId = tagId;
     }
 }

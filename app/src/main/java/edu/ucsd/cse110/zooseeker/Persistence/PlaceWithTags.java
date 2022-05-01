@@ -6,12 +6,12 @@ import androidx.room.Relation;
 
 import java.util.List;
 
-public class ExhibitWithTags {
-    @Embedded public Exhibit exhibit;
+public class PlaceWithTags {
+    @Embedded public Place place;
     @Relation(
-        parentColumn = "exhibitId",
+        parentColumn = "placeId",
         entityColumn = "tagId",
-        associateBy = @Junction(ExhibitTagCrossRef.class)
+        associateBy = @Junction(PlaceTagCrossRef.class)
     )
     public List<Tag> tags;
 }

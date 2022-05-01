@@ -7,11 +7,15 @@
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/search_bar_text_field_bg.xml" value="0.221" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/exhibit_list_item.xml" value="0.25317028985507245" />
         <entry key="app/src/main/res/layout/fragment_plan.xml" value="0.28396739130434784" />
         <entry key="app/src/main/res/layout/search_fragment.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/search_result_item.xml" value="0.19852941176470587" />
         <entry key="app/src/main/res/menu/bottom_navigation_menu.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/activity_exhibit_list.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/exhibit_list_item.xml" value="0.375" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_roundd.xml" value="0.1935" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcherr.xml" value="0.1" />
       </map>
     </option>
   </component>
