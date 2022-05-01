@@ -37,10 +37,22 @@ public class SearchResultViewModel extends AndroidViewModel {
 
 
     public void search(String query) {
+        /*
+        If you want to make it so a blank search gets nothing,
+        uncomment this
+
         if(query.trim().equals("") || query.length() == 0) {
-            searchResult = new MutableLiveData<List<Place>>();
+            //searchResult = new MutableLiveData<List<Place>>();
+            //searchResult = placeDao.nameAndTagSearch(query);
+            Log.i("It gets here", "ye");
             return;
         }
+
+        */
+
+        // By not putting the one above, we query all of the
+        // exhibits, which might be a better design choice here
+        // since someone can see everything that the zoo offers
 
         searchResult = placeDao.nameAndTagSearch(query);
     }

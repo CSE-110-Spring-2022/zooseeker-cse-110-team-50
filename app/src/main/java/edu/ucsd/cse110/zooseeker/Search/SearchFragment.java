@@ -65,7 +65,12 @@ public class SearchFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 //                Log.d("SEARCH_BAR", charSequence.toString());
-                searchResultViewModel.search(charSequence.toString());
+                if(charSequence.length() == 0){
+                    searchResultViewModel.search("");
+                }
+                else{
+                    searchResultViewModel.search(charSequence.toString());
+                }
 
                 // put the LiveData on the activity screen
                 // searchResultViewModel.getSearchResult();
