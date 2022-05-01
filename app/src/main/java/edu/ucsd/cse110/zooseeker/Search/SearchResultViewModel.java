@@ -37,7 +37,7 @@ public class SearchResultViewModel extends AndroidViewModel {
 
 
     public void search(String query) {
-        if(query.trim().equals("")) {
+        if(query.trim().equals("") || query.length() == 0) {
             searchResult = new MutableLiveData<List<Place>>();
             return;
         }
