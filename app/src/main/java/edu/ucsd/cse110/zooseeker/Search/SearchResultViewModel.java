@@ -54,6 +54,9 @@ public class SearchResultViewModel extends AndroidViewModel {
         // exhibits, which might be a better design choice here
         // since someone can see everything that the zoo offers
 
+        // As of right now this just searches the name, but we should
+        // figure out how to also search by tag and potentially part of
+        // the name as well.
         searchResult = placeDao.nameAndTagSearch(query);
     }
 }
