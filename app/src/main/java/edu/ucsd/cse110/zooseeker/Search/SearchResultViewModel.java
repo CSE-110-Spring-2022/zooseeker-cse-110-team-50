@@ -1,5 +1,12 @@
 package edu.ucsd.cse110.zooseeker.Search;
 
+import android.app.Application;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -7,23 +14,34 @@ import androidx.lifecycle.ViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.ucsd.cse110.zooseeker.Persistence.MainDatabase;
 import edu.ucsd.cse110.zooseeker.Persistence.Place;
+import edu.ucsd.cse110.zooseeker.Persistence.PlaceDao;
 
-public class SearchResultViewModel extends ViewModel {
+public class SearchResultViewModel extends AndroidViewModel {
 
     private LiveData<List<Place>> searchResult;
+    private PlaceDao placeDao;
+    private LiveData<String> liveQuery = new MutableLiveData<>("");
+
+    public SearchResultViewModel(@NonNull Application application) {
+        super(application);
+        MainDatabase db = MainDatabase.getSingleton(getApplication().getApplicationContext());
+        placeDao = db.placeDao();
+    }
 
     public LiveData<List<Place>> getSearchResult() {
-        if (true) loadSearchResult();
+        if(searchResult == null) search("");
         return searchResult;
     }
 
-    private void loadSearchResult() {
-        List<Place> list = new ArrayList<Place>();
-        list.add(new Place("1", "Bear", "exhibit"));
-        list.add(new Place("2", "Money", "exhibit"));
-        list.add(new Place("3", "Parrot", "exhibit"));
-        LiveData<List<Place>> liveData = new MutableLiveData<List<Place>>(list);
-        searchResult = liveData;
+
+    public void search(String query) {
+        if(query.trim().equals("")) {
+            searchResult = new MutableLiveData<List<Place>>();
+            return;
+        }
+
+        searchResult = placeDao.nameAndTagSearch(query);
     }
 }

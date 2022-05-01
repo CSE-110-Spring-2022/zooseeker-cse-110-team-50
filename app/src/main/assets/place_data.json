@@ -14,7 +14,7 @@
     "kind": "exhibit",
     "name": "Money Forest",
     "tags": [
-      "money",
+      "monkey",
       "mammal",
       "africa"
     ]
@@ -37,6 +37,18 @@
       "Lion",
       "mammal",
       "africa"
+    ]
+  },
+  {
+    "id": "rabbit_paradise",
+    "kind": "exhibit",
+    "name": "Rabbit Paradise",
+    "tags": [
+      "Rabbit",
+      "mammal",
+      "asia",
+      "america",
+      "europe"
     ]
   }
 ]

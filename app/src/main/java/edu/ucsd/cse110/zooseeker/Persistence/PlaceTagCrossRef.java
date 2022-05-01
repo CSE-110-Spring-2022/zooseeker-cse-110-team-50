@@ -5,7 +5,9 @@ import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(primaryKeys = {"placeId", "tagId"}, indices = {@Index("tagId")})
+@Entity(tableName = "place_tag_cross_ref",
+        primaryKeys = {"placeId", "tagId"},
+        indices = {@Index("tagId")})
 public class PlaceTagCrossRef {
 
     @NonNull
