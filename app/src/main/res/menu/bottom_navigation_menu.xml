@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/searchFragment"
+        android:icon="@drawable/ic_baseline_search_24"
+        android:title="HOME"/>
+    <item
+        android:id="@+id/planFragment"
+        android:icon="@drawable/ic_baseline_format_list_bulleted_24"
+        android:title="PLAN"/>
+</menu>
