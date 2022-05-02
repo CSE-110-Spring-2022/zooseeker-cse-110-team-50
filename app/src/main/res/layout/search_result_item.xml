@@ -17,10 +17,17 @@
 
         <TextView
             android:id="@+id/search_result_item_name"
-            android:layout_width="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:hint="search result" />
+
+        <Button
+            android:id="@+id/add_btn"
+            android:layout_weight="0.2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Add" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
