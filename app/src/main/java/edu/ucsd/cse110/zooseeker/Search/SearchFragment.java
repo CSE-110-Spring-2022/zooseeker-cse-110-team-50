@@ -84,9 +84,12 @@ public class SearchFragment extends Fragment {
         return view;
     }
 
+    public RecyclerView getSearchResultRecyclerView() {
+        return searchResultRecyclerView;
+    }
 
 
-//    @Override
+    //    @Override
 //    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 //        super.onActivityCreated(savedInstanceState);
 //        searchResultViewModel = new ViewModelProvider(this).get(SearchResultViewModel.class);
