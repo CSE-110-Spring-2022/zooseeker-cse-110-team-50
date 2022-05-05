@@ -39,17 +39,11 @@ public class PlanFragment extends Fragment implements View.OnClickListener {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment PlanFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static PlanFragment newInstance(String param1, String param2) {
+    public static PlanFragment newInstance() {
         PlanFragment fragment = new PlanFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
