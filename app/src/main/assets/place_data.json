@@ -44,11 +44,21 @@
     "kind": "exhibit",
     "name": "Rabbit Paradise",
     "tags": [
-      "Rabbit",
+      "rabbit",
       "mammal",
       "asia",
       "america",
       "europe"
+    ]
+  },
+  {
+    "id": "yummy_hot_dog",
+    "kind": "restaurant",
+    "name": "Yummy Hot Dog",
+    "tags": [
+      "restaurant",
+      "food",
+      "hotdog"
     ]
   }
 ]
