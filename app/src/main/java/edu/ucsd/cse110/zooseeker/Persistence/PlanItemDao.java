@@ -1,8 +1,11 @@
 package edu.ucsd.cse110.zooseeker.Persistence;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -14,7 +17,16 @@ public interface PlanItemDao {
     @Query("SELECT * FROM `plan_list` WHERE `placeId`=:placeId")
     PlanItem get(String placeId);
 
-    @Query("SELECT * FROM `plan_list`")
+    @Query("SELECT * FROM `plan_list` ORDER BY `distance` ASC")
     List<PlanItem> getAll();
+
+    @Query("SELECT * FROM `plan_list` ORDER BY `distance` ASC")
+    LiveData<List<PlanItem>> getAllLive();
+
+    @Update
+    int update(PlanItem planItem);
+
+    @Delete
+    int delete(PlanItem planItem);
 }
 

@@ -20,6 +20,10 @@ public class PlanItem {
         this.distance = distance;
     }
 
+    public void setDistance(@NonNull double distance) {
+        this.distance = distance;
+    }
+
     @Override
     public String toString() {
         return "PlanItem{" +
