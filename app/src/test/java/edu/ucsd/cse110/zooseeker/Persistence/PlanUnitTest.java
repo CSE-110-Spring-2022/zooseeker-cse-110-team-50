@@ -41,6 +41,12 @@ public class PlanUnitTest {
     }
 
     @Test
+    public void testNothing() {
+        List<PlanItem> allFoundPlaces = planItemDao.getAll();
+        assertEquals(allFoundPlaces.size(), 0);
+    }
+
+    @Test
     public void testInsert() {
         PlanItem planItem = new PlanItem("lion_kingdom", -1);
         planItemDao.insert(planItem);
