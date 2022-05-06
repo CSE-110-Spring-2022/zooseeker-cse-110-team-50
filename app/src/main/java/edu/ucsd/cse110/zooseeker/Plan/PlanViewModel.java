@@ -17,6 +17,8 @@ import edu.ucsd.cse110.zooseeker.Persistence.PlanItemDao;
 public class PlanViewModel extends AndroidViewModel {
     private LiveData<List<PlanItem>> planItems;
     private PlaceDao placeDao;
+    //private LiveData<Integer> planCount;
+    //private int planCount = 0;
 
     private PlanItemDao planItemDao;
 
@@ -54,6 +56,11 @@ public class PlanViewModel extends AndroidViewModel {
     public void updateDistance(PlanItem planItem, double distance) {
         planItem.setDistance(distance);
         this.planItemDao.update(planItem);
+    }
+
+    public int getPlanCount(){
+        //planCount = planItems.size();
+        return planItemDao.getAll().size();
     }
 
 }

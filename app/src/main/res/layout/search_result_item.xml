@@ -24,7 +24,6 @@
 
         <Button
             android:id="@+id/add_btn"
-            android:onClick="onAddButtonClick"
             android:layout_weight="0.2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

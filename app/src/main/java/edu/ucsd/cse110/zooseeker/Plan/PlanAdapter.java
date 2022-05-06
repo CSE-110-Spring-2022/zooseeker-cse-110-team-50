@@ -12,13 +12,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
+import edu.ucsd.cse110.zooseeker.Persistence.MainDatabase;
 import edu.ucsd.cse110.zooseeker.Persistence.Place;
+import edu.ucsd.cse110.zooseeker.Persistence.PlaceDao;
 import edu.ucsd.cse110.zooseeker.Persistence.PlanItem;
 import edu.ucsd.cse110.zooseeker.R;
 
 public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.ViewHolder>{
     private List<PlanItem> planItems = Collections.emptyList();
-    private Consumer<PlanItem> onAddButtonClicked;
+
+    MainDatabase db ;
+    PlaceDao placeDao;
 
     @NonNull
     @Override
@@ -26,6 +30,8 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.ViewHolder>{
         View view = LayoutInflater
                 .from(parent.getContext())
                 .inflate(R.layout.plan_item, parent, false);
+        db = MainDatabase.getSingleton(parent.getContext());
+        placeDao = db.placeDao();
         return new ViewHolder(view);
     }
 
@@ -44,8 +50,12 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.ViewHolder>{
         return planItems.size();
     }
 
+    public int getItemCount(List<PlanItem> planItems) {
+        return planItems.size();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder{
-        private PlanItem place;
+        private PlanItem plan;
         private TextView name;
         private double distance;
 
@@ -54,11 +64,13 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.ViewHolder>{
             this.name = itemView.findViewById(R.id.plan_item);
         }
 
-        public void setPlanItem(PlanItem place){
-            this.place = place;
-            this.name.setText(place.placeId);
-            this.distance = place.distance;
-        }
+        public void setPlanItem(PlanItem plan){
+            this.plan = plan;
+            Place place = placeDao.get(plan.placeId);
 
+            this.name.setText(place.name);
+            this.distance = plan.distance;
+        }
+        
     }
 }

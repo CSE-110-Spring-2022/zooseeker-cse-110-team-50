@@ -7,8 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,11 +28,11 @@ import edu.ucsd.cse110.zooseeker.Persistence.PlanItemDao;
 import edu.ucsd.cse110.zooseeker.R;
 import edu.ucsd.cse110.zooseeker.RouteActivity;
 
-
 public class PlanFragment extends Fragment implements View.OnClickListener {
 
     private FloatingActionButton startRoute;
     public RecyclerView planList;
+    public TextView planAmount;
     private PlanViewModel planViewModel;
 
     public static PlanFragment newInstance() {
@@ -48,7 +47,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener {
 
         startRoute = view.findViewById(R.id.start_route_button);
         startRoute.setOnClickListener(this);
-    
+
         //Sets up planviewmodel and the planlist to be looked at when plan is hit
         planViewModel = new ViewModelProvider(requireActivity()).get(PlanViewModel.class);
         PlanAdapter planAdapter = new PlanAdapter();
@@ -68,12 +67,23 @@ public class PlanFragment extends Fragment implements View.OnClickListener {
         planList.setLayoutManager(new LinearLayoutManager(requireActivity()));
         planList.setAdapter(planAdapter);
 
+        planAmount = view.findViewById(R.id.plan_amount);
+        int amount = planViewModel.getPlanCount();
+        //int amount = planViewModel.getPlanItems().observe(getViewLifecycleOwner(), planAdapter::getItemCount);
+//        if(amount == 1){
+//            planAmount.setText(amount + " Exhibit in Plan");
+//        }
+        //else{
+        planAmount.setText("Exhibit Count: " + amount);
+        //}
+        //planAmount.setText("Setting the text of the view, this is a test");
         //planAdapter.setPlanItems(PlanItemDao.getAll());
+
         return view;
     }
 
     public RecyclerView getPlanView(){return planList;}
-  
+
 //    @Override
 //    public View onCreateView(LayoutInflater inflater, ViewGroup container,
 //                             Bundle savedInstanceState) {
