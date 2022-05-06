@@ -2,9 +2,11 @@ package edu.ucsd.cse110.zooseeker.Plan;
 
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,6 +26,7 @@ import edu.ucsd.cse110.zooseeker.R;
 public class PlanFragment extends Fragment {
 
     public RecyclerView planList;
+    public TextView planAmount;
     private PlanViewModel planViewModel;
 
     public static PlanFragment newInstance(){ return new PlanFragment();}
@@ -50,8 +53,18 @@ public class PlanFragment extends Fragment {
         planList.setLayoutManager(new LinearLayoutManager(requireActivity()));
         planList.setAdapter(planAdapter);
 
+        planAmount = view.findViewById(R.id.plan_amount);
+        int amount = planViewModel.getPlanCount();
+        //int amount = planViewModel.getPlanItems().observe(getViewLifecycleOwner(), planAdapter::getItemCount);
+//        if(amount == 1){
+//            planAmount.setText(amount + " Exhibit in Plan");
+//        }
+        //else{
+        planAmount.setText("Exhibit Count: " + amount);
+        //}
+        //planAmount.setText("Setting the text of the view, this is a test");
         //planAdapter.setPlanItems(PlanItemDao.getAll());
-
+        Log.e("Amount", "Amount " + amount);
         return view;
     }
 

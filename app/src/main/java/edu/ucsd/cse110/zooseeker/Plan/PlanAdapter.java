@@ -44,6 +44,10 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.ViewHolder>{
         return planItems.size();
     }
 
+    public int getItemCount(List<PlanItem> planItems) {
+        return planItems.size();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder{
         private PlanItem place;
         private TextView name;
@@ -59,6 +63,6 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.ViewHolder>{
             this.name.setText(place.placeId);
             this.distance = place.distance;
         }
-
+        
     }
 }
