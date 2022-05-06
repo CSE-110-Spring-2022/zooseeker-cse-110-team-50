@@ -92,7 +92,7 @@ public class SearchFragment extends Fragment {
         return searchResultRecyclerView;
     }
 
-    public void onAddButtonClick(View view){
+    public void onClickAddBtn(View view){
         //return;
     }
 
