@@ -14,7 +14,7 @@ import java.util.concurrent.Executors;
 
 import edu.ucsd.cse110.zooseeker.Util.JSONLoader;
 
-@Database(entities = {Place.class, PlaceTagCrossRef.class, Tag.class}, version = 1, exportSchema = true)
+@Database(entities = {Place.class, PlaceTagCrossRef.class, Tag.class, PlanItem.class}, version = 3, exportSchema = true)
 public abstract class MainDatabase extends RoomDatabase {
 
     private static MainDatabase singleton = null;
@@ -23,6 +23,7 @@ public abstract class MainDatabase extends RoomDatabase {
     public abstract PlaceDao placeDao();
     public abstract TagDao tagDao();
     public abstract PlaceTagCrossRefDao placeTagCrossRefDao();
+    public abstract PlanItemDao planItemDao();
 
 
     public synchronized static MainDatabase getSingleton(Context context) {
@@ -32,8 +33,9 @@ public abstract class MainDatabase extends RoomDatabase {
 
     public static MainDatabase makeDatabase(Context context) {
         return Room.databaseBuilder(context, MainDatabase.class, "main.db")
-                .createFromAsset("main_db.db")
+                .createFromAsset("main_db-2.db")
                 .allowMainThreadQueries()
+                .fallbackToDestructiveMigration()
                 .build();
     }
 
