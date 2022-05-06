@@ -35,6 +35,7 @@ public abstract class MainDatabase extends RoomDatabase {
         return Room.databaseBuilder(context, MainDatabase.class, "main.db")
                 .createFromAsset("main_db-2.db")
                 .allowMainThreadQueries()
+                .fallbackToDestructiveMigration()
                 .build();
     }
 

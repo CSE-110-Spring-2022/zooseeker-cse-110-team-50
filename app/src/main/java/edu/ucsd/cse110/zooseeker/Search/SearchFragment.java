@@ -33,6 +33,7 @@ public class SearchFragment extends Fragment {
 
     private RecyclerView searchResultRecyclerView;
     private SearchResultViewModel searchResultViewModel;
+    private Button addButton;
 
     public static SearchFragment newInstance() {
         return new SearchFragment();
@@ -91,6 +92,9 @@ public class SearchFragment extends Fragment {
         return searchResultRecyclerView;
     }
 
+    public void onAddButtonClick(View view){
+        //return;
+    }
 
     //    @Override
 //    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
