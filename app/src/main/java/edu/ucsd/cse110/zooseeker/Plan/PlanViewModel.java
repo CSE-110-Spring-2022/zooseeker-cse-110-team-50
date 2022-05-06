@@ -10,18 +10,22 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 import edu.ucsd.cse110.zooseeker.Persistence.MainDatabase;
+import edu.ucsd.cse110.zooseeker.Persistence.PlaceDao;
 import edu.ucsd.cse110.zooseeker.Persistence.PlanItem;
 import edu.ucsd.cse110.zooseeker.Persistence.PlanItemDao;
 
 public class PlanViewModel extends AndroidViewModel {
     private LiveData<List<PlanItem>> planItems;
-    private final PlanItemDao planItemDao;
+    private PlaceDao placeDao;
+
+    private PlanItemDao planItemDao;
 
     public PlanViewModel(@NonNull Application application) {
         super(application);
         Context context = getApplication().getApplicationContext();
         MainDatabase db = MainDatabase.getSingleton(context);
         planItemDao = db.planItemDao();
+        placeDao = db.placeDao();
     }
 
     public LiveData<List<PlanItem>> getPlanItems() {

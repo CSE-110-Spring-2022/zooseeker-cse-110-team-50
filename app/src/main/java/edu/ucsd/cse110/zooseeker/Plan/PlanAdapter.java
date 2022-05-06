@@ -34,6 +34,11 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.ViewHolder>{
         holder.setPlanItem(planItems.get(position));
     }
 
+    public void setPlanItems(List<PlanItem> planItems){
+        this.planItems = planItems;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
         return planItems.size();
@@ -46,7 +51,7 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.ViewHolder>{
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.name = itemView.findViewById(R.id.search_result_item_name);
+            this.name = itemView.findViewById(R.id.plan_item);
         }
 
         public void setPlanItem(PlanItem place){
@@ -54,8 +59,6 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.ViewHolder>{
             this.name.setText(place.placeId);
             this.distance = place.distance;
         }
-
-
 
     }
 }
