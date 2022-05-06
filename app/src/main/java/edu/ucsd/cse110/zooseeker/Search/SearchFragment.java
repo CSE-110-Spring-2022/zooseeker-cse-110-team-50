@@ -17,7 +17,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -33,7 +32,6 @@ public class SearchFragment extends Fragment {
 
     private RecyclerView searchResultRecyclerView;
     private SearchResultViewModel searchResultViewModel;
-    private Button addButton;
 
     public static SearchFragment newInstance() {
         return new SearchFragment();
@@ -51,8 +49,6 @@ public class SearchFragment extends Fragment {
         SearchResultAdapter searchResultAdapter = new SearchResultAdapter();
         searchResultAdapter.setHasStableIds(true);
         searchResultViewModel.getSearchResult().observe(getViewLifecycleOwner(), searchResultAdapter::setSearchResults);
-
-        searchResultAdapter.setOnAddButtonClicked(searchResultViewModel::addToPlan);
 
         searchResultRecyclerView = view.findViewById(R.id.search_result_list);
         searchResultRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
@@ -92,9 +88,6 @@ public class SearchFragment extends Fragment {
         return searchResultRecyclerView;
     }
 
-    public void onAddButtonClick(View view){
-        //return;
-    }
 
     //    @Override
 //    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
