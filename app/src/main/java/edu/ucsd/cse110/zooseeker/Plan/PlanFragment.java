@@ -62,26 +62,30 @@ public class PlanFragment extends Fragment implements View.OnClickListener {
 
         //planAdapter.setPlanItems(PlanItemDao.getAll());
 
+        startRoute = view.findViewById(R.id.start_route_button);
+        startRoute.setOnClickListener(this);
+
         return view;
     }
 
     public RecyclerView getPlanView(){return planList;}
   
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
-        final View view = inflater.inflate(R.layout.fragment_plan, container, false);
-
-        startRoute = view.findViewById(R.id.start_route_button);
-        startRoute.setOnClickListener(this);
-        return view;
-    }
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//                             Bundle savedInstanceState) {
+//        // Inflate the layout for this fragment
+//
+//        final View view = inflater.inflate(R.layout.fragment_plan, container, false);
+//
+//        startRoute = view.findViewById(R.id.start_route_button);
+//        startRoute.setOnClickListener(this);
+//        return view;
+//    }
 
     @Override
     public void onClick(View view) {
         Intent intent = new Intent(getActivity(), RouteActivity.class);
         //myIntent.putExtra("key", value); //Optional parameters
         startActivity(intent);
+    }
 }
