@@ -40,7 +40,7 @@ public abstract class PlaceDao {
             "FROM place_tag_cross_ref\n" +
             "JOIN place ON place.placeId = place_tag_cross_ref.placeId\n" +
             "JOIN tag ON tag.tagId = place_tag_cross_ref.tagId\n" +
-            "WHERE tag.name LIKE :query || '%' OR place.name LIKE :query || '%'OR place.kind LIKE :query || '%'\n" +
+            "WHERE tag.name LIKE '%' || :query || '%' OR place.name LIKE '%' || :query || '%'OR place.kind LIKE '%' || :query || '%'\n" +
             "ORDER BY place.name ASC\n")
     public abstract LiveData<List<Place>> nameAndTagSearch(String query);
 
