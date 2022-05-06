@@ -70,6 +70,6 @@ public class SearchResultViewModel extends AndroidViewModel {
         PlanItem newPlanItem = new PlanItem(place.placeId, -1);
         // TODO: set to a meaningful value from the algorithm
         newPlanItem.setDistance(-1);
-        planItemDao.insert(new PlanItem(place.placeId, -1));
+        planItemDao.insert(newPlanItem);
     }
 }
