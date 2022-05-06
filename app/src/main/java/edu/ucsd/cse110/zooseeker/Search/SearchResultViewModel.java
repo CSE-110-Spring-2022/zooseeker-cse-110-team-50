@@ -17,6 +17,8 @@ import java.util.List;
 import edu.ucsd.cse110.zooseeker.Persistence.MainDatabase;
 import edu.ucsd.cse110.zooseeker.Persistence.Place;
 import edu.ucsd.cse110.zooseeker.Persistence.PlaceDao;
+import edu.ucsd.cse110.zooseeker.Persistence.PlanItem;
+import edu.ucsd.cse110.zooseeker.Persistence.PlanItemDao;
 
 public class SearchResultViewModel extends AndroidViewModel {
 
@@ -24,10 +26,13 @@ public class SearchResultViewModel extends AndroidViewModel {
     private PlaceDao placeDao;
     private LiveData<String> liveQuery = new MutableLiveData<>("");
 
+    private PlanItemDao planItemDao;
+
     public SearchResultViewModel(@NonNull Application application) {
         super(application);
         MainDatabase db = MainDatabase.getSingleton(getApplication().getApplicationContext());
         placeDao = db.placeDao();
+        planItemDao = db.planItemDao();
     }
 
     public LiveData<List<Place>> getSearchResult() {
@@ -37,18 +42,13 @@ public class SearchResultViewModel extends AndroidViewModel {
 
 
     public void search(String query) {
-        /*
-        If you want to make it so a blank search gets nothing,
-        uncomment this
 
+        // Returns empty list for empty search query
         if(query.trim().equals("") || query.length() == 0) {
-            //searchResult = new MutableLiveData<List<Place>>();
-            //searchResult = placeDao.nameAndTagSearch(query);
-            Log.i("It gets here", "ye");
+            searchResult = new MutableLiveData<List<Place>>();
+            searchResult = placeDao.nameAndTagSearch(query);
             return;
         }
-
-        */
 
         // By not putting the one above, we query all of the
         // exhibits, which might be a better design choice here
@@ -58,5 +58,18 @@ public class SearchResultViewModel extends AndroidViewModel {
         // figure out how to also search by tag and potentially part of
         // the name as well.
         searchResult = placeDao.nameAndTagSearch(query);
+    }
+
+    public void addToPlan(Place place, double distance) {
+        PlanItem newPlanItem = new PlanItem(place.placeId, distance);
+        planItemDao.insert(newPlanItem);
+    }
+
+    public void addToPlan(Place place) {
+        Log.d("SearchResultViewModel", "addToPlan: " + place);
+        PlanItem newPlanItem = new PlanItem(place.placeId, -1);
+        // TODO: set to a meaningful value from the algorithm
+        newPlanItem.setDistance(-1);
+        planItemDao.insert(newPlanItem);
     }
 }
