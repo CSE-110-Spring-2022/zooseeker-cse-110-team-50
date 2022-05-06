@@ -40,7 +40,7 @@ public class PlanFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState){
         final View view = inflater.inflate(R.layout.fragment_plan, container, false);
 
         //Sets up planviewmodel and the planlist to be looked at when plan is hit
@@ -68,10 +68,19 @@ public class PlanFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
-    public RecyclerView getPlanView() {
-        return planList;
-    }
+    public RecyclerView getPlanView(){return planList;}
 
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//                             Bundle savedInstanceState) {
+//        // Inflate the layout for this fragment
+//
+//        final View view = inflater.inflate(R.layout.fragment_plan, container, false);
+//
+//        startRoute = view.findViewById(R.id.start_route_button);
+//        startRoute.setOnClickListener(this);
+//        return view;
+//    }
 
     @Override
     public void onClick(View view) {
