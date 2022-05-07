@@ -36,8 +36,6 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
-
-
     }
 
     testOptions {
@@ -52,6 +50,7 @@ dependencies {
     androidTestImplementation 'androidx.test:rules:1.4.1-alpha06'
     def gson_version = "2.9.0"
     def room_version = "2.4.2"
+    def jgrapht_version = "1.5.0"
 
 
     implementation "com.google.code.gson:gson:$gson_version"
@@ -75,4 +74,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'androidx.test.ext:junit:1.1.3'
     testImplementation 'org.robolectric:robolectric:4.7.3'
+
+    implementation "org.jgrapht:jgrapht-core:$jgrapht_version"
+    implementation "org.jgrapht:jgrapht-io:$jgrapht_version"
 }

@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Zooseeker">
         <activity
-            android:name=".RouteActivity"
+            android:name=".Route.RouteActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

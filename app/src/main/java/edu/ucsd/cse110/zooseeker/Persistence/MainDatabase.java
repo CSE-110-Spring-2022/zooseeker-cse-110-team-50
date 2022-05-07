@@ -11,6 +11,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.List;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.zooseeker.Util.JSONLoader;
 
@@ -33,14 +34,24 @@ public abstract class MainDatabase extends RoomDatabase {
 
     public static MainDatabase makeDatabase(Context context) {
         return Room.databaseBuilder(context, MainDatabase.class, "main.db")
-                .createFromAsset("main_db-2.db")
                 .allowMainThreadQueries()
-                .fallbackToDestructiveMigration()
+                .addCallback(new Callback() {
+                    @Override
+                    public void onOpen(@NonNull SupportSQLiteDatabase db) {
+                        super.onOpen(db);
+                        Executors.newSingleThreadScheduledExecutor().execute(() -> {
+                            List<Place> allPlaces = JSONLoader.loadExamplePlaceData(context, "sample_node_info.json");
+                            for(Place place : allPlaces)
+                                getSingleton(context).placeDao().insertWithTag(place);
+                            getSingleton(context).planItemDao().insert(new PlanItem("entrance_exit_gate", 0));
+                        });
+                    }
+                })
                 .build();
     }
 
     private static void resetDatabase(Context context) {
-        List<Place> places = JSONLoader.loadExamplePlaceData(context);
+//        List<Place> places = JSONLoader.loadExamplePlaceData(context);
     }
 
     @VisibleForTesting

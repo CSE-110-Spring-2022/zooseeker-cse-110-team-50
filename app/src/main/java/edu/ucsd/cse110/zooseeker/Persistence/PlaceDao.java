@@ -13,11 +13,29 @@ import java.util.List;
 @Dao
 public abstract class PlaceDao {
 
+    private final TagDao tagDao;
+    private final PlaceTagCrossRefDao placeTagCrossRefDao;
+
+    public PlaceDao(MainDatabase database) {
+        this.tagDao = database.tagDao();
+        this.placeTagCrossRefDao = database.placeTagCrossRefDao();
+    }
+
     @Insert
     public abstract void insert(Place place);
 
     @Insert
     public abstract void insertAll(List<Place> place);
+
+    @Transaction
+    public void insertWithTag(Place place) {
+        insert(place);
+        for (String tag : place.tags) {
+            if(tagDao.get(tag) == null) tagDao.insert(new Tag(tag));
+            long newTagId = tagDao.get(tag).tagId;
+            placeTagCrossRefDao.insert(new PlaceTagCrossRef(place.placeId, newTagId));
+        }
+    }
 
     @Query("SELECT * FROM `place` WHERE `placeId`=:placeId")
     public abstract Place get(String placeId);

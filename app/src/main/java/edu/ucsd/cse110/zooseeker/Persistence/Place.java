@@ -20,6 +20,8 @@ public class Place {
 
     @Ignore
     public List<String> tags;
+    @Ignore
+    public String id;
 
     public Place(@NonNull String placeId, String name, String kind) {
         this.placeId = placeId;
