@@ -1,6 +1,6 @@
 [
   {
-    "id": "elephant_odyssey",
+    "placeId": "elephant_odyssey",
     "kind": "exhibit",
     "name": "Elephant Odyssey",
     "tags": [
@@ -10,7 +10,7 @@
     ]
   },
   {
-    "id": "monkey_forest",
+    "placeId": "monkey_forest",
     "kind": "exhibit",
     "name": "Money Forest",
     "tags": [
@@ -20,7 +20,7 @@
     ]
   },
   {
-    "id": "parrot_world",
+    "placeId": "parrot_world",
     "kind": "exhibit",
     "name": "Parrot World",
     "tags": [
@@ -30,7 +30,7 @@
     ]
   },
   {
-    "id": "lion_kingdom",
+    "placeId": "lion_kingdom",
     "kind": "exhibit",
     "name": "Lion Kingdom",
     "tags": [
@@ -40,7 +40,7 @@
     ]
   },
   {
-    "id": "rabbit_paradise",
+    "placeId": "rabbit_paradise",
     "kind": "exhibit",
     "name": "Rabbit Paradise",
     "tags": [
@@ -52,9 +52,9 @@
     ]
   },
   {
-    "id": "yummy_hot_dog",
+    "placeId": "pls_load",
     "kind": "restaurant",
-    "name": "Yummy Hot Dog",
+    "name": "please load",
     "tags": [
       "restaurant",
       "food",

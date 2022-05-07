@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.zooseeker.Persistence;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
@@ -32,10 +33,25 @@ public abstract class MainDatabase extends RoomDatabase {
     }
 
     public static MainDatabase makeDatabase(Context context) {
-        return Room.databaseBuilder(context, MainDatabase.class, "main.db")
-                .createFromAsset("main_db-2.db")
+        List<Place> places = JSONLoader.loadExamplePlaceData(context);
+        int index = 0;
+        for(Place i : places){
+            Log.i(i.toString(), "Index " + index++);
+        }
+        return Room.databaseBuilder(context, MainDatabase.class, "main_db.db")
                 .allowMainThreadQueries()
-                .fallbackToDestructiveMigration()
+                .addCallback(new Callback() {
+                    @Override
+                    public void onCreate(@NonNull SupportSQLiteDatabase db) {
+                        super.onCreate(db);
+                        Executors.newSingleThreadScheduledExecutor().execute(() -> {
+                            List<Place> places = JSONLoader.loadExamplePlaceData(context);
+
+                            getSingleton(context).placeDao().insertAll(places);
+
+                        });
+                    }
+                })
                 .build();
     }
 
