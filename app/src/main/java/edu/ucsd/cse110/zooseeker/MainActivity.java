@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+import edu.ucsd.cse110.zooseeker.Persistence.MainDatabase;
 import edu.ucsd.cse110.zooseeker.Plan.PlanFragment;
 import edu.ucsd.cse110.zooseeker.Search.SearchFragment;
 
@@ -21,6 +22,8 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        MainDatabase.getSingleton(this);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
         bottomNavigationView.setOnItemSelectedListener(this);

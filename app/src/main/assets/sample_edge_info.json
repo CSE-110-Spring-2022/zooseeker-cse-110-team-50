@@ -1,0 +1,30 @@
+[
+    {
+        "id": "edge-0",
+        "street": "Entrance Way"
+    },
+    {
+        "id": "edge-1",
+        "street": "Africa Rocks Street"
+    },
+    {
+        "id": "edge-2",
+        "street": "Africa Rocks Street"
+    },
+    {
+        "id": "edge-3",
+        "street": "Africa Rocks Street"
+    },
+    {
+        "id": "edge-4",
+        "street": "Arctic Avenue"
+    },
+    {
+        "id": "edge-5",
+        "street": "Reptile Road"
+    },
+    {
+        "id": "edge-6",
+        "street": "Sharp Teeth Shortcut"
+    }
+]

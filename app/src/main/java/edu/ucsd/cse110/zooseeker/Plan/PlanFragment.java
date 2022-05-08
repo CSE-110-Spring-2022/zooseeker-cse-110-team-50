@@ -19,14 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.List;
-
-import edu.ucsd.cse110.zooseeker.MainActivity;
-import edu.ucsd.cse110.zooseeker.Persistence.MainDatabase;
-import edu.ucsd.cse110.zooseeker.Persistence.PlanItem;
-import edu.ucsd.cse110.zooseeker.Persistence.PlanItemDao;
 import edu.ucsd.cse110.zooseeker.R;
-import edu.ucsd.cse110.zooseeker.RouteActivity;
+import edu.ucsd.cse110.zooseeker.Route.RouteActivity;
 
 public class PlanFragment extends Fragment implements View.OnClickListener {
 

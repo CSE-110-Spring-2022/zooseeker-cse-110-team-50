@@ -46,7 +46,7 @@ public class SearchResultViewModel extends AndroidViewModel {
         // Returns empty list for empty search query
         if(query.trim().equals("") || query.length() == 0) {
             searchResult = new MutableLiveData<List<Place>>();
-            searchResult = placeDao.nameAndTagSearch(query);
+//            searchResult = placeDao.nameAndTagSearch(query);
             return;
         }
 

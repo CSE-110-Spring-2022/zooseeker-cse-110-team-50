@@ -16,6 +16,7 @@
         <entry key="app/src/main/res/drawable/search_result_item_bg.xml" value="0.125" />
         <entry key="app/src/main/res/layout/activity_exhibit_list.xml" value="0.4782608695652174" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/activity_route.xml" value="0.2552083333333333" />
         <entry key="app/src/main/res/layout/exhibit_list_item.xml" value="0.25317028985507245" />
         <entry key="app/src/main/res/layout/fragment_plan.xml" value="0.28396739130434784" />
         <entry key="app/src/main/res/layout/plan_item.xml" value="0.33" />

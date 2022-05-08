@@ -29,5 +29,8 @@ public interface PlanItemDao {
 
     @Delete
     int delete(PlanItem planItem);
+
+    @Query("DELETE FROM plan_list")
+    void nukeTable();
 }
 
