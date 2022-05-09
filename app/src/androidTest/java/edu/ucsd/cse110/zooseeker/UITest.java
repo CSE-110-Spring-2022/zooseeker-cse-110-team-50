@@ -37,7 +37,7 @@ public class UITest {
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void uITest() {
+    public void UITest() {
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.search_bar_text_field),
                         childAtPosition(

@@ -77,4 +77,41 @@ public class JSONLoader {
         return edgeInfo;
     }
 
+    public static RawGraph loadTestRawGraph(Context context) {
+        final String PATH = "test/sample_zoo_graph.json";
+//        if (graph != null) return graph;
+        RawGraph graph = null;
+
+        try {
+            InputStream input = context.getAssets().open(PATH);
+            Reader reader = new InputStreamReader(input);
+            Gson gson = new Gson();
+            Type type = new TypeToken<RawGraph>(){}.getType();
+            graph = gson.fromJson(reader, type);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return graph;
+    }
+
+    public static Map<String, String> loadTestEdgeInfo(Context context) {
+//        final String PATH = "test/sample_edge_info.json";
+        final String PATH = "sample_edge_info.json";
+        List<EdgeInfo> ret;
+        try {
+            InputStream input = context.getAssets().open(PATH);
+            Reader reader = new InputStreamReader(input);
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<EdgeInfo>>(){}.getType();
+            ret =  gson.fromJson(reader, type);
+        } catch (IOException e) {
+            e.printStackTrace();
+            ret = Collections.emptyList();
+        }
+        Map<String, String> edgeInfo = new HashMap<>();
+        for(EdgeInfo ei : ret) edgeInfo.put(ei.id, ei.street);
+        return edgeInfo;
+    }
+
 }
