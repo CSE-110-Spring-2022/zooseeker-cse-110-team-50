@@ -50,6 +50,9 @@ public class PlanTest {
     private PlanItemDao planItemDao;
     private PlanViewModel planViewModel;
 
+    /**
+     * Create the Database
+     */
     @Before
     public void createDb() {
         Context context = ApplicationProvider.getApplicationContext();
@@ -61,16 +64,24 @@ public class PlanTest {
         planItemDao = mainDb.planItemDao();
     }
 
+    /**
+     * Close the Database
+     */
     @After
     public void closeDb() throws IOException {
         mainDb.close();
     }
-
+    /**
+     * Check if we can successfully get the plan fragment
+     */
     @Test
     public void checkPlanFragmentWorks() {
         PlanFragment fragment = PlanFragment.newInstance();
         assertNotNull(fragment);
     }
+    /**
+     * Check if the fragment unsuccessfully gets the button if we do not call correctly
+     */
     @Test
     public void checkIfButtonNull() {
         MainActivity activity = Robolectric.setupActivity(MainActivity.class);
@@ -84,6 +95,9 @@ public class PlanTest {
 
     }
 
+    /**
+     * Check if the DAO is working properly according to the plan fragment
+     */
     @Test
     public void checkPlanItemDaoInsert(){
         //  MainActivity activity = Robolectric.setupActivity(MainActivity.class);
