@@ -74,11 +74,15 @@ public class Router {
         public String toString() {
             int cnt = 1;
             String ret = "From " + start + "\n\n\n";
-            for (RouteStep step : steps)
+            for (RouteStep step : steps) {
+                if(start == step.to){
+                    continue;
+                }
                 ret += (cnt++ + ". Proceed on " +
                         edgeInfo.get(step.edgeId) +
                         " " + step.distance +
                         " ft toward " + step.to + "\n\n");
+            }
             ret += "\nDestination: " + end + "\n";
             return ret;
         }
