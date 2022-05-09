@@ -23,7 +23,6 @@ public class JSONLoader {
 //    private static RawGraph graph = null;
 
     public static List<Place> loadExamplePlaceData(Context context, String path) {
-//        final String PATH = "place_data.json";
         List<Place> ret;
         try {
             InputStream input = context.getAssets().open(path);
