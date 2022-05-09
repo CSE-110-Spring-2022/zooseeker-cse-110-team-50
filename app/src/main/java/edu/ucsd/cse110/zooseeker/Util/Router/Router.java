@@ -68,7 +68,7 @@ public class Router {
         }
 
         public String toString() {
-            String ret = "\n";
+            String ret = start + "\n\n\n";
             for (RouteStep step : steps)
                 ret += ("    -> " + edgeInfo.get(step.edgeId) + "\n");
             ret += "\n\n" + end + "\n";
