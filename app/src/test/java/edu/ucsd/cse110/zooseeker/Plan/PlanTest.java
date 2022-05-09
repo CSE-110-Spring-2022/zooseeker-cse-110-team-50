@@ -34,11 +34,19 @@ import edu.ucsd.cse110.zooseeker.R;
 @RunWith(RobolectricTestRunner.class)
 public class PlanTest {
     @Test
+    /**
+     * Check if there is a plan fragment.
+     */
     public void checkPlanFragmentWorks() {
         PlanFragment fragment = PlanFragment.newInstance();
         assertNotNull(fragment);
     }
+
+
     @Test
+    /**
+     * Tests that the button is not null.
+     */
     public void checkIfButtonNull() {
         MainActivity activity = Robolectric.setupActivity(MainActivity.class);
         //PlanFragment planFragment = new PlanFragment();
@@ -48,6 +56,5 @@ public class PlanTest {
         Button routeButton = activity.findViewById(R.id.start_route_button);
 
         assertNull(routeButton);
-
     }
 }
