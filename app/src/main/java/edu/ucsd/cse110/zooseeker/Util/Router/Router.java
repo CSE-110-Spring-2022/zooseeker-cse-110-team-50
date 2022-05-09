@@ -75,7 +75,8 @@ public class Router {
             int cnt = 1;
             String ret = "From " + start + "\n\n\n";
             for (RouteStep step : steps) {
-                if(start == step.to) {
+
+                if(start == step.to){
                     continue;
                 }
                 ret += (cnt++ + ". Proceed on " +

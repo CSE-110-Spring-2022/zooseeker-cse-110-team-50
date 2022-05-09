@@ -96,8 +96,7 @@ public class JSONLoader {
     }
 
     public static Map<String, String> loadTestEdgeInfo(Context context) {
-//        final String PATH = "test/sample_edge_info.json";
-        final String PATH = "sample_edge_info.json";
+        final String PATH = "test/sample_edge_info.json";
         List<EdgeInfo> ret;
         try {
             InputStream input = context.getAssets().open(PATH);
