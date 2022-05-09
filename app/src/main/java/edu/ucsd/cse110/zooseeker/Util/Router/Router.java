@@ -75,6 +75,7 @@ public class Router {
             int cnt = 1;
             String ret = "From " + start + "\n\n\n";
             for (RouteStep step : steps) {
+
                 if(start == step.to){
                     continue;
                 }
@@ -83,6 +84,7 @@ public class Router {
                         " " + step.distance +
                         " ft toward " + step.to + "\n\n");
             }
+
             ret += "\nDestination: " + end + "\n";
             return ret;
         }

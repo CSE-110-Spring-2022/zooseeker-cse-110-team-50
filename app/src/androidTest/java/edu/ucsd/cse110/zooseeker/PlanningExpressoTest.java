@@ -5,10 +5,10 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
+import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -34,13 +34,13 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class SearchUITest {
+public class PlanningExpressoTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void searchUITest() {
+    public void planningExpressoTest() {
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.search_bar_text_field),
                         childAtPosition(
@@ -49,16 +49,20 @@ public class SearchUITest {
                                         0),
                                 0),
                         isDisplayed()));
-        appCompatEditText.perform(replaceText("elephant"), closeSoftKeyboard());
+        appCompatEditText.perform(replaceText("allig"), closeSoftKeyboard());
 
-        ViewInteraction textView = onView(
-                allOf(withId(R.id.search_result_item_name), withText("Elephant Odyssey"),
-                        withParent(withParent(IsInstanceOf.<View>instanceOf(android.view.ViewGroup.class))),
+        ViewInteraction materialButton = onView(
+                allOf(withId(R.id.add_btn), withText("Add"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                        0),
+                                1),
                         isDisplayed()));
-        textView.check(matches(withText("Elephant Odyssey")));
+        materialButton.perform(click());
 
         ViewInteraction appCompatEditText2 = onView(
-                allOf(withId(R.id.search_bar_text_field), withText("elephant"),
+                allOf(withId(R.id.search_bar_text_field), withText("allig"),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("android.widget.FrameLayout")),
@@ -68,17 +72,17 @@ public class SearchUITest {
         appCompatEditText2.perform(click());
 
         ViewInteraction appCompatEditText3 = onView(
-                allOf(withId(R.id.search_bar_text_field), withText("elephant"),
+                allOf(withId(R.id.search_bar_text_field), withText("allig"),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("android.widget.FrameLayout")),
                                         0),
                                 0),
                         isDisplayed()));
-        appCompatEditText3.perform(replaceText("li"));
+        appCompatEditText3.perform(replaceText("fox"));
 
         ViewInteraction appCompatEditText4 = onView(
-                allOf(withId(R.id.search_bar_text_field), withText("li"),
+                allOf(withId(R.id.search_bar_text_field), withText("fox"),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("android.widget.FrameLayout")),
@@ -87,13 +91,68 @@ public class SearchUITest {
                         isDisplayed()));
         appCompatEditText4.perform(closeSoftKeyboard());
 
+        ViewInteraction materialButton2 = onView(
+                allOf(withId(R.id.add_btn), withText("Add"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                        0),
+                                1),
+                        isDisplayed()));
+        materialButton2.perform(click());
+
+        ViewInteraction appCompatEditText5 = onView(
+                allOf(withId(R.id.search_bar_text_field), withText("fox"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("android.widget.FrameLayout")),
+                                        0),
+                                0),
+                        isDisplayed()));
+        appCompatEditText5.perform(replaceText("gorilla"));
+
+        ViewInteraction appCompatEditText6 = onView(
+                allOf(withId(R.id.search_bar_text_field), withText("gorilla"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("android.widget.FrameLayout")),
+                                        0),
+                                0),
+                        isDisplayed()));
+        appCompatEditText6.perform(closeSoftKeyboard());
+
+        ViewInteraction materialButton3 = onView(
+                allOf(withId(R.id.add_btn), withText("Add"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                        0),
+                                1),
+                        isDisplayed()));
+        materialButton3.perform(click());
+
+        ViewInteraction bottomNavigationItemView = onView(
+                allOf(withId(R.id.planFragment), withContentDescription("PLAN"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.bottom_navigation_view),
+                                        0),
+                                1),
+                        isDisplayed()));
+        bottomNavigationItemView.perform(click());
+
+        ViewInteraction textView = onView(
+                allOf(withId(R.id.plan_amount), withText("Exhibit Count: 4"),
+                        withParent(withParent(IsInstanceOf.<View>instanceOf(android.widget.FrameLayout.class))),
+                        isDisplayed()));
+        textView.check(matches(withText("Exhibit Count: 4")));
+
         ViewInteraction textView2 = onView(
-                allOf(withId(R.id.search_result_item_name), withText("Lion Kingdom"),
+                allOf(withId(R.id.plan_item), withText("Entrance and Exit Gate"),
                         withParent(withParent(IsInstanceOf.<View>instanceOf(android.view.ViewGroup.class))),
                         isDisplayed()));
-        textView2.check(matches(withText("Lion Kingdom")));
+        textView2.check(matches(withText("Entrance and Exit Gate")));
     }
-
 
     private static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
