@@ -23,10 +23,9 @@ public class TagUnitTest {
     private PlaceDao placeDao;
     private TagDao tagDao;
 
-    /*
+    /**
      * Method to create database and the necessary Dao declarations for testing
      */
-
     @Before
     public void createDb() {
         Context context = ApplicationProvider.getApplicationContext();
@@ -38,7 +37,7 @@ public class TagUnitTest {
         tagDao = mainDb.tagDao();
     }
 
-    /*
+    /**
      * Method to close database
      */
     @After
@@ -46,8 +45,8 @@ public class TagUnitTest {
         mainDb.close();
     }
 
-    /*
-     *Tests the Tag insert() method to confirm that the tag is successfully added
+    /**
+     * Tests the Tag insert() method to confirm that the tag is successfully added
      * Returns true if the first Tag's ID is the same as the inserted id and
      * if the amount of tags is increased
      */
@@ -62,8 +61,8 @@ public class TagUnitTest {
         assertEquals(foundTag.name, "animal");
     }
 
-    /*
-     *Tests the Tag insertAll() method to confirm that the tags are successfully added
+    /**
+     * Tests the Tag insertAll() method to confirm that the tags are successfully added
      * Returns true if the Tag names are the same as the inserted id and
      * if the amount of tags is increased
      */
@@ -80,9 +79,9 @@ public class TagUnitTest {
         List<Long> allTags = tagDao.insertAll(tags);
         assertEquals(allTags.size(), 3);
 
-    assertEquals(tagDao.get(allTags.get(0)).name, "mammal");
-    assertEquals(tagDao.get(allTags.get(1)).name, "bird");
-    assertEquals(tagDao.get(allTags.get(2)).name, "reptile");
+        assertEquals(tagDao.get(allTags.get(0)).name, "mammal");
+        assertEquals(tagDao.get(allTags.get(1)).name, "bird");
+        assertEquals(tagDao.get(allTags.get(2)).name, "reptile");
     }
 
 }
