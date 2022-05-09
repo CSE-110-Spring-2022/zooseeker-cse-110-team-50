@@ -50,6 +50,9 @@ public class PlanTest {
     private PlanItemDao planItemDao;
     private PlanViewModel planViewModel;
 
+    /**
+     * Create the Database
+     */
     @Before
     public void createDb() {
         Context context = ApplicationProvider.getApplicationContext();
@@ -61,12 +64,15 @@ public class PlanTest {
         planItemDao = mainDb.planItemDao();
     }
 
+    /**
+     * Close the Database
+     */
     @After
     public void closeDb() throws IOException {
         mainDb.close();
     }
     /**
-     *
+     * Check if we can successfully get the plan fragment
      */
     @Test
     public void checkPlanFragmentWorks() {
