@@ -78,8 +78,7 @@ public class JSONLoader {
     }
 
     public static RawGraph loadTestRawGraph(Context context) {
-//        final String PATH = "test/sample_edge_info.json";
-        final String PATH = "sample_edge_info.json";
+        final String PATH = "test/sample_zoo_graph.json";
 //        if (graph != null) return graph;
         RawGraph graph = null;
 
