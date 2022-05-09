@@ -28,6 +28,7 @@ public class GraphTest {
     MainActivity activity;
     PlaceDao placeDao;
     Router router;
+    Map<String, String> placeInfoMap;
 
     /**
      * Sets up the graph and activity for testing.
@@ -38,7 +39,7 @@ public class GraphTest {
         placeDao = MainDatabase.getSingleton(activity).placeDao();
         JSONLoader.loadTestRawGraph(getApplicationContext());
 
-        final Map<String, String> placeInfoMap = new HashMap<>();
+        placeInfoMap = new HashMap<>();
         for (Place place: placeDao.getAll())
             placeInfoMap.put(place.placeId, place.name);
         router = Router.builder()
@@ -50,7 +51,8 @@ public class GraphTest {
     }
 
     @Test
-    public void testGraph() {
-        assertNotNull(router);
+    public void getShortestPath() {
+        // Check if putting the information into the router does not equal a null value
+        assertNotNull(router.shortestPath("gators", "gorillas"));
     }
 }
