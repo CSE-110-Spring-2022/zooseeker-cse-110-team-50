@@ -20,8 +20,9 @@ public class Router {
 
     Graph<String, EdgeWithId> graph;
     Map<String, String> edgeInfo;
+    Map<String, String> placeInfo;
 
-    private class EdgeWithId extends DefaultWeightedEdge {
+    public class EdgeWithId extends DefaultWeightedEdge {
         public String edgeId;
         public EdgeWithId(String id) {
             edgeId = id;
@@ -32,24 +33,27 @@ public class Router {
         public String id;
         public double distance;
         public NodeWithDist(String id, double distance) {this.id = id; this.distance = distance; }
-
-//        public boolean equals(Object obj) {
-//            if (!(obj instanceof NodeWithDist)) return false;
-//            return ((NodeWithDist) obj).id.equals(this.id);
-//        }
     }
 
     public class RouteStep {
         public String edgeId;
         public double distance;
-        public RouteStep(String edgeId, double distance) { this.edgeId = edgeId; this.distance = distance; }
+        public String to;
+        public RouteStep(String edgeId, double distance, String to) {
+            this.edgeId = edgeId;
+            this.distance = distance;
+            this.to = placeInfo.get(to);
+        }
     }
 
     public class RoutePackage {
         private String start;
         private String end;
         private List<RouteStep> steps = new ArrayList<>();
-        public RoutePackage(String start, String end) { this.start = start; this.end = end; }
+        public RoutePackage(String startPlaceId, String endPlaceId) {
+            this.start = placeInfo.get(startPlaceId);
+            this.end = placeInfo.get(endPlaceId);
+        }
 
         public String getStart() {
             return start;
@@ -68,10 +72,14 @@ public class Router {
         }
 
         public String toString() {
-            String ret = start + "\n\n\n";
+            int cnt = 1;
+            String ret = "From " + start + "\n\n\n";
             for (RouteStep step : steps)
-                ret += ("    -> " + edgeInfo.get(step.edgeId) + "\n");
-            ret += "\n\n" + end + "\n";
+                ret += (cnt++ + ". Proceed on " +
+                        edgeInfo.get(step.edgeId) +
+                        " " + step.distance +
+                        " ft toward " + step.to + "\n\n");
+            ret += "\nDestination: " + end + "\n";
             return ret;
         }
     }
@@ -80,8 +88,17 @@ public class Router {
         return new Router();
     }
 
+    public Router build() {
+        return this;
+    }
+
     public Router loadEdgeInfo(Map<String, String> edgeInfo) {
         this.edgeInfo = edgeInfo;
+        return this;
+    }
+
+    public Router loadPlaceInfo(Map<String, String> placeInfo) {
+        this.placeInfo = placeInfo;
         return this;
     }
 
@@ -92,7 +109,9 @@ public class Router {
         });
 
         rawGraph.edges.stream().forEach((edge) -> {
-            graph.addEdge(edge.source, edge.target, new EdgeWithId(edge.id));
+            EdgeWithId newEdge = new EdgeWithId(edge.id);
+            graph.addEdge(edge.source, edge.target, newEdge);
+            graph.setEdgeWeight(newEdge, edge.weight);
         });
         return this;
     }
@@ -133,7 +152,7 @@ public class Router {
         for (GraphPath<String, EdgeWithId> route : routes) {
             RoutePackage pkg = new RoutePackage(route.getStartVertex(), route.getEndVertex());
             for (EdgeWithId edge : route.getEdgeList()) {
-                pkg.addStep(new RouteStep(edge.edgeId, 0));
+                pkg.addStep(new RouteStep(edge.edgeId, graph.getEdgeWeight(edge), graph.getEdgeTarget(edge)));
             }
             ret.add(pkg);
         }

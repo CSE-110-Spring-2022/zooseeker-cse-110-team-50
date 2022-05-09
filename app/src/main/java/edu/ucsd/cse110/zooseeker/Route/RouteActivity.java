@@ -8,10 +8,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.zooseeker.Persistence.MainDatabase;
+import edu.ucsd.cse110.zooseeker.Persistence.Place;
+import edu.ucsd.cse110.zooseeker.Persistence.PlaceDao;
 import edu.ucsd.cse110.zooseeker.Persistence.PlanItem;
 import edu.ucsd.cse110.zooseeker.Persistence.PlanItemDao;
 import edu.ucsd.cse110.zooseeker.R;
@@ -22,6 +26,7 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
 
     private List<Router.RoutePackage> pkgList;
     private int routeIndex = 0;
+    private PlaceDao placeDao = MainDatabase.getSingleton(this).placeDao();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,10 +37,16 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
         nextButton.setOnClickListener(this);
 
         JSONLoader.loadRawGraph(getApplicationContext());
+        final Map<String, String> placeInfoMap = new HashMap<>();
+        for (Place place: placeDao.getAll())
+            placeInfoMap.put(place.placeId, place.name);
+
 
         Router router = Router.builder()
                 .loadEdgeInfo(JSONLoader.loadEdgeInfo(getApplicationContext()))
-                .loadFromRawGraph(JSONLoader.loadRawGraph(getApplicationContext()));
+                .loadFromRawGraph(JSONLoader.loadRawGraph(getApplicationContext()))
+                .loadPlaceInfo(placeInfoMap)
+                .build();
 
         MainDatabase db = MainDatabase.getSingleton(this);
         PlanItemDao planItemDao = db.planItemDao();
