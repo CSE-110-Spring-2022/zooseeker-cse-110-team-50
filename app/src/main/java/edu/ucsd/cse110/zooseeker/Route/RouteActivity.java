@@ -3,7 +3,6 @@ package edu.ucsd.cse110.zooseeker.Route;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,7 +21,7 @@ import edu.ucsd.cse110.zooseeker.R;
 import edu.ucsd.cse110.zooseeker.Util.JSONLoader;
 import edu.ucsd.cse110.zooseeker.Util.Router.Router;
 
-public class RouteActivity extends AppCompatActivity implements View.OnClickListener {
+public class RouteActivity extends AppCompatActivity {
 
     private List<Router.RoutePackage> pkgList;
     private int routeIndex = 0;
@@ -34,7 +33,26 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_route);
 
         Button nextButton = findViewById(R.id.route_next_button);
-        nextButton.setOnClickListener(this);
+
+        Button toggleDirectionsButton = findViewById(R.id.toggle_directions_button);
+
+        nextButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                nextExhibit(v);
+            }
+        });
+
+        toggleDirectionsButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                toggleDirections(v);
+            }
+        });
 
         JSONLoader.loadRawGraph(getApplicationContext());
         final Map<String, String> placeInfoMap = new HashMap<>();
@@ -58,14 +76,17 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
 //        }
 
         TextView routeTextView = findViewById(R.id.route_text_view);
-        routeTextView.setText(pkgList.get(routeIndex).toString());
+        routeTextView.setText(pkgList.get(routeIndex).toStringDetailed());
     }
 
-    @Override
-    public void onClick(View view) {
+    public void toggleDirections(View v){
+
+    }
+
+    public void nextExhibit(View v){
         if(routeIndex + 1 < pkgList.size()) routeIndex++;
 
         TextView routeTextView = findViewById(R.id.route_text_view);
-        routeTextView.setText(pkgList.get(routeIndex).toString());
+        routeTextView.setText(pkgList.get(routeIndex).toStringDetailed());
     }
 }
