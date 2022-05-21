@@ -127,6 +127,22 @@ public class PlanTest {
         assertEquals(3,allFoundPlaces.size() );
 
     }
+    
+    @Test
+    public void checkIfPlanDeletion() {
+        PlanItem planItem = new PlanItem("lion_kingdom", -1);
+        PlanItem planItem_2 = new PlanItem("arctic foxes", 20);
+        PlanItem planItem_3= new PlanItem("entrance plaza", 30);
 
+        planItemDao.insert(planItem);
+        planItemDao.insert(planItem_2);
+        planItemDao.insert(planItem_3);
 
+        planItemDao.nukeTable();
+
+        List<PlanItem> allFoundPlaces = planItemDao.getAll();
+
+        assertEquals(0,allFoundPlaces.size() );
+
+    }
 }

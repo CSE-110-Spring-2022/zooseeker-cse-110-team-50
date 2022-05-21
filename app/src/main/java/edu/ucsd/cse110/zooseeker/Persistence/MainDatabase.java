@@ -43,7 +43,7 @@ public abstract class MainDatabase extends RoomDatabase {
                             List<Place> allPlaces = JSONLoader.loadExamplePlaceData(context, "sample_node_info.json");
                             for(Place place : allPlaces)
                                 getSingleton(context).placeDao().insertWithTag(place);
-                            getSingleton(context).planItemDao().insert(new PlanItem("entrance_exit_gate", 0));
+                            //getSingleton(context).planItemDao().insert(new PlanItem("entrance_exit_gate", 0));
                         });
                     }
                 })
