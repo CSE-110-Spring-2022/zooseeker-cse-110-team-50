@@ -134,5 +134,24 @@ public class PlanUnitTest {
         assertEquals(allFoundPlaces.size(), 0);
     }
 
+    @Test
+    /**
+     * Delete all plan items from plan
+     */
+    public void testDeleteAllButton(){
+        PlanItem planItem1 = new PlanItem("flamingo", -1);
+        planItemDao.insert(planItem1);
+
+        PlanItem planItem2 = new PlanItem("capuchin", -1);
+        planItemDao.insert(planItem2);
+
+        PlanItem planItem3 = new PlanItem("siamang", -1);
+        planItemDao.insert(planItem3);
+
+        planItemDao.nukeTable();
+
+        List<PlanItem> allFoundPlaces = planItemDao.getAll();
+        assertEquals(allFoundPlaces.size(), 0);
+    }
 
 }
