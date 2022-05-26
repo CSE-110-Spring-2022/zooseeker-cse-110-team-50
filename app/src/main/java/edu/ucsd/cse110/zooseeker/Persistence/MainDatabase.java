@@ -11,9 +11,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.List;
 import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 
-import edu.ucsd.cse110.zooseeker.Util.JSONLoader;
+import edu.ucsd.cse110.zooseeker.Util.JSONLoader.JSONLoader;
 
 @Database(entities = {Place.class, PlaceTagCrossRef.class, Tag.class, PlanItem.class}, version = 3, exportSchema = true)
 public abstract class MainDatabase extends RoomDatabase {
@@ -37,13 +36,12 @@ public abstract class MainDatabase extends RoomDatabase {
                 .allowMainThreadQueries()
                 .addCallback(new Callback() {
                     @Override
-                    public void onOpen(@NonNull SupportSQLiteDatabase db) {
-                        super.onOpen(db);
+                    public void onCreate(@NonNull SupportSQLiteDatabase db) {
+                        super.onCreate(db);
                         Executors.newSingleThreadScheduledExecutor().execute(() -> {
-                            List<Place> allPlaces = JSONLoader.loadExamplePlaceData(context, "sample_node_info.json");
+                            List<Place> allPlaces = JSONLoader.loadNodeInfo(context);
                             for(Place place : allPlaces)
                                 getSingleton(context).placeDao().insertWithTag(place);
-                            //getSingleton(context).planItemDao().insert(new PlanItem("entrance_exit_gate", 0));
                         });
                     }
                 })

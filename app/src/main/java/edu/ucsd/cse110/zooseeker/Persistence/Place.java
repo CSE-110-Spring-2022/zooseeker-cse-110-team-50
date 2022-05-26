@@ -17,6 +17,7 @@ public class Place {
     @NonNull
     public String name;
     public String kind;
+    public String parentId;
 
     @Ignore
     public List<String> tags;

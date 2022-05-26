@@ -8,14 +8,12 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 
 import org.jgrapht.GraphPath;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +31,7 @@ import edu.ucsd.cse110.zooseeker.MainActivity;
 import edu.ucsd.cse110.zooseeker.Persistence.MainDatabase;
 import edu.ucsd.cse110.zooseeker.Persistence.Place;
 import edu.ucsd.cse110.zooseeker.Persistence.PlaceDao;
-import edu.ucsd.cse110.zooseeker.Util.JSONLoader;
+import edu.ucsd.cse110.zooseeker.Util.JSONLoader.JSONLoader;
 import edu.ucsd.cse110.zooseeker.Util.Router.Router;
 
 @Config(sdk = 31)

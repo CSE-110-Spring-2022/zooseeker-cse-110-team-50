@@ -1,0 +1,230 @@
+{
+  "creator": "JGraphT JSON Exporter",
+  "version": "1",
+  "nodes": [
+    {
+      "id": "entrance_exit_gate"
+    },
+    {
+      "id": "intxn_front_treetops"
+    },
+    {
+      "id": "intxn_front_monkey"
+    },
+    {
+      "id": "intxn_front_lagoon_1"
+    },
+    {
+      "id": "intxn_front_lagoon_2"
+    },
+    {
+      "id": "intxn_treetops_fern_trail"
+    },
+    {
+      "id": "intxn_treetops_orangutan_trail"
+    },
+    {
+      "id": "intxn_treetops_hippo_trail"
+    },
+    {
+      "id": "intxn_hippo_monkey_trails"
+    },
+    {
+      "id": "koi"
+    },
+    {
+      "id": "flamingo"
+    },
+    {
+      "id": "capuchin"
+    },
+    {
+      "id": "gorilla"
+    },
+    {
+      "id": "orangutan"
+    },
+    {
+      "id": "siamang"
+    },
+    {
+      "id": "fern_canyon"
+    },
+    {
+      "id": "parker_aviary"
+    },
+    {
+      "id": "owens_aviary"
+    },
+    {
+      "id": "scripps_aviary"
+    },
+    {
+      "id": "hippo"
+    },
+    {
+      "id": "crocodile"
+    },
+    {
+      "id": "benchley_plaza"
+    }
+  ],
+  "edges": [
+    {
+      "id": "gate_to_front",
+      "source": "entrance_exit_gate",
+      "target": "intxn_front_treetops",
+      "weight": 10.0
+    },
+    {
+      "id": "front_to_monkey",
+      "source": "intxn_front_treetops",
+      "target": "intxn_front_monkey",
+      "weight": 50.0
+    },
+    {
+      "id": "monkey_to_flamingo",
+      "source": "intxn_front_monkey",
+      "target": "flamingo",
+      "weight": 30.0
+    },
+    {
+      "id": "flamingo_to_capuchin",
+      "source": "flamingo",
+      "target": "capuchin",
+      "weight": 150.0
+    },
+    {
+      "id": "capuchin_to_hippo_monkey",
+      "source": "capuchin",
+      "target": "intxn_hippo_monkey_trails",
+      "weight": 50.0
+    },
+    {
+      "id": "hippo_monkey_to_scripps",
+      "source": "intxn_hippo_monkey_trails",
+      "target": "scripps_aviary",
+      "weight": 30.0
+    },
+    {
+      "id": "scripps_to_gorilla",
+      "source": "scripps_aviary",
+      "target": "gorilla",
+      "weight": 100.0
+    },
+    {
+      "id": "gorilla_to_benchley",
+      "source": "gorilla",
+      "target": "benchley_plaza",
+      "weight": 50.0
+    },
+    {
+      "id": "front_to_fern",
+      "source": "intxn_front_treetops",
+      "target": "intxn_treetops_fern_trail",
+      "weight": 30.0
+    },
+    {
+      "id": "fern_to_orangutan",
+      "source": "intxn_treetops_fern_trail",
+      "target": "intxn_treetops_orangutan_trail",
+      "weight": 30.0
+    },
+    {
+      "id": "treetops_to_siamang",
+      "source": "intxn_treetops_orangutan_trail",
+      "target": "siamang",
+      "weight": 60.0
+    },
+    {
+      "id": "treetops_to_hippo",
+      "source": "intxn_treetops_orangutan_trail",
+      "target": "intxn_treetops_hippo_trail",
+      "weight": 100.0
+    },
+    {
+      "id": "hippo_to_hippo",
+      "source": "intxn_treetops_hippo_trail",
+      "target": "hippo",
+      "weight": 30.0
+    },
+    {
+      "id": "hippo_to_crocodile",
+      "source": "hippo",
+      "target": "crocodile",
+      "weight": 10.0
+    },
+    {
+      "id": "crocodile_to_monkey_hippo",
+      "source": "crocodile",
+      "target": "intxn_hippo_monkey_trails",
+      "weight": 30.0
+    },
+    {
+      "id": "hippo_to_parker",
+      "source": "intxn_treetops_hippo_trail",
+      "target": "parker_aviary",
+      "weight": 60.0
+    },
+    {
+      "id": "siamang_to_orangutan",
+      "source": "siamang",
+      "target": "orangutan",
+      "weight": 5.0
+    },
+    {
+      "id": "orangutan_to_parker",
+      "source": "orangutan",
+      "target": "parker_aviary",
+      "weight": 50.0
+    },
+    {
+      "id": "parker_to_owens",
+      "source": "parker_aviary",
+      "target": "owens_aviary",
+      "weight": 50.0
+    },
+    {
+      "id": "parker_to_benchley",
+      "source": "parker_aviary",
+      "target": "benchley_plaza",
+      "weight": 80.0
+    },
+    {
+      "id": "owens_to_fern",
+      "source": "owens_aviary",
+      "target": "fern_canyon",
+      "weight": 30.0
+    },
+    {
+      "id": "fern_to_fern",
+      "source": "fern_canyon",
+      "target": "intxn_treetops_fern_trail",
+      "weight": 60.0
+    },
+    {
+      "id": "front_to_lagoon1",
+      "source": "intxn_front_treetops",
+      "target": "intxn_front_lagoon_1",
+      "weight": 30.0
+    },
+    {
+      "id": "lagoon1_to_lagoon2",
+      "source": "intxn_front_lagoon_1",
+      "target": "intxn_front_lagoon_2",
+      "weight": 30.0
+    },
+    {
+      "id": "lagoon1_to_koi",
+      "source": "intxn_front_lagoon_1",
+      "target": "koi",
+      "weight": 20.0
+    },
+    {
+      "id": "lagoon2_to_koi",
+      "source": "koi",
+      "target": "intxn_front_lagoon_2",
+      "weight": 30.0
+    }
+  ]
+}

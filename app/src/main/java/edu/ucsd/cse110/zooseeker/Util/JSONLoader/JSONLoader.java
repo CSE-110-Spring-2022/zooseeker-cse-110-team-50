@@ -1,4 +1,4 @@
-package edu.ucsd.cse110.zooseeker.Util;
+package edu.ucsd.cse110.zooseeker.Util.JSONLoader;
 
 import android.content.Context;
 
@@ -16,16 +16,34 @@ import java.util.List;
 import java.util.Map;
 
 import edu.ucsd.cse110.zooseeker.Persistence.Place;
-import edu.ucsd.cse110.zooseeker.Util.Router.EdgeInfo;
 import edu.ucsd.cse110.zooseeker.Util.Router.RawGraph;
 
 public class JSONLoader {
-//    private static RawGraph graph = null;
+    public static String BASE_PATH = "";
 
-    public static List<Place> loadExamplePlaceData(Context context, String path) {
+    public static Map<String, String> loadEdgeInfo(Context context) {
+        final String PATH = BASE_PATH + "sample_edge_info.json";
+        List<EdgeInfoMapper> ret;
+        try {
+            InputStream input = context.getAssets().open(PATH);
+            Reader reader = new InputStreamReader(input);
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<EdgeInfoMapper>>(){}.getType();
+            ret =  gson.fromJson(reader, type);
+        } catch (IOException e) {
+            e.printStackTrace();
+            ret = Collections.emptyList();
+        }
+        Map<String, String> edgeInfo = new HashMap<>();
+        for(EdgeInfoMapper ei : ret) edgeInfo.put(ei.id, ei.street);
+        return edgeInfo;
+    }
+
+    public static List<Place> loadNodeInfo(Context context) {
+        String PATH = BASE_PATH + "sample_node_info.json";
         List<Place> ret;
         try {
-            InputStream input = context.getAssets().open(path);
+            InputStream input = context.getAssets().open(PATH);
             Reader reader = new InputStreamReader(input);
             Gson gson = new Gson();
             Type type = new TypeToken<List<Place>>(){}.getType();
@@ -40,10 +58,25 @@ public class JSONLoader {
         return ret;
     }
 
-    // Graph singleton
+    public static List<NodeInfoMapper> loadNodeInfoMapper(Context context) {
+        String PATH = BASE_PATH + "sample_node_info.json";
+        List<NodeInfoMapper> ret = null;
+        try {
+            InputStream input = context.getAssets().open(PATH);
+            Reader reader = new InputStreamReader(input);
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<NodeInfoMapper>>(){}.getType();
+            ret =  gson.fromJson(reader, type);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            ret = Collections.emptyList();
+        }
+        return ret;
+    }
+
     public static RawGraph loadRawGraph(Context context) {
-        final String PATH = "sample_zoo_graph.json";
-//        if (graph != null) return graph;
+        final String PATH = BASE_PATH + "sample_zoo_graph.json";
         RawGraph graph = null;
 
         try {
@@ -55,31 +88,15 @@ public class JSONLoader {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return graph;
     }
 
-    public static Map<String, String> loadEdgeInfo(Context context) {
-        final String PATH = "sample_edge_info.json";
-        List<EdgeInfo> ret;
-        try {
-            InputStream input = context.getAssets().open(PATH);
-            Reader reader = new InputStreamReader(input);
-            Gson gson = new Gson();
-            Type type = new TypeToken<List<EdgeInfo>>(){}.getType();
-            ret =  gson.fromJson(reader, type);
-        } catch (IOException e) {
-            e.printStackTrace();
-            ret = Collections.emptyList();
-        }
-        Map<String, String> edgeInfo = new HashMap<>();
-        for(EdgeInfo ei : ret) edgeInfo.put(ei.id, ei.street);
-        return edgeInfo;
-    }
+    /*
+    * Below is for testing
+    * */
 
     public static RawGraph loadTestRawGraph(Context context) {
         final String PATH = "test/sample_zoo_graph.json";
-//        if (graph != null) return graph;
         RawGraph graph = null;
 
         try {
@@ -97,20 +114,19 @@ public class JSONLoader {
 
     public static Map<String, String> loadTestEdgeInfo(Context context) {
         final String PATH = "test/sample_edge_info.json";
-        List<EdgeInfo> ret;
+        List<EdgeInfoMapper> ret;
         try {
             InputStream input = context.getAssets().open(PATH);
             Reader reader = new InputStreamReader(input);
             Gson gson = new Gson();
-            Type type = new TypeToken<List<EdgeInfo>>(){}.getType();
+            Type type = new TypeToken<List<EdgeInfoMapper>>(){}.getType();
             ret =  gson.fromJson(reader, type);
         } catch (IOException e) {
             e.printStackTrace();
             ret = Collections.emptyList();
         }
         Map<String, String> edgeInfo = new HashMap<>();
-        for(EdgeInfo ei : ret) edgeInfo.put(ei.id, ei.street);
+        for(EdgeInfoMapper ei : ret) edgeInfo.put(ei.id, ei.street);
         return edgeInfo;
     }
-
 }

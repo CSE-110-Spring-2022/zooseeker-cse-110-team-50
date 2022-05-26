@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "1ab676942f1407fb4c9c4787b3bae8f8",
+    "identityHash": "c0dbed17b1da7aef29489a8153383232",
     "entities": [
       {
         "tableName": "place",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`placeId` TEXT NOT NULL, `name` TEXT NOT NULL, `kind` TEXT, PRIMARY KEY(`placeId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`placeId` TEXT NOT NULL, `name` TEXT NOT NULL, `kind` TEXT, `parentId` TEXT, PRIMARY KEY(`placeId`))",
         "fields": [
           {
             "fieldPath": "placeId",
@@ -23,6 +23,12 @@
           {
             "fieldPath": "kind",
             "columnName": "kind",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "parentId",
+            "columnName": "parentId",
             "affinity": "TEXT",
             "notNull": false
           }
@@ -139,7 +145,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1ab676942f1407fb4c9c4787b3bae8f8')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c0dbed17b1da7aef29489a8153383232')"
     ]
   }
 }

@@ -18,7 +18,7 @@ import edu.ucsd.cse110.zooseeker.Persistence.PlaceDao;
 import edu.ucsd.cse110.zooseeker.Persistence.PlanItem;
 import edu.ucsd.cse110.zooseeker.Persistence.PlanItemDao;
 import edu.ucsd.cse110.zooseeker.R;
-import edu.ucsd.cse110.zooseeker.Util.JSONLoader;
+import edu.ucsd.cse110.zooseeker.Util.JSONLoader.JSONLoader;
 import edu.ucsd.cse110.zooseeker.Util.Router.Router;
 
 public class RouteActivity extends AppCompatActivity {
