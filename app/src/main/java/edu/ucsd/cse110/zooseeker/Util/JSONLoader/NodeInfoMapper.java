@@ -11,8 +11,8 @@ public class NodeInfoMapper {
     public String name;
     public String parentId;
     public List<String> tags;
-    public double lat;
-    public double lng;
+    public Double lat;
+    public Double lng;
 
     public Place toPlace() {
         return new Place(id, name, kind, parentId, lng, lat);
