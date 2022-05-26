@@ -28,7 +28,7 @@ public abstract class PlaceDao {
     @Transaction
     public void insertWithTag(Place place, List<String> tags) {
         insert(place);
-        for (String tag : place.tags) {
+        for (String tag : tags) {
             if(tagDao.get(tag) == null) tagDao.insert(new Tag(tag));
             long newTagId = tagDao.get(tag).tagId;
             if (placeTagCrossRefDao.get(place.placeId, newTagId) == null) {

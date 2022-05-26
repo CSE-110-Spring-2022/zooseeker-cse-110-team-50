@@ -41,10 +41,6 @@ public class Place {
     @SerializedName("lat")
     public Double lat;
 
-    @Ignore
-    public List<String> tags;
-
-
     public Place(
             @NonNull String placeId,
             @NonNull String name,

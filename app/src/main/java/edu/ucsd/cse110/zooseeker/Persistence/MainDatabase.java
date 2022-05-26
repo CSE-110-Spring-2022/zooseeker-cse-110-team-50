@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.concurrent.Executors;
 
 import edu.ucsd.cse110.zooseeker.Util.JSONLoader.JSONLoader;
+import edu.ucsd.cse110.zooseeker.Util.JSONLoader.NodeInfoMapper;
 
 @Database(entities = {Place.class, PlaceTagCrossRef.class, Tag.class, PlanItem.class}, version = 3, exportSchema = true)
 public abstract class MainDatabase extends RoomDatabase {
@@ -37,12 +38,13 @@ public abstract class MainDatabase extends RoomDatabase {
                 .allowMainThreadQueries()
                 .addCallback(new Callback() {
                     @Override
-                    public void onCreate(@NonNull SupportSQLiteDatabase db) {
-                        super.onCreate(db);
+                    public void onOpen(@NonNull SupportSQLiteDatabase db) {
+                        super.onOpen(db);
                         Executors.newSingleThreadScheduledExecutor().execute(() -> {
-                            List<Place> allPlaces = JSONLoader.loadNodeInfo(context);
-                            for(Place place : allPlaces)
-                                getSingleton(context).placeDao().insertWithTag(place, new ArrayList<String>());
+                            List<NodeInfoMapper> allNodeInfo = JSONLoader.loadNodeInfoMapper(context);
+                            for(NodeInfoMapper nInfo : allNodeInfo)
+                                getSingleton(context).placeDao().insertWithTag(
+                                        nInfo.toPlace(), nInfo.tags);
                         });
                     }
                 })
