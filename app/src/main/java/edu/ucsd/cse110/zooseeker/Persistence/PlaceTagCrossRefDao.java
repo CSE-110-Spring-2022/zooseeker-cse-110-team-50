@@ -9,6 +9,6 @@ public interface PlaceTagCrossRefDao {
     @Insert
     void insert(PlaceTagCrossRef placeTagCrossRef);
 
-    @Query("SELECT * FROM `place_tag_cross_ref` WHERE `placeId`=:placeId AND `tagId`=:tagId")
+    @Query("SELECT * FROM `place_tag_cross_ref` WHERE `place_id`=:placeId AND `tag_id`=:tagId")
     PlaceTagCrossRef get(String placeId, long tagId);
 }

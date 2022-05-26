@@ -53,7 +53,7 @@ public class JSONLoader {
             ret = Collections.emptyList();
         }
         for (Place place : ret) {
-            place.placeId = place.id;
+            place.placeId = place.placeId;
         }
         return ret;
     }

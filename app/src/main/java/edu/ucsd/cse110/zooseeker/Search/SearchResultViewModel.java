@@ -1,17 +1,13 @@
 package edu.ucsd.cse110.zooseeker.Search;
 
 import android.app.Application;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import edu.ucsd.cse110.zooseeker.Persistence.MainDatabase;

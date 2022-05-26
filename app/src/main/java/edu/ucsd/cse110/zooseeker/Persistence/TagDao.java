@@ -14,7 +14,7 @@ public interface TagDao {
     @Insert
     List<Long> insertAll(List<Tag> allTags);
 
-    @Query("SELECT * FROM `tag` WHERE `tagId`=:tagId")
+    @Query("SELECT * FROM `tag` WHERE `tag_id`=:tagId")
     Tag get(long tagId);
 
     @Query("SELECT * FROM `tag` WHERE `name`=:name")

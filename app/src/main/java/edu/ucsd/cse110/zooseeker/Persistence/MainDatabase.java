@@ -9,6 +9,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 
@@ -41,7 +42,7 @@ public abstract class MainDatabase extends RoomDatabase {
                         Executors.newSingleThreadScheduledExecutor().execute(() -> {
                             List<Place> allPlaces = JSONLoader.loadNodeInfo(context);
                             for(Place place : allPlaces)
-                                getSingleton(context).placeDao().insertWithTag(place);
+                                getSingleton(context).placeDao().insertWithTag(place, new ArrayList<String>());
                         });
                     }
                 })

@@ -9,8 +9,8 @@ import java.util.List;
 public class PlaceWithTags {
     @Embedded public Place place;
     @Relation(
-        parentColumn = "placeId",
-        entityColumn = "tagId",
+        parentColumn = "place_id",
+        entityColumn = "tag_id",
         associateBy = @Junction(PlaceTagCrossRef.class)
     )
     public List<Tag> tags;

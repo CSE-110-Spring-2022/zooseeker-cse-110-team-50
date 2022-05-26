@@ -2,15 +2,15 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "c0dbed17b1da7aef29489a8153383232",
+    "identityHash": "042c8e61db8a64a0dc3c709002b79e75",
     "entities": [
       {
         "tableName": "place",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`placeId` TEXT NOT NULL, `name` TEXT NOT NULL, `kind` TEXT, `parentId` TEXT, PRIMARY KEY(`placeId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`place_id` TEXT NOT NULL, `name` TEXT NOT NULL, `kind` TEXT NOT NULL, `parent_id` TEXT, `lng` REAL, `lat` REAL, PRIMARY KEY(`place_id`))",
         "fields": [
           {
             "fieldPath": "placeId",
-            "columnName": "placeId",
+            "columnName": "place_id",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -24,18 +24,30 @@
             "fieldPath": "kind",
             "columnName": "kind",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "parentId",
-            "columnName": "parentId",
+            "columnName": "parent_id",
             "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lng",
+            "columnName": "lng",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lat",
+            "columnName": "lat",
+            "affinity": "REAL",
             "notNull": false
           }
         ],
         "primaryKey": {
           "columnNames": [
-            "placeId"
+            "place_id"
           ],
           "autoGenerate": false
         },
@@ -44,48 +56,48 @@
       },
       {
         "tableName": "place_tag_cross_ref",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`placeId` TEXT NOT NULL, `tagId` INTEGER NOT NULL, PRIMARY KEY(`placeId`, `tagId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`place_id` TEXT NOT NULL, `tag_id` INTEGER NOT NULL, PRIMARY KEY(`place_id`, `tag_id`))",
         "fields": [
           {
             "fieldPath": "placeId",
-            "columnName": "placeId",
+            "columnName": "place_id",
             "affinity": "TEXT",
             "notNull": true
           },
           {
             "fieldPath": "tagId",
-            "columnName": "tagId",
+            "columnName": "tag_id",
             "affinity": "INTEGER",
             "notNull": true
           }
         ],
         "primaryKey": {
           "columnNames": [
-            "placeId",
-            "tagId"
+            "place_id",
+            "tag_id"
           ],
           "autoGenerate": false
         },
         "indices": [
           {
-            "name": "index_place_tag_cross_ref_tagId",
+            "name": "index_place_tag_cross_ref_tag_id",
             "unique": false,
             "columnNames": [
-              "tagId"
+              "tag_id"
             ],
             "orders": [],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_place_tag_cross_ref_tagId` ON `${TABLE_NAME}` (`tagId`)"
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_place_tag_cross_ref_tag_id` ON `${TABLE_NAME}` (`tag_id`)"
           }
         ],
         "foreignKeys": []
       },
       {
         "tableName": "tag",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`tagId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`tag_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "tagId",
-            "columnName": "tagId",
+            "columnName": "tag_id",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -93,12 +105,12 @@
             "fieldPath": "name",
             "columnName": "name",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           }
         ],
         "primaryKey": {
           "columnNames": [
-            "tagId"
+            "tag_id"
           ],
           "autoGenerate": true
         },
@@ -145,7 +157,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c0dbed17b1da7aef29489a8153383232')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '042c8e61db8a64a0dc3c709002b79e75')"
     ]
   }
 }
