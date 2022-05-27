@@ -69,7 +69,6 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.ViewHolder>{
             Place place = placeDao.get(plan.placeId);
 
             this.name.setText(place.name);
-            this.distance = plan.distance;
         }
         
     }

@@ -15,13 +15,13 @@ public interface PlanItemDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     long insert(PlanItem planItem);
 
-    @Query("SELECT * FROM `plan_list` WHERE `placeId`=:placeId")
+    @Query("SELECT * FROM `plan_list` WHERE `place_id`=:placeId")
     PlanItem get(String placeId);
 
-    @Query("SELECT * FROM `plan_list` ORDER BY `distance` ASC")
+    @Query("SELECT * FROM `plan_list`")
     List<PlanItem> getAll();
 
-    @Query("SELECT * FROM `plan_list` ORDER BY `distance` ASC")
+    @Query("SELECT * FROM `plan_list`")
     LiveData<List<PlanItem>> getAllLive();
 
     @Update

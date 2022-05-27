@@ -57,15 +57,14 @@ public class SearchResultViewModel extends AndroidViewModel {
     }
 
     public void addToPlan(Place place, double distance) {
-        PlanItem newPlanItem = new PlanItem(place.placeId, distance);
+        PlanItem newPlanItem = new PlanItem(place.placeId);
         planItemDao.insert(newPlanItem);
     }
 
     public void addToPlan(Place place) {
         Log.d("SearchResultViewModel", "addToPlan: " + place);
-        PlanItem newPlanItem = new PlanItem(place.placeId, -1);
+        PlanItem newPlanItem = new PlanItem(place.placeId);
         // TODO: set to a meaningful value from the algorithm
-        newPlanItem.setDistance(-1);
         planItemDao.insert(newPlanItem);
     }
 }

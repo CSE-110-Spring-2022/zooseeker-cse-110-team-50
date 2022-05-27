@@ -8,6 +8,7 @@ import java.util.List;
 
 public class PlaceWithTags {
     @Embedded public Place place;
+
     @Relation(
         parentColumn = "place_id",
         entityColumn = "tag_id",

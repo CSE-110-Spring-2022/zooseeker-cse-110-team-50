@@ -56,11 +56,6 @@ public class PlanViewModel extends AndroidViewModel {
         this.planItemDao.update(planItem);
     }
 
-    public void updateDistance(PlanItem planItem, double distance) {
-        planItem.setDistance(distance);
-        this.planItemDao.update(planItem);
-    }
-
     public int getPlanCount(){
         //planCount = planItems.size();
         return planItemDao.getAll().size();

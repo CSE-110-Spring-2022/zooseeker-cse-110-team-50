@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "042c8e61db8a64a0dc3c709002b79e75",
+    "identityHash": "2c0a1b2ca3f87ccdd57bae4285cfb9ea",
     "entities": [
       {
         "tableName": "place",
@@ -129,24 +129,18 @@
       },
       {
         "tableName": "plan_list",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`placeId` TEXT NOT NULL, `distance` REAL NOT NULL, PRIMARY KEY(`placeId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`place_id` TEXT NOT NULL, PRIMARY KEY(`place_id`))",
         "fields": [
           {
             "fieldPath": "placeId",
-            "columnName": "placeId",
+            "columnName": "place_id",
             "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "distance",
-            "columnName": "distance",
-            "affinity": "REAL",
             "notNull": true
           }
         ],
         "primaryKey": {
           "columnNames": [
-            "placeId"
+            "place_id"
           ],
           "autoGenerate": false
         },
@@ -157,7 +151,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '042c8e61db8a64a0dc3c709002b79e75')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2c0a1b2ca3f87ccdd57bae4285cfb9ea')"
     ]
   }
 }
