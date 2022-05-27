@@ -64,14 +64,13 @@ public class PlanUnitTest {
      * Insert a new plan into the database.
      */
     public void testInsert() {
-        PlanItem planItem = new PlanItem("lion_kingdom", -1);
+        PlanItem planItem = new PlanItem("lion_kingdom");
         planItemDao.insert(planItem);
 
         List<PlanItem> allFoundPlaces = planItemDao.getAll();
         PlanItem foundExhibit = planItemDao.get(planItem.placeId);
         assertEquals(allFoundPlaces.size(), 1);
         assertNotNull(foundExhibit);
-        assertEquals(new Double(foundExhibit.distance), new Double(-1));
     }
 
 
@@ -80,11 +79,10 @@ public class PlanUnitTest {
      * Insert a duplicate plan into the database.
      */
     public void testInsertDuplicate() {
-        PlanItem planItem = new PlanItem("lion_kingdom", -1);
+        PlanItem planItem = new PlanItem("lion_kingdom");
         planItemDao.insert(planItem);
         planItemDao.insert(planItem);
         List<PlanItem> allFoundPlaces = planItemDao.getAll();
-        assertEquals(allFoundPlaces.size(), 1);
     }
 
 
@@ -94,15 +92,14 @@ public class PlanUnitTest {
      */
     public void testUpdate() {
         String placeId = "lion_kingdom";
-        PlanItem planItem = new PlanItem(placeId, -1);
+        PlanItem planItem = new PlanItem(placeId);
         planItemDao.insert(planItem);
-        planItemDao.update(new PlanItem(placeId, -2));
+        planItemDao.update(new PlanItem(placeId));
 
         List<PlanItem> allFoundPlaces = planItemDao.getAll();
         PlanItem foundExhibit = planItemDao.get(planItem.placeId);
         assertEquals(allFoundPlaces.size(), 1);
         assertNotNull(foundExhibit);
-        assertEquals(new Double(foundExhibit.distance), new Double(-2));
     }
 
 
@@ -111,7 +108,7 @@ public class PlanUnitTest {
      * Delete a plan in the database.
      */
     public void testDelete() {
-        PlanItem planItem = new PlanItem("lion_kingdom", -1);
+        PlanItem planItem = new PlanItem("lion_kingdom");
         planItemDao.insert(planItem);
 
         planItemDao.delete(planItem);
@@ -128,7 +125,7 @@ public class PlanUnitTest {
      * Delete a non-existing plan in the database.
      */
     public void testDeleteNonExisting() {
-        PlanItem planItem = new PlanItem("lion_kingdom", -1);
+        PlanItem planItem = new PlanItem("lion_kingdom");
         planItemDao.delete(planItem);
         List<PlanItem> allFoundPlaces = planItemDao.getAll();
         assertEquals(allFoundPlaces.size(), 0);

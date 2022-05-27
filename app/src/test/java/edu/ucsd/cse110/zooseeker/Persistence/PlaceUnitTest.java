@@ -63,7 +63,13 @@ public class PlaceUnitTest {
      * Insert a new plan into the database.
      */
     public void testInsert() {
-        Place place = new Place("lion_kingdom", "Lion Kingdom", "exhibit");
+        Place place = new Place("lion_kingdom",
+                "Lion Kingdom",
+                "exhibit",
+                null,
+                -0.0,
+                -0.0
+        );
         placeDao.insert(place);
 
         List<Place> allFoundPlaces = placeDao.getAll();
@@ -73,14 +79,6 @@ public class PlaceUnitTest {
         assertEquals(foundExhibit.name, "Lion Kingdom");
     }
 
-    @Test
-    /**
-     * Insert a place with tags.
-     */
-    public void testInsertWithTag() {
-        Place place = new Place("lion_kingdom", "Lion Kingdom", "exhibit");
-        placeDao.insert(place);
-    }
 
     @Test(expected = SQLiteConstraintException.class)
     /**
@@ -88,7 +86,13 @@ public class PlaceUnitTest {
      * Make sure it throws an error.
      */
     public void testInsertDuplicate() {
-        Place place = new Place("lion_kingdom", "Lion Kingdom", "exhibit");
+        Place place = new Place("lion_kingdom",
+                "Lion Kingdom",
+                "exhibit",
+                null,
+                -0.0,
+                -0.0
+        );
         placeDao.insert(place);
         placeDao.insert(place);
 
