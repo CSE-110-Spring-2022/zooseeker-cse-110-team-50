@@ -36,6 +36,7 @@ public class RouteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_route);
 
         Button nextButton = findViewById(R.id.route_next_button);
+        Button skipButton = findViewById(R.id.skip_btn);
 
         toggleDirectionsButton = findViewById(R.id.toggle_directions_button);
 
@@ -78,6 +79,15 @@ public class RouteActivity extends AppCompatActivity {
 //        for (Router.RoutePackage pkg : pkgList) {
 //            routeStr += pkg.toString() + "\n";
 //        }
+
+        skipButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                pkgList.remove(routeIndex);
+
+            }
+        });
+
 
         routeTextView = findViewById(R.id.route_text_view);
         if(isDetailedDirections){
