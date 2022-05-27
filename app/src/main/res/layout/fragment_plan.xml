@@ -19,19 +19,8 @@
             android:text="TextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/start_route_button"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:contentDescription="Start Route"
-        app:backgroundTint="#008F0F"
-        android:src="@drawable/ic_baseline_directions_24"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="32dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -43,6 +32,38 @@
             android:id="@+id/plan"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical">
+
+
+        <Button
+            android:id="@+id/delete_all_plans_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginEnd="15dp"
+            android:backgroundTint="#F30C0C"
+            android:text="Delete All\nPlans"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/start_route_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="32dp"
+            android:contentDescription="Start Route"
+            android:src="@drawable/ic_baseline_directions_24"
+            app:backgroundTint="#008F0F"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </LinearLayout>
 

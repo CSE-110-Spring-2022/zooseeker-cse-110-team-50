@@ -3,71 +3,310 @@
         "id": "entrance_exit_gate",
         "kind": "gate",
         "name": "Entrance and Exit Gate",
-        "tags": [
-            "enter",
-            "leave",
-            "start",
-            "begin",
-            "entrance",
-            "exit"
-        ]
+        "tags": [],
+        "lat": 32.73561,
+        "lng": -117.14936
     },
     {
-        "id": "entrance_plaza",
+        "id": "intxn_front_treetops",
         "kind": "intersection",
-        "name": "Entrance Plaza",
-        "tags": []
+        "name": "Front Street / Treetops Way",
+        "tags": [],
+        "lat": 32.735546539459556,
+        "lng": -117.1521136981983
     },
     {
-        "id": "gorillas",
+        "id": "intxn_front_monkey",
+        "kind": "intersection",
+        "name": "Front Street / Monkey Trail",
+        "tags": [],
+        "lat": 32.742335294284764,
+        "lng": -117.15496383006723
+    },
+    {
+        "id": "intxn_front_lagoon_1",
+        "kind": "intersection",
+        "name": "Front Street / Terrace Lagoon Loop (South)",
+        "tags": [],
+        "lat": 32.72726737662313,
+        "lng": -117.15496383006723
+    },
+    {
+        "id": "intxn_front_lagoon_2",
+        "kind": "intersection",
+        "name": "Front Street / Terrace Lagoon Loop (North)",
+        "tags": [],
+        "lat": 32.72442520989079,
+        "lng": -117.16066409380507
+    },
+    {
+        "id": "intxn_treetops_fern_trail",
+        "kind": "intersection",
+        "name": "Treetops Way / Fern Canyon Trail",
+        "tags": [],
+        "lat": 32.735612428188205,
+        "lng": -117.15496383006723
+    },
+    {
+        "id": "intxn_treetops_orangutan_trail",
+        "kind": "intersection",
+        "name": "Treetops Way / Orangutan Trail",
+        "tags": [],
+        "lat": 32.73796433208615,
+        "lng": -117.15781396193616
+    },
+    {
+        "id": "intxn_treetops_hippo_trail",
+        "kind": "intersection",
+        "name": "Treetops Way / Hippo Trail",
+        "tags": [],
+        "lat": 32.74213959255212,
+        "lng": -117.16066409380507
+    },
+    {
+        "id": "intxn_hippo_monkey_trails",
+        "kind": "intersection",
+        "name": "Monkey Trail / Hippo Trail",
+        "tags": [],
+        "lat": 32.748983757472594,
+        "lng": -117.16951754140803
+    },
+    {
+        "id": "koi",
+        "kind": "exhibit",
+        "name": "Koi Fish",
+        "tags": [
+            "koi",
+            "fish",
+            "aquatic",
+            "pond",
+            "goldfish",
+            "japan",
+            "asia"
+        ],
+        "lat": 32.72211788245888,
+        "lng": -117.15794384136309
+    },
+    {
+        "id": "flamingo",
+        "kind": "exhibit",
+        "name": "Flamingos",
+        "tags": [
+            "flamingo",
+            "bird",
+            "flamingo",
+            "pink",
+            "lawn decoration",
+            "south",
+            "america"
+        ],
+        "lat": 32.74505139995802,
+        "lng": -117.15794384136309
+    },
+    {
+        "id": "capuchin",
+        "kind": "exhibit",
+        "name": "Capuchin Monkeys",
+        "tags": [
+            "tufted",
+            "capuchin",
+            "monkey",
+            "mammal",
+            "primate",
+            "south",
+            "america"
+        ],
+        "lat": 32.751128871469874,
+        "lng": -117.16364410510093
+    },
+    {
+        "id": "gorilla",
         "kind": "exhibit",
         "name": "Gorillas",
         "tags": [
             "gorilla",
-            "monkey",
+            "primate",
+            "mammal",
+            "great",
             "ape",
-            "mammal"
+            "primate",
+            "africa"
+        ],
+        "lat": 32.74812588554637,
+        "lng": -117.17565073656901
+    },
+    {
+        "id": "orangutan",
+        "kind": "exhibit",
+        "name": "Orangutans",
+        "tags": [
+            "orangutan",
+            "mammal",
+            "terrestrial",
+            "primate",
+            "ape",
+            "orange",
+            "asia"
+        ],
+        "lat": 32.736864688333235,
+        "lng": -117.16364410510093
+    },
+    {
+        "id": "siamang",
+        "kind": "exhibit",
+        "name": "Siamangs",
+        "tags": [
+            "siamang",
+            "mammal",
+            "terrestrial",
+            "primate",
+            "orange",
+            "asia"
+        ],
+        "lat": 32.736864688333235,
+        "lng": -117.16079397323202
+    },
+    {
+        "id": "fern_canyon",
+        "kind": "exhibit",
+        "name": "Fern Canyon",
+        "tags": [
+            "plants",
+            "ferns",
+            "green"
+        ],
+        "lat": 32.73480907296893,
+        "lng": -117.17269958736802
+    },
+    {
+        "id": "parker_aviary",
+        "kind": "exhibit_group",
+        "name": "Parker Aviary",
+        "tags": [],
+        "lat": 32.73971798112842,
+        "lng": -117.16644660080382
+    },
+    {
+        "id": "toucan",
+        "parent_id": "parker_aviary",
+        "kind": "exhibit",
+        "name": "Toucan",
+        "tags": [
+            "bird",
+            "avian",
+            "toucan",
+            "colorful",
+            "orange",
+            "south",
+            "america"
         ]
     },
     {
-        "id": "gators",
+        "id": "motmot",
+        "parent_id": "parker_aviary",
         "kind": "exhibit",
-        "name": "Alligators",
+        "name": "Blue Capped Motmot",
         "tags": [
-            "alligator",
+            "bird",
+            "avian",
+            "blue",
+            "colorful",
+            "central",
+            "america"
+        ]
+    },
+    {
+        "id": "scripps_aviary",
+        "kind": "exhibit_group",
+        "name": "Scripps Aviary",
+        "tags": [],
+        "lat": 32.748538318135594,
+        "lng": -117.17255093386991
+    },
+    {
+        "id": "spoonbill",
+        "parent_id": "scripps_aviary",
+        "kind": "exhibit",
+        "name": "Spoonbill",
+        "tags": [
+            "spoon",
+            "bill",
+            "bird",
+            "avian",
+            "blue",
+            "beak",
+            "flat"
+        ]
+    },
+    {
+        "id": "hippo",
+        "kind": "exhibit",
+        "name": "Hippos",
+        "tags": [
+            "hippo",
+            "mammal",
+            "africa",
+            "big"
+        ],
+        "lat": 32.746320519009025,
+        "lng": -117.16364410510093
+    },
+    {
+        "id": "crocodile",
+        "kind": "exhibit",
+        "name": "Crocodiles",
+        "tags": [
+            "croc",
+            "crocodile",
             "reptile",
-            "gator"
+            "africa",
+            "teeth",
+            "scary"
+        ],
+        "lat": 32.746302644092815,
+        "lng": -117.16659525430192
+    },
+    {
+        "id": "owens_aviary",
+        "kind": "exhibit_group",
+        "name": "Owens Aviary",
+        "tags": [],
+        "lat": 32.73798565400121,
+        "lng": -117.16949876733686
+    },
+    {
+        "id": "mynah",
+        "parent_id": "owens_aviary",
+        "kind": "exhibit",
+        "name": "Bali Mynah",
+        "tags": [
+            "bali",
+            "mynah",
+            "bird",
+            "endangered",
+            "indonesia"
         ]
     },
     {
-        "id": "lions",
+        "id": "dove",
+        "parent_id": "owens_aviary",
         "kind": "exhibit",
-        "name": "Lions",
+        "name": "Emerald Dove",
         "tags": [
-            "lions",
-            "cats",
-            "mammal",
-            "africa"
+            "emerald",
+            "dove",
+            "bird",
+            "south",
+            "east",
+            "asia"
         ]
     },
     {
-        "id": "elephant_odyssey",
-        "kind": "exhibit",
-        "name": "Elephant Odyssey",
-        "tags": [
-            "elephant",
-            "mammal",
-            "africa"
-        ]
-    },
-    {
-        "id": "arctic_foxes",
-        "kind": "exhibit",
-        "name": "Arctic Foxes",
-        "tags": [
-            "arctic",
-            "fox",
-            "mammal"
-        ]
+        "id": "benchley_plaza",
+        "kind": "intersection",
+        "name": "Benchley Plaza",
+        "tags": [],
+        "lat": 32.74577064618906,
+        "lng": -117.17837098901099
     }
 ]

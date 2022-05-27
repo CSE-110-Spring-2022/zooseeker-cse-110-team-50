@@ -33,7 +33,9 @@ public abstract class PlaceDao {
         for (String tag : place.tags) {
             if(tagDao.get(tag) == null) tagDao.insert(new Tag(tag));
             long newTagId = tagDao.get(tag).tagId;
-            placeTagCrossRefDao.insert(new PlaceTagCrossRef(place.placeId, newTagId));
+            if (placeTagCrossRefDao.get(place.placeId, newTagId) == null) {
+                placeTagCrossRefDao.insert(new PlaceTagCrossRef(place.placeId, newTagId));
+            }
         }
     }
 

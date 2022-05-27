@@ -49,6 +49,9 @@ public class PlanViewModel extends AndroidViewModel {
         this.planItemDao.delete(planItem);
     }
 
+    public void nukePlanItems() {
+        this.planItemDao.nukeTable();
+    }
     public void updatePlanItem(PlanItem planItem) {
         this.planItemDao.update(planItem);
     }
