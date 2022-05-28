@@ -20,20 +20,32 @@ import java.util.Map;
 public class ZooNavigator {
 
     private int routeIndex = 0;
-    Graph<String, EdgeWithId> graph;
-    Map<String, String> edgeInfo;
-    Map<String, String> placeInfo;
+//    Graph<String, EdgeWithId> graph;
+//    Map<String, String> edgeInfo;
+//    Map<String, String> placeInfo;
+    List<RoutePackage> route;
 
     public static ZooNavigator builder(){ return new ZooNavigator(); }
 
-    public ZooNavigator build(){ return this; }
-
-    public void nextExhibit(){
-        routeIndex++;
+    public ZooNavigator setRoute(List<RoutePackage> route) {
+        this.route = route;
+        return this;
     }
 
-    public void previousExhibit(){
+    public ZooNavigator build(){ return this; }
+
+    public RoutePackage nextExhibit(){
+        routeIndex++;
+        return currentExhibit();
+    }
+
+    public RoutePackage previousExhibit(){
         routeIndex--;
+        return currentExhibit();
+    }
+
+    public RoutePackage currentExhibit() {
+        return route.get(routeIndex);
     }
 
     public void route(List<String> nodes){
