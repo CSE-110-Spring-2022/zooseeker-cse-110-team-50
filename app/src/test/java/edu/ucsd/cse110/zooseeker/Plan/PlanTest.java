@@ -115,9 +115,9 @@ public class PlanTest {
 
         activity.getSupportFragmentManager().beginTransaction().replace(R.id.nav_fragment, planFragment).commit();
 
-        PlanItem planItem = new PlanItem("lion_kingdom", -1);
-        PlanItem planItem_2 = new PlanItem("arctic foxes", 20);
-        PlanItem planItem_3= new PlanItem("entrance plaza", 30);
+        PlanItem planItem = new PlanItem("lion_kingdom");
+        PlanItem planItem_2 = new PlanItem("arctic foxes");
+        PlanItem planItem_3= new PlanItem("entrance plaza");
 
         planItemDao.insert(planItem);
         planItemDao.insert(planItem_2);
@@ -130,9 +130,9 @@ public class PlanTest {
     
     @Test
     public void checkIfPlanDeletion() {
-        PlanItem planItem = new PlanItem("lion_kingdom", -1);
-        PlanItem planItem_2 = new PlanItem("arctic foxes", 20);
-        PlanItem planItem_3= new PlanItem("entrance plaza", 30);
+        PlanItem planItem = new PlanItem("lion_kingdom");
+        PlanItem planItem_2 = new PlanItem("arctic foxes");
+        PlanItem planItem_3= new PlanItem("entrance plaza");
 
         planItemDao.insert(planItem);
         planItemDao.insert(planItem_2);
