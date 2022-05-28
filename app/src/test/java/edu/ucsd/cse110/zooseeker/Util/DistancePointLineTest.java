@@ -2,15 +2,20 @@ package edu.ucsd.cse110.zooseeker.Util;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import android.util.Pair;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import edu.ucsd.cse110.zooseeker.Util.Geometry.Distance2D;
 import edu.ucsd.cse110.zooseeker.Util.Geometry.Point2D;
 
+@RunWith(AndroidJUnit4.class)
 public class DistancePointLineTest {
     /**
      * Make sure distance throw an exception when p1 and p2
@@ -220,7 +225,7 @@ public class DistancePointLineTest {
                         new Point2D(-1, 0.5)
                 )
         );
-        assertEquals(3*Math.sqrt(5) / 2, distance, 0.001);
+        assertEquals(3*Math.sqrt((double)5) / 2, distance, 0.001);
 
         distance = Distance2D.distance(
                 new Point2D(-6, -4),

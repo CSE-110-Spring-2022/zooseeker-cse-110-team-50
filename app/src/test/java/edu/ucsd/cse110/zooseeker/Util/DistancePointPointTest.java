@@ -1,11 +1,7 @@
 package edu.ucsd.cse110.zooseeker.Util;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
-import android.graphics.Point;
-import android.util.Pair;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
