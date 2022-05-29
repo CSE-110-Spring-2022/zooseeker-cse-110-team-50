@@ -33,6 +33,7 @@ public class ZooNavigator {
     Searcher searcher;
     Boolean firstPrev = false;
 
+    //comment
 
     public ZooNavigator(RawGraph rawGraph){
         this.searcher = Searcher.builder(rawGraph);
