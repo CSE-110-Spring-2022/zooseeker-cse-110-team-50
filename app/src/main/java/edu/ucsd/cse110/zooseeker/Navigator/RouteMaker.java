@@ -1,11 +1,9 @@
-package edu.ucsd.cse110.zooseeker.Util.JSONLoader;
+package edu.ucsd.cse110.zooseeker.Navigator;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
-import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 
 import java.util.ArrayList;
@@ -13,10 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 
-import edu.ucsd.cse110.zooseeker.Navigator.EdgeWithId;
-import edu.ucsd.cse110.zooseeker.Navigator.NodeWithDist;
-import edu.ucsd.cse110.zooseeker.Navigator.RoutePackage;
-import edu.ucsd.cse110.zooseeker.Navigator.RouteStep;
 import edu.ucsd.cse110.zooseeker.Util.Router.RawGraph;
 import edu.ucsd.cse110.zooseeker.Util.Router.Router;
 //import edu.ucsd.cse110.zooseeker.Util.Router.Router;
@@ -107,4 +101,5 @@ public class RouteMaker {
         }
         return ret;
     }
+
 }

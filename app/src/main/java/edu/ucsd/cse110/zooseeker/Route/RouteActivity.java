@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+
+import edu.ucsd.cse110.zooseeker.Navigator.*;
 import edu.ucsd.cse110.zooseeker.Persistence.MainDatabase;
 import edu.ucsd.cse110.zooseeker.Persistence.Place;
 import edu.ucsd.cse110.zooseeker.Persistence.PlaceDao;
@@ -19,16 +21,18 @@ import edu.ucsd.cse110.zooseeker.Persistence.PlanItem;
 import edu.ucsd.cse110.zooseeker.Persistence.PlanItemDao;
 import edu.ucsd.cse110.zooseeker.R;
 import edu.ucsd.cse110.zooseeker.Util.JSONLoader.JSONLoader;
+import edu.ucsd.cse110.zooseeker.Util.Router.RawGraph;
 import edu.ucsd.cse110.zooseeker.Util.Router.Router;
 
 public class RouteActivity extends AppCompatActivity {
 
-    private List<Router.RoutePackage> pkgList;
+    private List<RoutePackage> pkgList;
     private int routeIndex = 0;
     private PlaceDao placeDao = MainDatabase.getSingleton(this).placeDao();
     boolean isDetailedDirections = true;
     TextView routeTextView;
     Button toggleDirectionsButton;
+    ZooNavigator zooNavigator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +66,18 @@ public class RouteActivity extends AppCompatActivity {
         for (Place place: placeDao.getAll())
             placeInfoMap.put(place.placeId, place.name);
 
+        Map<String, String> edgeInfo = JSONLoader.loadEdgeInfo(getApplicationContext());
+        RawGraph rawGraph = JSONLoader.loadRawGraph(getApplicationContext());
+
+        RouteMaker routeMaker = RouteMaker.builder()
+                .loadEdgeInfo(edgeInfo)
+                .loadFromRawGraph(rawGraph)
+                .loadPlaceInfo(placeInfoMap)
+                .build();
 
         Router router = Router.builder()
-                .loadEdgeInfo(JSONLoader.loadEdgeInfo(getApplicationContext()))
-                .loadFromRawGraph(JSONLoader.loadRawGraph(getApplicationContext()))
+                .loadEdgeInfo(edgeInfo)
+                .loadFromRawGraph(rawGraph)
                 .loadPlaceInfo(placeInfoMap)
                 .build();
 
@@ -73,7 +85,7 @@ public class RouteActivity extends AppCompatActivity {
         PlanItemDao planItemDao = db.planItemDao();
         List<PlanItem> allPlanItems = planItemDao.getAll();
         List<String> allNodes = allPlanItems.stream().map((item) -> item.placeId).collect(Collectors.toList());
-        pkgList = router.route(allNodes);
+        pkgList = routeMaker.route(allNodes);
         toggleDirectionsButton.setText("Brief\nDirections");
 //        for (Router.RoutePackage pkg : pkgList) {
 //            routeStr += pkg.toString() + "\n";

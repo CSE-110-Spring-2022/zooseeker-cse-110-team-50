@@ -108,7 +108,6 @@ public class GraphTest {
 
     }
 
-
     /**
      * Checks if putting the information into the router is a null value
      * when a target vertex does not exist
