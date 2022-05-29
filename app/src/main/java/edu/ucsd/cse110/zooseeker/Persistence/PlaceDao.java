@@ -60,11 +60,11 @@ public abstract class PlaceDao {
             "FROM place_tag_cross_ref\n" +
             "JOIN place ON place.place_id = place_tag_cross_ref.place_id\n" +
             "JOIN tag ON tag.tag_id = place_tag_cross_ref.tag_id\n" +
-            "WHERE tag.name LIKE '%' || :query || '%'\n" +
+            "WHERE place.kind = 'exhibit' AND tag.name LIKE '%' || :query || '%'\n" +
             "UNION ALL\n" +
             "SELECT DISTINCT place.place_id, place.name, place.kind\n" +
             "FROM place\n" +
-            "WHERE place.name LIKE '%' || :query || '%'OR place.kind LIKE '%' || :query || '%')\n" +
+            "WHERE place.kind = 'exhibit' AND place.name LIKE '%' || :query || '%')\n" +
             "AS place ORDER BY place.name\n")
     public abstract LiveData<List<Place>> nameAndTagSearch(String query);
 
