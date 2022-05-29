@@ -2,10 +2,13 @@ package edu.ucsd.cse110.zooseeker.Navigator;
 
 
 import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import edu.ucsd.cse110.zooseeker.Util.Router.Router;
 
 /**
  * Things it should do:
@@ -29,6 +32,7 @@ public class ZooNavigator {
     public ZooNavigator build(){ return this; }
 
     public void nextExhibit(){
+
         routeIndex++;
     }
 
@@ -36,8 +40,8 @@ public class ZooNavigator {
         routeIndex--;
     }
 
-    public void route(List<String> nodes){
-
+    public List<RoutePackage> route(List<String> nodes){
+        return null;
     }
 
     public void reroute(){

@@ -4,34 +4,32 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import edu.ucsd.cse110.zooseeker.Util.Router.Router;
-
 public class RoutePackage {
     private String start = "";
     private String end = "";
-    private List<Router.RouteStep> steps = new ArrayList<>();
+    private List<RouteStep> steps = new ArrayList<>();
     Map<String, String> edgeInfo;
     Map<String, String> placeInfo;
     public RoutePackage(String startPlaceId, String endPlaceId, Map<String, String> edge, Map<String, String> place) {
-        this.edgeInfo = edge;
-        this.placeInfo = place;
+        //this.edgeInfo = edge;
+        //this.placeInfo = place;
         this.start = placeInfo.get(startPlaceId);
         this.end = placeInfo.get(endPlaceId);
     }
 
     public String getStart() {
-        return start;
+        return  start;
     }
 
     public String getEnd() {
         return end;
     }
 
-    public List<Router.RouteStep> getSteps() {
+    public List<RouteStep> getSteps() {
         return steps;
     }
 
-    public void addStep(Router.RouteStep step) {
+    public void addStep(RouteStep step) {
         steps.add(step);
     }
 
@@ -43,7 +41,7 @@ public class RoutePackage {
         List<String> endOfPaths = new ArrayList();
         int index = -1;
 
-        for(Router.RouteStep step : steps){
+        for(RouteStep step : steps){
             if(start == step.to){
                 continue;
             }
