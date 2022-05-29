@@ -15,6 +15,10 @@ import edu.ucsd.cse110.zooseeker.Util.Router.RawGraph;
 import edu.ucsd.cse110.zooseeker.Util.Router.Router;
 //import edu.ucsd.cse110.zooseeker.Util.Router.Router;
 
+/**
+ * NOTE: LEGACY CODE, NOT TO BE USED IN FINAL APP
+ */
+
 public class RouteMaker {
     Graph<String, EdgeWithId> graph;
     Map<String, String> edgeInfo;

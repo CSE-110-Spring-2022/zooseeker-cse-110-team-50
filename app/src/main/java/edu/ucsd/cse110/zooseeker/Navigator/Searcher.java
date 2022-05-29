@@ -17,7 +17,14 @@ public class Searcher {
     Map<String, String> edgeInfo;
     Map<String, String> placeInfo;
 
-    public Searcher builder(){ return new Searcher(); }
+    public Searcher(RawGraph rawGraph){
+        //Graph<String, EdgeWithId> loadedGraph =
+        this.graph = GraphLoader.loadFromRawGraph(rawGraph);
+    }
+
+    public static Searcher builder(RawGraph rawGraph){
+        return new Searcher(rawGraph);
+    }
 
     public Searcher build(){ return this; }
 
@@ -65,14 +72,36 @@ public class Searcher {
         return shortestPath;
     }
 
+    public void setGraph(RawGraph rawGraph){
+        graph = GraphLoader.loadFromRawGraph(rawGraph);
+    }
+
     /**
      *
      * @param node: current node
      * @param nodes: list of nodes
      * @returns the closest node to node from nodes
+     * This basically stems from the getPathToClosestNode algorithm above with a few tweaks
      */
-    public static RawGraph.Node closestNode(RawGraph.Node node, List<RawGraph.Node> nodes){
+    public RawGraph.Node closestNode(RawGraph.Node node, List<RawGraph.Node> nodes){
+        RawGraph.Node closest = null;
+        String source = node.id;
+        List<String> targets = null;
+        for(int i = 0; i < nodes.size(); ++i){
+            targets.add(nodes.get(i).id);
+        }
 
-        return null;
+        PriorityQueue<NodeWithDist> pq = new PriorityQueue<>((x, y) -> (int)(x.distance - y.distance));
+        GraphPath<String, EdgeWithId> shortestPath = shortestPath(source, targets.get(0));
+        GraphPath<String, EdgeWithId> newPath;
+        for (RawGraph.Node ind : nodes) {
+            String target = ind.id;
+            newPath = shortestPath(source, target);
+            if (newPath.getWeight() < shortestPath.getWeight()) {
+                shortestPath = newPath;
+                closest = ind;
+            }
+        }
+        return closest;
     }
 }

@@ -30,12 +30,17 @@ public class ZooNavigator {
     List<RawGraph.Node> pastNodes = new ArrayList<RawGraph.Node>();
     RawGraph.Node current;
     RawGraph.Node next;
+    Searcher searcher;
+    Boolean firstPrev = false;
 
-    public ZooNavigator(){
 
+    public ZooNavigator(RawGraph rawGraph){
+        this.searcher = Searcher.builder(rawGraph);
     }
 
-    public static ZooNavigator builder(){ return new ZooNavigator(); }
+    public static ZooNavigator builder(RawGraph rawGraph){
+        return new ZooNavigator(rawGraph);
+    }
 
     public ZooNavigator setRoute(List<RoutePackage> route) {
         this.route = route;
@@ -44,20 +49,51 @@ public class ZooNavigator {
 
     public ZooNavigator build(){ return this; }
 
-    public RoutePackage nextExhibit(){
-        if(routeIndex + 1 < route.size()){ routeIndex++; }
-        return currentExhibit();
+    public void nextExhibit(){
+        //if(routeIndex + 1 < route.size()){ routeIndex++; }
+        //return currentExhibit();
+        if(firstPrev) {
+            RawGraph.Node alt = current;
+            current = next;
+            next = current;
+            firstPrev = false;
+        }
+        else {
+            pastNodes.add(current);
+            current = next;
+            next = searcher.closestNode(current, futureNodes);
+        }
     }
 
-    public RoutePackage previousExhibit(){
-        if(routeIndex - 1 >= 0){ routeIndex--; }
-        return currentExhibit();
+    public void previousExhibit(){
+        //if(routeIndex - 1 >= 0){ routeIndex--; }
+        //return currentExhibit();
+        if(!firstPrev){
+            firstPrev = true;
+            futureNodes.add(next);
+            next = searcher.closestNode(current, pastNodes);
+        }
+        else{
+            futureNodes.add(current);
+            current = next;
+            next = searcher.closestNode(current, pastNodes);
+        }
     }
 
-    public RoutePackage currentExhibit() {
-        return route.get(routeIndex);
+    public RawGraph.Node currentExhibit() {
+        return current;
     }
 
+    public void skip(){
+        //route.remove(routeIndex);
+        next = searcher.closestNode(current, futureNodes);
+    }
+
+
+    /**
+     * Everything below is legacy based on RouteMaker and RoutePackage,
+     * currently using Searcher
+     */
     public List<RoutePackage> route(List<String> nodes){
             return routeMaker.route(nodes);
     }
@@ -72,11 +108,6 @@ public class ZooNavigator {
         List<RoutePackage> newRoute = route(newRouteNodes);
         oldRoute.addAll(newRoute);
         setRoute(oldRoute); //note, not returning THE old route, but an edited route
-    }
-
-    public void skip(){
-        route.remove(routeIndex);
-
     }
 
 //    public void setRoute(List<RoutePackage> route){
