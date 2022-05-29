@@ -52,6 +52,11 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         return searchResults.size();
     }
 
+    @Override
+    public long getItemId(int position) {
+        return searchResults.get(position).hashCode();
+    }
+
     public void setOnAddButtonClicked(Consumer<Place> onAddButtonClicked) {
         this.onAddButtonClicked = onAddButtonClicked;
     }
