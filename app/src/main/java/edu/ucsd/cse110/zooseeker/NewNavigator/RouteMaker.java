@@ -1,4 +1,4 @@
-package edu.ucsd.cse110.zooseeker.Navigator;
+package edu.ucsd.cse110.zooseeker.NewNavigator;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
@@ -11,13 +11,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 
+import edu.ucsd.cse110.zooseeker.Navigator.NodeWithDist;
+import edu.ucsd.cse110.zooseeker.Navigator.RoutePackage;
+import edu.ucsd.cse110.zooseeker.Navigator.RouteStep;
 import edu.ucsd.cse110.zooseeker.Util.Router.RawGraph;
-import edu.ucsd.cse110.zooseeker.Util.Router.Router;
 //import edu.ucsd.cse110.zooseeker.Util.Router.Router;
 
-/**
- * NOTE: LEGACY CODE, NOT TO BE USED IN FINAL APP
- */
+
 
 public class RouteMaker {
     Graph<String, EdgeWithId> graph;
@@ -25,6 +25,7 @@ public class RouteMaker {
     Map<String, String> placeInfo;
     private String start;
     private String end;
+
 
     private List<RouteStep> steps = new ArrayList<>();
 
@@ -83,6 +84,7 @@ public class RouteMaker {
         return shortestPath;
     }
 
+
     public List<RoutePackage> route(List<String> nodes) {
         List<GraphPath<String, EdgeWithId>> routes = new ArrayList<>();
         String START = "entrance_exit_gate";
@@ -105,5 +107,7 @@ public class RouteMaker {
         }
         return ret;
     }
+
+
 
 }

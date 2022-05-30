@@ -2,6 +2,7 @@ package edu.ucsd.cse110.zooseeker.Route;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +15,8 @@ import java.util.stream.Collectors;
 
 
 import edu.ucsd.cse110.zooseeker.Navigator.*;
+import edu.ucsd.cse110.zooseeker.NewNavigator.RouteMaker;
+import edu.ucsd.cse110.zooseeker.NewNavigator.ZooNavigator;
 import edu.ucsd.cse110.zooseeker.Persistence.MainDatabase;
 import edu.ucsd.cse110.zooseeker.Persistence.Place;
 import edu.ucsd.cse110.zooseeker.Persistence.PlaceDao;
@@ -26,7 +29,7 @@ import edu.ucsd.cse110.zooseeker.Util.Router.Router;
 
 public class RouteActivity extends AppCompatActivity {
 
-    private List<RoutePackage> pkgList;
+    private List<Router.RoutePackage> pkgList;
     private int routeIndex = 0;
     private PlaceDao placeDao = MainDatabase.getSingleton(this).placeDao();
     boolean isDetailedDirections = true;
@@ -61,6 +64,7 @@ public class RouteActivity extends AppCompatActivity {
             }
         });
 
+        /*
         JSONLoader.loadRawGraph(getApplicationContext());
         final Map<String, String> placeInfoMap = new HashMap<>();
         for (Place place: placeDao.getAll())
@@ -81,8 +85,13 @@ public class RouteActivity extends AppCompatActivity {
                 .loadPlaceInfo(placeInfoMap)
                 .build();
 
+
+         */
         MainDatabase db = MainDatabase.getSingleton(this);
         PlanItemDao planItemDao = db.planItemDao();
+        Context context = getApplicationContext();
+        zooNavigator = new ZooNavigator(placeDao, planItemDao, context);
+/*
         List<PlanItem> allPlanItems = planItemDao.getAll();
         List<String> allNodes = allPlanItems.stream().map((item) -> item.placeId).collect(Collectors.toList());
         pkgList = routeMaker.route(allNodes);
@@ -91,6 +100,9 @@ public class RouteActivity extends AppCompatActivity {
 //            routeStr += pkg.toString() + "\n";
 //        }
 
+
+ */
+        pkgList = zooNavigator.getPkgList();
         routeTextView = findViewById(R.id.route_text_view);
         if(isDetailedDirections){
             routeTextView.setText(pkgList.get(routeIndex).toStringDetailed());

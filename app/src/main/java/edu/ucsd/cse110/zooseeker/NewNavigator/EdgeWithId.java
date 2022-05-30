@@ -1,4 +1,4 @@
-package edu.ucsd.cse110.zooseeker.Navigator;
+package edu.ucsd.cse110.zooseeker.NewNavigator;
 
 
 import org.jgrapht.graph.DefaultWeightedEdge;

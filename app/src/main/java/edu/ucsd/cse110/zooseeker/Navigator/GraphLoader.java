@@ -3,6 +3,7 @@ package edu.ucsd.cse110.zooseeker.Navigator;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 
+import edu.ucsd.cse110.zooseeker.NewNavigator.EdgeWithId;
 import edu.ucsd.cse110.zooseeker.Util.Router.RawGraph;
 
 public class GraphLoader {

@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 
+import edu.ucsd.cse110.zooseeker.NewNavigator.EdgeWithId;
+import edu.ucsd.cse110.zooseeker.NewNavigator.MetaVertex;
 import edu.ucsd.cse110.zooseeker.Util.Router.RawGraph;
 
 public class Searcher {

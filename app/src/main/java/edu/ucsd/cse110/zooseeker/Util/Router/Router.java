@@ -80,9 +80,9 @@ public class Router {
             String ret = "From " + start + "\n\n\n";
             for (RouteStep step : steps) {
 
-                if(start == step.to){
-                    continue;
-                }
+                //if(start == step.to){
+                //    continue;
+                //}
                 ret += (cnt++ + ". Proceed on " +
                         edgeInfo.get(step.edgeId) +
                         " " + step.distance +
@@ -102,9 +102,9 @@ public class Router {
             int index = -1;
 
             for(RouteStep step : steps){
-                if(start == step.to){
-                    continue;
-                }
+                //if(start == step.to){
+                //    continue;
+                //}
                 if(index == -1){
                     // first time. We will add the place and the distances
                     compressedEdges.add(edgeInfo.get(step.edgeId));

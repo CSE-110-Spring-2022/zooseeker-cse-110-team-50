@@ -1,4 +1,4 @@
-package edu.ucsd.cse110.zooseeker.Navigator;
+package edu.ucsd.cse110.zooseeker.NewNavigator;
 
 import java.util.Arrays;
 import java.util.List;
@@ -7,27 +7,28 @@ import edu.ucsd.cse110.zooseeker.Persistence.Place;
 
 public class MetaVertex {
     public String id;
-    public boolean isParent;
+    public String name;
+    public boolean hasParent;
     public List<String> placeIds;
-    public Double lat, lng;
+    public double lat, lng;
 
-    public MetaVertex(Place place, Double lat, Double lng) {
+    public MetaVertex(Place place) {
         if (place.parentId == null) {
             this.id = place.placeId;
-            this.isParent = true;
+            this.hasParent = false;
+            this.lat = place.lat;
+            this.lng = place.lng;
+            this.name = place.name;
         } else {
             this.id = place.parentId;
-            this.isParent = false;
+            this.hasParent = true;
+            placeIds = Arrays.asList(place.placeId);
         }
-
-        placeIds = Arrays.asList(place.placeId);
-        this.lat = lat;
-        this.lng = lng;
     }
 
     public boolean addPlace(Place place) {
 
-        if (!isParent)
+        if (!hasParent)
             return false;
 
         if (this.placeIds.contains(place.placeId))
@@ -36,12 +37,25 @@ public class MetaVertex {
         this.placeIds.add(place.placeId);
         return true;
     }
+    public boolean setLatLng(double lat, double lng) {
+
+        if (!hasParent)
+            return false;
+
+        this.lat = lat;
+        this.lng = lng;
+        return true;
+    }
+
+    public void setName(String nameInput){
+        this.name = nameInput;
+    }
 
     @Override
     public String toString() {
         return "MetaVertex{" +
                 "id='" + id + '\'' +
-                ", isParent=" + isParent +
+                ", isParent=" + hasParent +
                 ", placeIds=" + placeIds +
                 ", lat=" + lat +
                 ", lng=" + lng +
