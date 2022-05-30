@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,13 +50,6 @@ public class PlanFragment extends Fragment{
         planAdapter.setHasStableIds(true);
 
 
-
-        //PlanItemDao planItemDao = MainDatabase.getSingleton(this).planItemDao();
-        //List<PlanItem> planListItems = PlanItemDao.getAll();
-
-
-        //planAdapter.setPlanItems(planListItems);
-
         planViewModel.getPlanItems().observe(getViewLifecycleOwner(), planAdapter::setPlanItems);
 
         planList = view.findViewById(R.id.plan);
@@ -84,41 +78,17 @@ public class PlanFragment extends Fragment{
         });
 
 
-
         planAmount = view.findViewById(R.id.plan_amount);
         int amount = planViewModel.getPlanCount();
-        //int amount = planViewModel.getPlanItems().observe(getViewLifecycleOwner(), planAdapter::getItemCount);
-//        if(amount == 1){
-//            planAmount.setText(amount + " Exhibit in Plan");
-//        }
-        //else{
         planAmount.setText("Exhibit Count: " + amount);
-        //}
-        //planAmount.setText("Setting the text of the view, this is a test");
-        //planAdapter.setPlanItems(PlanItemDao.getAll());
 
         return view;
     }
 
-    public RecyclerView getPlanView(){return planList;}
-
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//        // Inflate the layout for this fragment
-//
-//        final View view = inflater.inflate(R.layout.fragment_plan, container, false);
-//
-//        startRoute = view.findViewById(R.id.start_route_button);
-//        startRoute.setOnClickListener(this);
-//        return view;
-//    }
-
+    public RecyclerView getPlanView() { return planList; }
 
     public void startPlan(View view){
         Intent intent = new Intent(getActivity(), RouteActivity.class);
-        //myIntent.putExtra("key", value); //Optional parameters
-        Log.d("HI", "HIHI");
         startActivity(intent);
     }
 

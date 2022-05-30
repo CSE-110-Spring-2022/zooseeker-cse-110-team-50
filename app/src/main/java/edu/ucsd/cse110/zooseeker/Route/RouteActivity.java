@@ -3,30 +3,19 @@ package edu.ucsd.cse110.zooseeker.Route;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 
-import edu.ucsd.cse110.zooseeker.Navigator.*;
-import edu.ucsd.cse110.zooseeker.NewNavigator.RouteMaker;
 import edu.ucsd.cse110.zooseeker.NewNavigator.ZooNavigator;
 import edu.ucsd.cse110.zooseeker.Persistence.MainDatabase;
-import edu.ucsd.cse110.zooseeker.Persistence.Place;
 import edu.ucsd.cse110.zooseeker.Persistence.PlaceDao;
-import edu.ucsd.cse110.zooseeker.Persistence.PlanItem;
 import edu.ucsd.cse110.zooseeker.Persistence.PlanItemDao;
 import edu.ucsd.cse110.zooseeker.R;
-import edu.ucsd.cse110.zooseeker.Util.JSONLoader.JSONLoader;
-import edu.ucsd.cse110.zooseeker.Util.Router.RawGraph;
 import edu.ucsd.cse110.zooseeker.Util.Router.Router;
 
 public class RouteActivity extends AppCompatActivity {
@@ -44,6 +33,10 @@ public class RouteActivity extends AppCompatActivity {
 
     // View Elements
     TextView routeTextView;
+    TextView fromTextView;
+    TextView toTextView;
+    TextView routeLatitude;
+    TextView routeLongitude;
     Button nextButton;
     Button skipButton;
     Button backButton;
@@ -64,6 +57,10 @@ public class RouteActivity extends AppCompatActivity {
 
         // initialize all view elements
         routeTextView = findViewById(R.id.route_text_view);
+        fromTextView = findViewById(R.id.route_from_text);
+        toTextView = findViewById(R.id.route_to_text);
+        routeLatitude = findViewById(R.id.route_latitude);
+        routeLongitude = findViewById(R.id.route_longitude);
         nextButton = findViewById(R.id.route_next_button);
         backButton = findViewById(R.id.route_back_button);
         skipButton = findViewById(R.id.route_skip_button);
@@ -84,7 +81,17 @@ public class RouteActivity extends AppCompatActivity {
             routeTextView.setText(currentRouteToDisplay);
         });
 
+        model.getFromAndTo().observe(this, fromAndTo -> {
+            fromTextView.setText(fromAndTo.first);
+            toTextView.setText(fromAndTo.second);
+        });
 
+        model.getCurrentLocationCoordinate().observe(this, currentLocationCoordinate -> {
+            String LATITUDE_LABEL = " Latitude:";
+            String LONGITUDE_LABEL = "Longitude:";
+            routeLatitude.setText(LATITUDE_LABEL + currentLocationCoordinate.first);
+            routeLongitude.setText(LONGITUDE_LABEL + currentLocationCoordinate.second);
+        });
 
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override

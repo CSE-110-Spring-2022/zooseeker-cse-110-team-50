@@ -12,17 +12,74 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:text="Route"
-            android:textSize="30dp"
             android:background="@drawable/route_header_bg"
-            android:paddingHorizontal="16dp"
-            android:textColor="#fff"
-            android:gravity="center_vertical"
+            android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="26dp"/>
+            android:layout_marginTop="16dp"
+            android:paddingVertical="10dp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/route_latitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Latitude"
+                android:textSize="10dp"
+                android:paddingHorizontal="16dp"
+                android:textColor="#fff"
+                android:gravity="center_vertical" />
+            <TextView
+                android:id="@+id/route_longitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Longitude"
+                android:textSize="10dp"
+                android:paddingHorizontal="16dp"
+                android:textColor="#fff"
+                android:gravity="center_vertical" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="from"
+                    android:textSize="12dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="10dp"
+                    android:textColor="#fff"
+                    android:gravity="center_vertical" />
+                <TextView
+                    android:id="@+id/route_from_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="XXXXX"
+                    android:textSize="22dp"
+                    android:textFontWeight="900"
+                    android:textColor="#fff"
+                    android:gravity="center_vertical" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="to"
+                    android:textSize="12dp"
+                    android:paddingHorizontal="10dp"
+                    android:textColor="#fff"
+                    android:gravity="center_vertical" />
+                <TextView
+                    android:id="@+id/route_to_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="YYYYY"
+                    android:textSize="22dp"
+                    android:textFontWeight="900"
+                    android:textColor="#fff"
+                    android:gravity="center_vertical" />
+            </LinearLayout>
+        </LinearLayout>
+
 
         <ScrollView
             android:layout_width="match_parent"
@@ -30,6 +87,7 @@
             android:scrollbars="vertical"
             android:fillViewport="true"
             android:layout_weight="1.0">
+
             <TextView
                 android:id="@+id/route_text_view"
                 android:layout_width="match_parent"

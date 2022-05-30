@@ -2,6 +2,7 @@ package edu.ucsd.cse110.zooseeker.Route;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -10,6 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.util.List;
+import java.util.function.DoubleBinaryOperator;
 
 import edu.ucsd.cse110.zooseeker.NewNavigator.ZooNavigator;
 import edu.ucsd.cse110.zooseeker.Persistence.MainDatabase;
@@ -22,6 +24,9 @@ public class RouteViewModel extends AndroidViewModel {
     // Live Data
     private MutableLiveData<Boolean> isDirectionDetailed;
     private MutableLiveData<String> currentRouteToDisplay;
+    private MutableLiveData<Pair<String, String>> fromAndTo;
+    private MutableLiveData<Pair<Double, Double>> currentLocationCoordinate;
+    private MutableLiveData<Boolean> isLocationMocked;
 
     // DAOs
     private MainDatabase mainDb;
@@ -32,8 +37,9 @@ public class RouteViewModel extends AndroidViewModel {
     private ZooNavigator zooNavigator;
     private List<Router.RoutePackage> routePackageList;
 
-    // Navigator Index
+    // Navigator related user data
     private int currentRouteIndex = 0;
+
 
     // Ctor
     public RouteViewModel(@NonNull Application application) {
@@ -51,7 +57,11 @@ public class RouteViewModel extends AndroidViewModel {
 
         // initialize LiveData
         isDirectionDetailed = new MutableLiveData<>(false);
-
+        fromAndTo = new MutableLiveData<>(new Pair<>("", ""));
+        currentLocationCoordinate = new MutableLiveData<>();
+        isLocationMocked = new MutableLiveData<>();
+        setCurrentLocationCoordinate(17.123124123, 17.8787);
+        setIsLocationMocked(false);
     }
 
     public LiveData<Boolean> getIsDirectionDetailed() {
@@ -64,6 +74,33 @@ public class RouteViewModel extends AndroidViewModel {
             updateCurrentRouteToDisplay();
         }
         return currentRouteToDisplay;
+    }
+
+    public LiveData<Pair<String, String>> getFromAndTo() {
+        updateCurrentRouteToDisplay();
+        return fromAndTo;
+    }
+
+    public LiveData<Pair<Double, Double>> getCurrentLocationCoordinate() {
+        return currentLocationCoordinate;
+    }
+
+    public LiveData<Boolean> getIsLocationMocked() {
+        return getIsLocationMocked();
+    }
+
+    public void setIsLocationMocked(boolean isLocationMocked) {
+        this.isLocationMocked.setValue(isLocationMocked);
+    }
+
+    // Set coordinate pair interface
+    public void setCurrentLocationCoordinate(Pair<Double, Double> coordinate) {
+        currentLocationCoordinate.setValue(coordinate);
+    }
+
+    // Set Coordinate Double, Double interface
+    public void setCurrentLocationCoordinate(Double latitude, Double longitude) {
+        currentLocationCoordinate.setValue(new Pair<>(latitude, longitude));
     }
 
     public void toggleIsDirectionDetailed() {
@@ -85,6 +122,15 @@ public class RouteViewModel extends AndroidViewModel {
         String routeStr = isDirectionDetailed.getValue()
                 ? routePackageList.get(currentRouteIndex).toStringDetailed()
                 : routePackageList.get(currentRouteIndex).toStringBrief();
+
+        String from = routePackageList.get(currentRouteIndex).getStart();
+        String to = routePackageList.get(currentRouteIndex).getEnd();
+
+        // limit max length of from and to to 8 characters
+        if (from.length() > 10) from = from.substring(0, 8).trim() + "...";
+        if (to.length() > 10) to = to.substring(0, 8).trim() + "...";
+
+        fromAndTo.setValue(new Pair<>(from, to));
         currentRouteToDisplay.setValue(routeStr);
     }
 }
