@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 
+import edu.ucsd.cse110.zooseeker.Location.LocationModel;
 import edu.ucsd.cse110.zooseeker.Navigator.*;
 import edu.ucsd.cse110.zooseeker.NewNavigator.RouteMaker;
 import edu.ucsd.cse110.zooseeker.NewNavigator.ZooNavigator;
@@ -71,9 +72,11 @@ public class RouteActivity extends AppCompatActivity {
         toggleDirectionsButton = findViewById(R.id.toggle_directions_button);
         deleteAllButton = findViewById(R.id.route_delete_all_button);
 
-        // ViewModel
+        // ViewModels
         RouteViewModel model = new ViewModelProvider(this).get(RouteViewModel.class);
+        LocationModel locationModel = new ViewModelProvider(this).get(LocationModel.class);
 
+        model.setViewModel(locationModel);
 
         model.getIsDirectionDetailed().observe(this, isDirectionDetailed -> {
             String btnText = isDirectionDetailed ? "Detailed\nDirections" : "Brief\nDirections";

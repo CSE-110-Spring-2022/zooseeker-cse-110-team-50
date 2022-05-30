@@ -8,9 +8,11 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 import java.util.List;
 
+import edu.ucsd.cse110.zooseeker.Location.LocationModel;
 import edu.ucsd.cse110.zooseeker.NewNavigator.ZooNavigator;
 import edu.ucsd.cse110.zooseeker.Persistence.MainDatabase;
 import edu.ucsd.cse110.zooseeker.Persistence.PlaceDao;
@@ -22,6 +24,8 @@ public class RouteViewModel extends AndroidViewModel {
     // Live Data
     private MutableLiveData<Boolean> isDirectionDetailed;
     private MutableLiveData<String> currentRouteToDisplay;
+    private LocationModel locationModel;
+
 
     // DAOs
     private MainDatabase mainDb;
@@ -38,6 +42,7 @@ public class RouteViewModel extends AndroidViewModel {
     // Ctor
     public RouteViewModel(@NonNull Application application) {
         super(application);
+        //this.locationModel = new ViewModelProvider(this).get(LocationModel.class);
 
         // initialize DataBase related fields
         Context context = getApplication().getApplicationContext();
@@ -52,6 +57,10 @@ public class RouteViewModel extends AndroidViewModel {
         // initialize LiveData
         isDirectionDetailed = new MutableLiveData<>(false);
 
+    }
+
+    public void setViewModel(LocationModel locationModel){
+        this.locationModel = locationModel;
     }
 
     public LiveData<Boolean> getIsDirectionDetailed() {
