@@ -49,7 +49,6 @@ public class ZooNavigator {
         if(nextVertex == null){
             nextVertex = "entrance_exit_gate";
         }
-
     }
 
     public void next(){
@@ -60,6 +59,7 @@ public class ZooNavigator {
         if(routeExhibits.contains(currentVertex) && !pastNodes.contains(currentVertex)){
             pastNodes.push(currentVertex);
         }
+        currentVertex = nextVertex;
         nextVertex = getClosestNode();
         if(nextVertex == null){
             nextVertex = "entrance_exit_gate";
@@ -70,7 +70,8 @@ public class ZooNavigator {
         if(pastNodes.size() == 0){
             return;
         }
-        if(!futureNodes.contains(nextVertex) && !nextVertex.equals("entrance_exit_gate")){
+        if(!futureNodes.contains(nextVertex) && !nextVertex.equals("entrance_exit_gate")
+                && routeExhibits.contains(nextVertex)){
             futureNodes.add(nextVertex);
         }
         nextVertex = currentVertex;
@@ -98,16 +99,33 @@ public class ZooNavigator {
         if(futureNodes.size() == 0){
             return null;
         }
-        String closestNode = "dummyString";
+        String closestNode = "dummyStringShouldCallRouter";
         futureNodes.remove(closestNode);
         return closestNode;
     }
+
+    public void reroute(String id){
+        if(routeExhibits.contains(currentVertex) && !pastNodes.contains(currentVertex)){
+            pastNodes.push(currentVertex);
+        }
+        if(!futureNodes.contains(nextVertex) && !nextVertex.equals("entrance_exit_gate")
+                && routeExhibits.contains(nextVertex)){
+            futureNodes.add(nextVertex);
+        }
+        currentVertex = id;
+        futureNodes.remove(id);
+        nextVertex = getClosestNode();
+        if(nextVertex == null){
+            nextVertex = "entrance_exit_gate";
+        }
+    }
+
     public String getCurrNode(){
-        return null;
+        return currentVertex;
     }
 
     public String getNextNode(){
-        return null;
+        return nextVertex;
     }
 
     public String getRouteBrief(){
