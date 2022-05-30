@@ -71,7 +71,6 @@ public class RouteActivity extends AppCompatActivity {
         // ViewModel
         RouteViewModel model = new ViewModelProvider(this).get(RouteViewModel.class);
 
-
         model.getIsDirectionDetailed().observe(this, isDirectionDetailed -> {
             String btnText = isDirectionDetailed ? "Detailed\nDirections" : "Brief\nDirections";
             toggleDirectionsButton.setText(btnText);
@@ -87,10 +86,8 @@ public class RouteActivity extends AppCompatActivity {
         });
 
         model.getCurrentLocationCoordinate().observe(this, currentLocationCoordinate -> {
-            String LATITUDE_LABEL = " Latitude:";
-            String LONGITUDE_LABEL = "Longitude:";
-            routeLatitude.setText(LATITUDE_LABEL + currentLocationCoordinate.first);
-            routeLongitude.setText(LONGITUDE_LABEL + currentLocationCoordinate.second);
+            routeLatitude.setText("" + currentLocationCoordinate.first);
+            routeLongitude.setText("" + currentLocationCoordinate.second);
         });
 
         nextButton.setOnClickListener(new View.OnClickListener() {
