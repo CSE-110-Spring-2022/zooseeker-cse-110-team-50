@@ -1,10 +1,12 @@
 package edu.ucsd.cse110.zooseeker.Util.Router;
 
+import android.util.Pair;
+
 import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
+import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,12 +35,12 @@ public class GraphBuilder {
         return this;
     }
 
-    public Graph build() {
+    public Pair<Graph, Map<String, MetaNode>> build() {
         this.constructMetaNodeList();
         this.constructEdgeList();
 
         Graph<AbstractNode, EdgeWithId> graph =
-                new DefaultUndirectedWeightedGraph<>(EdgeWithId.class);
+                new DefaultDirectedWeightedGraph<>(EdgeWithId.class);
 
         this.metaNodeList.stream().forEach((node) -> {
             graph.addVertex(node);
@@ -49,13 +51,13 @@ public class GraphBuilder {
             graph.setEdgeWeight(edge, edge.distance);
         });
 
-        return graph;
+        return new Pair<>(graph, metaNodeMap);
     }
 
     private void constructMetaNodeList() {
         List<Place> waitList = new ArrayList<>();
-        metaNodeList = Collections.emptyList();
-        metaNodeMap = Collections.emptyMap();
+        metaNodeList = new ArrayList<>();
+        metaNodeMap = new HashMap<>();
 
         for (Place place : this.places) {
             if (place.parentId == null) {
@@ -90,11 +92,15 @@ public class GraphBuilder {
     }
 
     private void constructEdgeList() {
-        edgeList = Collections.emptyList();
+        edgeList = new ArrayList<>();
 
         for (ZooGraphMapper.Edge e : zooGraphMapper.edges) {
+            // simulate unweighted graph
             edgeList.add(new EdgeWithId(
                     e.id, edgeInfo.get(e.id), metaNodeMap.get(e.source), metaNodeMap.get(e.target), e.weight
+            ));
+            edgeList.add(new EdgeWithId(
+                    e.id, edgeInfo.get(e.id), metaNodeMap.get(e.target), metaNodeMap.get(e.source), e.weight
             ));
         }
 

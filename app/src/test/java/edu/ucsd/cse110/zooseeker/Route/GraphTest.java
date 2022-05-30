@@ -32,7 +32,9 @@ import edu.ucsd.cse110.zooseeker.Persistence.MainDatabase;
 import edu.ucsd.cse110.zooseeker.Persistence.Place;
 import edu.ucsd.cse110.zooseeker.Persistence.PlaceDao;
 import edu.ucsd.cse110.zooseeker.Util.JSONLoader.JSONLoader;
+import edu.ucsd.cse110.zooseeker.Util.Router.EdgeWithId;
 import edu.ucsd.cse110.zooseeker.Util.Router.LegacyRouter;
+import edu.ucsd.cse110.zooseeker.Util.Router.Router;
 
 @Config(sdk = 31)
 @RunWith(RobolectricTestRunner.class)
@@ -41,6 +43,7 @@ public class GraphTest {
     MainDatabase mainDb;
     PlaceDao placeDao;
     LegacyRouter legacyRouter;
+    Router router;
     Map<String, String> placeInfoMap;
 
     /**
@@ -67,6 +70,11 @@ public class GraphTest {
                 .loadFromRawGraph(JSONLoader.loadTestRawGraph(getApplicationContext()))
                 .loadPlaceInfo(placeInfoMap)
                 .build();
+        router = new Router(
+                JSONLoader.loadTestNodeInfo(context),
+                JSONLoader.loadTestEdgeInfo(context),
+                JSONLoader.loadTestRawGraph(context)
+        );
         assertNotNull(legacyRouter);
     }
 
@@ -83,8 +91,9 @@ public class GraphTest {
      */
     @Test
     public void getShortestPathExists() {
-        GraphPath<String, LegacyRouter.EdgeWithId> pathActual
-                = legacyRouter.shortestPath("gators", "gorillas");
+        List<EdgeWithId> pathActual
+                = router.shortestPath("gators", "gorillas");
+        assertNotNull("gators", "gorillas");
     }
 
     /**
@@ -92,17 +101,15 @@ public class GraphTest {
      */
     @Test
     public void testIsShortestPath() {
-        GraphPath<String, LegacyRouter.EdgeWithId> pathActual
-                = legacyRouter.shortestPath("gators", "gorillas");
-
-        List<LegacyRouter.EdgeWithId> edgeListActual = pathActual.getEdgeList();
+        List<EdgeWithId> edgeListActual
+                = router.shortestPath("gators", "gorillas");
 
         List<String> edgeListIDExpected = new ArrayList<String>();
         edgeListIDExpected.add("edge-5");
         edgeListIDExpected.add("edge-1");
 
         for (int i = 0; i < edgeListActual.size(); i++) {
-            String idActual = edgeListActual.get(i).edgeId;
+            String idActual = edgeListActual.get(i).id;
             assertEquals(edgeListIDExpected.get(i), idActual);
         }
 
@@ -112,9 +119,9 @@ public class GraphTest {
      * Checks if putting the information into the router is a null value
      * when a target vertex does not exist
      */
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void getPathTargetNotExists() {
-        assertNull(legacyRouter.shortestPath("gators", "no_a_place"));
+        assertNull(router.shortestPath("gators", "no_a_place"));
     }
 
     /**
@@ -123,6 +130,6 @@ public class GraphTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void getPathSourceNotExists() {
-        assertNull(legacyRouter.shortestPath("no_a_place", "gators"));
+        assertNull(router.shortestPath("no_a_place", "gators"));
     }
 }

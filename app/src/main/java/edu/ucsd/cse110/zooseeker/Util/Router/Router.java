@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.Pair;
 
 import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
 import java.util.List;
 import java.util.Map;
@@ -15,20 +17,53 @@ import edu.ucsd.cse110.zooseeker.Util.Geometry.Point2D;
 import edu.ucsd.cse110.zooseeker.Util.JSONLoader.JSONLoader;
 
 public class Router {
+    List<Place> nodeInfo;
+    Map<String, String> edgeInfo;
+    ZooGraphMapper zooGraphMapper;
     Graph graph;
+    Map<String, MetaNode> metaNodeMap;
 
     public Router(Context context) {
         List<Place> nodeInfo = JSONLoader.loadNodeInfo(context);
         Map<String, String> edgeInfo = JSONLoader.loadEdgeInfo(context);
         ZooGraphMapper zooGraphMapper = JSONLoader.loadRawGraph(context);
-        this.graph = new GraphBuilder()
+        Pair<Graph, Map<String, MetaNode>> graphWithInfo = new GraphBuilder()
                 .loadNodes(nodeInfo)
                 .loadEdgeInfo(edgeInfo)
                 .loadGraphInfo(zooGraphMapper)
                 .build();
+        this.graph = graphWithInfo.first;
+        this.metaNodeMap = graphWithInfo.second;
     }
 
-    // TODO: shortestPath(String n1_id, String n2_id) -> List<EdgeWithId> shortestPath;
+    public Router(List<Place> nodeInfo, Map<String, String> edgeInfo, ZooGraphMapper zooGraphMapper) {
+        Pair<Graph, Map<String, MetaNode>> graphWithInfo = new GraphBuilder()
+                .loadNodes(nodeInfo)
+                .loadEdgeInfo(edgeInfo)
+                .loadGraphInfo(zooGraphMapper)
+                .build();
+        this.graph = graphWithInfo.first;
+        this.metaNodeMap = graphWithInfo.second;
+    }
+
+    public GraphPath<MetaNode, EdgeWithId> shortestGraphPath(String node1Id, String node2Id) {
+        DijkstraShortestPath<MetaNode, EdgeWithId> dijkstraShortestPath =
+                new DijkstraShortestPath<MetaNode, EdgeWithId>(graph);
+        GraphPath<MetaNode, EdgeWithId> graphPath = dijkstraShortestPath.getPath(
+                metaNodeMap.get(node1Id), metaNodeMap.get(node2Id)
+        );
+        return graphPath;
+    }
+
+    public Pair<List<EdgeWithId>, Double> shortestPathWithDistance(String node1Id, String node2Id) {
+        GraphPath<MetaNode, EdgeWithId> graphPath = this.shortestGraphPath(node1Id, node2Id);
+        return new Pair<>(graphPath.getEdgeList(), graphPath.getWeight());
+    }
+
+    public List<EdgeWithId> shortestPath(String node1Id, String node2Id) {
+        GraphPath<MetaNode, EdgeWithId> graphPath = this.shortestGraphPath(node1Id, node2Id);
+        return graphPath.getEdgeList();
+    }
 
     /**
      * Given a node, find the nearest node (in terms of the Euclidean distance)

@@ -1,6 +1,6 @@
 package edu.ucsd.cse110.zooseeker.Util.Router;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MetaNode extends AbstractNode {
@@ -11,7 +11,7 @@ public class MetaNode extends AbstractNode {
     public MetaNode(String id, String name, String kind, Double lat, Double lng) {
         super(id, name, lat, lng);
         this.kind = kind;
-        this.nodeIds = Collections.emptyList();
+        this.nodeIds = new ArrayList<>();
     }
 
     public boolean addNode(String nodeId) {
