@@ -20,10 +20,19 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 public class LocationModel extends AndroidViewModel {
-    private final String TAG = "FOOBAR";
+
+    /**
+     * The only thing needed from LocationModel is the locationProviderSource
+     * mockSource used for testing/demo
+     */
+
+    //private final String TAG = "FOOBAR";
     private final MediatorLiveData<Coord> lastKnownCoords;
 
+    //this is what gives the current location
     private LiveData<Coord> locationProviderSource = null;
+
+    //mocks location
     private MutableLiveData<Coord> mockSource = null;
 
     public LocationModel(@NonNull Application application) {
@@ -44,6 +53,7 @@ public class LocationModel extends AndroidViewModel {
      * @param provider        the provider to use for location updates (usually GPS).
      * @apiNote This method should only be called after location permissions have been obtained.
      * @implNote If a location provider source already exists, it is removed.
+     * @TODO use method to get updates from location
      */
     @SuppressLint("MissingPermission")
     public void addLocationProviderSource(LocationManager locationManager, String provider) {
@@ -58,7 +68,7 @@ public class LocationModel extends AndroidViewModel {
             @Override
             public void onLocationChanged(@NonNull Location location) {
                 var coord = Coord.fromLocation(location);
-                Log.i(TAG, String.format("Model received GPS location update: %s", coord));
+                //Log.i(TAG, String.format("Model received GPS location update: %s", coord));
                 providerSource.postValue(coord);
             }
         };
@@ -69,15 +79,24 @@ public class LocationModel extends AndroidViewModel {
         lastKnownCoords.addSource(locationProviderSource, lastKnownCoords::setValue);
     }
 
+
+    /**
+     * Nothing needed for this
+     */
     void removeLocationProviderSource() {
         if (locationProviderSource == null) return;
         lastKnownCoords.removeSource(locationProviderSource);
     }
 
+    /**
+     * Mock location using coords, should be able to put in my own coords, maybe through UI? check piazza
+     * @param coords
+     */
     @VisibleForTesting
     public void mockLocation(Coord coords) {
         mockSource.postValue(coords);
     }
+
 
     @VisibleForTesting
     public Future<?> mockRoute(List<Coord> route, long delay, TimeUnit unit) {
@@ -86,7 +105,7 @@ public class LocationModel extends AndroidViewModel {
             int n = route.size();
             for (var coord : route) {
                 // Mock the location...
-                Log.i(TAG, String.format("Model mocking route (%d / %d): %s", i++, n, coord));
+                //Log.i(TAG, String.format("Model mocking route (%d / %d): %s", i++, n, coord));
                 mockLocation(coord);
 
                 // Sleep for a while...

@@ -3,6 +3,7 @@ package edu.ucsd.cse110.zooseeker.NewNavigator;
 import java.util.Arrays;
 import java.util.List;
 
+import edu.ucsd.cse110.zooseeker.Location.Coord;
 import edu.ucsd.cse110.zooseeker.Persistence.Place;
 
 public class MetaVertex {
@@ -11,6 +12,7 @@ public class MetaVertex {
     public boolean hasParent;
     public List<String> placeIds;
     public double lat, lng;
+    public Coord coord;
 
     public MetaVertex(Place place) {
         if (place.parentId == null) {
@@ -19,6 +21,7 @@ public class MetaVertex {
             this.lat = place.lat;
             this.lng = place.lng;
             this.name = place.name;
+            this.coord = new Coord(lat, lng);
         } else {
             this.id = place.parentId;
             this.hasParent = true;
@@ -44,6 +47,7 @@ public class MetaVertex {
 
         this.lat = lat;
         this.lng = lng;
+        this.coord = new Coord(lat, lng);
         return true;
     }
 
@@ -59,6 +63,7 @@ public class MetaVertex {
                 ", placeIds=" + placeIds +
                 ", lat=" + lat +
                 ", lng=" + lng +
+                ", Coord=" + coord +
                 '}';
     }
 }
