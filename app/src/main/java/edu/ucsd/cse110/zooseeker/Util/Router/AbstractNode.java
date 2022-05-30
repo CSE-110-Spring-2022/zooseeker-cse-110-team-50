@@ -16,4 +16,8 @@ public abstract class AbstractNode {
     public Point2D getPoint2DCoord() {
         return new Point2D(lat, lng);
     }
+
+    public boolean equals(AbstractNode other) {
+        return this.id.equals(other.id);
+    }
 }

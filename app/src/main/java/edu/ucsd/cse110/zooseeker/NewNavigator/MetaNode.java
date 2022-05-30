@@ -5,14 +5,14 @@ import java.util.List;
 
 import edu.ucsd.cse110.zooseeker.Persistence.Place;
 
-public class MetaVertex {
+public class MetaNode {
     public String id;
     public String name;
     public boolean hasParent;
     public List<String> placeIds;
     public double lat, lng;
 
-    public MetaVertex(Place place) {
+    public MetaNode(Place place) {
         if (place.parentId == null) {
             this.id = place.placeId;
             this.hasParent = false;

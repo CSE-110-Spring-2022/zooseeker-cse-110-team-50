@@ -42,7 +42,6 @@ public class GraphTest {
     MainActivity activity;
     MainDatabase mainDb;
     PlaceDao placeDao;
-    LegacyRouter legacyRouter;
     Router router;
     Map<String, String> placeInfoMap;
 
@@ -65,17 +64,12 @@ public class GraphTest {
         placeInfoMap = new HashMap<>();
         for (Place place: placeDao.getAll())
             placeInfoMap.put(place.placeId, place.name);
-        legacyRouter = LegacyRouter.builder()
-                .loadEdgeInfo(JSONLoader.loadTestEdgeInfo(getApplicationContext()))
-                .loadFromRawGraph(JSONLoader.loadTestRawGraph(getApplicationContext()))
-                .loadPlaceInfo(placeInfoMap)
-                .build();
         router = new Router(
-                JSONLoader.loadTestNodeInfo(context),
-                JSONLoader.loadTestEdgeInfo(context),
-                JSONLoader.loadTestRawGraph(context)
+                JSONLoader.loadTestNodeInfo(context, "test/t1-ms1-delivery/sample_node_info.json"),
+                JSONLoader.loadTestEdgeInfo(context, "test/t1-ms1-delivery/sample_edge_info.json"),
+                JSONLoader.loadTestRawGraph(context, "test/t1-ms1-delivery/sample_zoo_info.json")
         );
-        assertNotNull(legacyRouter);
+        assertNotNull(router);
     }
 
     @After
@@ -92,7 +86,7 @@ public class GraphTest {
     @Test
     public void getShortestPathExists() {
         List<EdgeWithId> pathActual
-                = router.shortestPath("gators", "gorillas");
+                = router.shortestPath("entrance_exit_gate", "gorillas");
         assertNotNull("gators", "gorillas");
     }
 
