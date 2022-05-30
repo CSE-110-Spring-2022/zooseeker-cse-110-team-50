@@ -142,6 +142,40 @@ public class ZooNavigator {
         return pkgList;
     }
 
+    public void next(){
+
+    }
+
+    public void back(){
+
+    }
+
+    public void reverse(){
+
+    }
+
+    public void skip(){
+
+    }
+
+    public String getCurrNode(){
+        return null;
+    }
+
+    public String getNextNode(){
+        return null;
+    }
+
+    public List<String> getRouteBrief(){
+        return null;
+    }
+
+    public List<String> getRouteDetailed(){
+        return null;
+    }
+
+
+
 
 
 
