@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.zooseeker.Route;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -70,11 +71,26 @@ public class RouteActivity extends AppCompatActivity {
         toggleDirectionsButton = findViewById(R.id.toggle_directions_button);
         deleteAllButton = findViewById(R.id.route_delete_all_button);
 
+        // ViewModel
+        RouteViewModel model = new ViewModelProvider(this).get(RouteViewModel.class);
+
+
+        model.getIsDirectionDetailed().observe(this, isDirectionDetailed -> {
+            String btnText = isDirectionDetailed ? "Detailed\nDirections" : "Brief\nDirections";
+            toggleDirectionsButton.setText(btnText);
+        });
+
+        model.getCurrentRouteToDisplay().observe(this, currentRouteToDisplay -> {
+            routeTextView.setText(currentRouteToDisplay);
+        });
+
+
+
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
-                nextExhibit(v);
+                model.next();
             }
         });
 
@@ -88,7 +104,7 @@ public class RouteActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                previousExhibit(view);
+                model.back();
             }
         });
 
@@ -103,7 +119,7 @@ public class RouteActivity extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                toggleDirections(v);
+                model.toggleIsDirectionDetailed();
             }
         });
 
@@ -114,51 +130,5 @@ public class RouteActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-
-
-        Context context = getApplicationContext();
-        zooNavigator = new ZooNavigator(placeDao, planItemDao, context);
-
-        pkgList = zooNavigator.getPkgList();
-        routeTextView = findViewById(R.id.route_text_view);
-        if(isDetailedDirections){
-            routeTextView.setText(pkgList.get(routeIndex).toStringDetailed());
-        }
-        else{
-            routeTextView.setText(pkgList.get(routeIndex).toStringBrief());
-        }
-    }
-
-    public void toggleDirections(View v){
-        if(isDetailedDirections){
-            routeTextView.setText(pkgList.get(routeIndex).toStringBrief());
-            isDetailedDirections = false;
-            toggleDirectionsButton.setText("Detailed\nDirections");
-        }
-        else{
-            routeTextView.setText(pkgList.get(routeIndex).toStringDetailed());
-            isDetailedDirections = true;
-            toggleDirectionsButton.setText("Brief\nDirections");
-        }
-    }
-
-    public void nextExhibit(View v){
-        if (routeIndex + 1 < pkgList.size()) routeIndex++;
-
-        if (isDetailedDirections)
-            routeTextView.setText(pkgList.get(routeIndex).toStringDetailed());
-        else
-            routeTextView.setText(pkgList.get(routeIndex).toStringBrief());
-    }
-
-    public void previousExhibit(View v){
-        if(routeIndex - 1 >= 0) routeIndex--;
-
-        if (isDetailedDirections)
-            routeTextView.setText(pkgList.get(routeIndex).toStringDetailed());
-        else
-            routeTextView.setText(pkgList.get(routeIndex).toStringBrief());
-
     }
 }
