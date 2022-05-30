@@ -31,11 +31,12 @@ android {
 
     buildFeatures {
         dataBinding true
+        viewBinding true
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 
     testOptions {
@@ -46,8 +47,12 @@ android {
 }
 
 dependencies {
+    def guava_version = "31.1-android"
+    implementation "com.google.guava:guava:$guava_version"
     implementation 'androidx.fragment:fragment-testing:1.4.1'
     implementation 'androidx.test.espresso:espresso-core:3.4.0'
+    implementation 'com.google.android.gms:play-services-maps:18.0.2'
+    implementation 'com.google.firebase:firebase-crashlytics-buildtools:2.7.1'
     androidTestImplementation 'androidx.test:rules:1.4.1-alpha06'
     def gson_version = "2.9.0"
     def room_version = "2.4.2"
