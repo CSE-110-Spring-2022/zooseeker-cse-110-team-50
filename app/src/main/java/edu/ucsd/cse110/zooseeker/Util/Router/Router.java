@@ -1,22 +1,31 @@
 package edu.ucsd.cse110.zooseeker.Util.Router;
 
+import android.content.Context;
 import android.util.Pair;
 
 import org.jgrapht.Graph;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+import edu.ucsd.cse110.zooseeker.Persistence.Place;
 import edu.ucsd.cse110.zooseeker.Util.Geometry.NearestObjectUtil;
 import edu.ucsd.cse110.zooseeker.Util.Geometry.Point2D;
+import edu.ucsd.cse110.zooseeker.Util.JSONLoader.JSONLoader;
 
 public class Router {
-    Graph<String, LegacyRouter.EdgeWithId> graph;
-    List<MetaNode> visited, unvisited;
+    Graph graph;
 
-    // TODO: construct a graph
-    public Router(List<AbstractNode> nodeList, List<EdgeWithId> abstractEdgeList) {
-
+    public Router(Context context) {
+        List<Place> nodeInfo = JSONLoader.loadNodeInfo(context);
+        Map<String, String> edgeInfo = JSONLoader.loadEdgeInfo(context);
+        ZooGraphMapper zooGraphMapper = JSONLoader.loadRawGraph(context);
+        this.graph = new GraphBuilder()
+                .loadNodes(nodeInfo)
+                .loadEdgeInfo(edgeInfo)
+                .loadGraphInfo(zooGraphMapper)
+                .build();
     }
 
     // TODO: shortestPath(String n1_id, String n2_id) -> List<EdgeWithId> shortestPath;
