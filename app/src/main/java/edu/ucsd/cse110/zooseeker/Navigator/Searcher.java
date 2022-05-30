@@ -83,8 +83,8 @@ public class Searcher {
      * @returns the closest node to node from nodes
      * This basically stems from the getPathToClosestNode algorithm above with a few tweaks
      */
-    public RawGraph.Node closestNode(RawGraph.Node node, List<RawGraph.Node> nodes){
-        RawGraph.Node closest = null;
+    public MetaVertex closestNode(MetaVertex node, List<MetaVertex> nodes){
+        MetaVertex closest = null;
         String source = node.id;
         List<String> targets = null;
         for(int i = 0; i < nodes.size(); ++i){
@@ -94,7 +94,7 @@ public class Searcher {
         PriorityQueue<NodeWithDist> pq = new PriorityQueue<>((x, y) -> (int)(x.distance - y.distance));
         GraphPath<String, EdgeWithId> shortestPath = shortestPath(source, targets.get(0));
         GraphPath<String, EdgeWithId> newPath;
-        for (RawGraph.Node ind : nodes) {
+        for (MetaVertex ind : nodes) {
             String target = ind.id;
             newPath = shortestPath(source, target);
             if (newPath.getWeight() < shortestPath.getWeight()) {

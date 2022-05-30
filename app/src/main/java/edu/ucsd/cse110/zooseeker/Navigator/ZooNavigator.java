@@ -18,7 +18,7 @@ import edu.ucsd.cse110.zooseeker.Util.Router.RawGraph;
 public class ZooNavigator {
 
     //past implementation stuff
-    private int routeIndex = 0;
+    //private int routeIndex = 0;
 //    Graph<String, EdgeWithId> graph;
 //    Map<String, String> edgeInfo;
 //    Map<String, String> placeInfo;
@@ -26,10 +26,12 @@ public class ZooNavigator {
     RouteMaker routeMaker = RouteMaker.builder();
 
     //Current implementation stuff
-    List<RawGraph.Node> futureNodes;
-    List<RawGraph.Node> pastNodes = new ArrayList<RawGraph.Node>();
-    RawGraph.Node current;
-    RawGraph.Node next;
+    List<MetaVertex> futureNodes;
+    List<MetaVertex> pastNodes = new ArrayList<MetaVertex>();
+    List<MetaVertex> allExhibits;
+
+    MetaVertex current;
+    MetaVertex next;
     Searcher searcher;
     Boolean firstPrev = false;
 
@@ -43,18 +45,11 @@ public class ZooNavigator {
         return new ZooNavigator(rawGraph);
     }
 
-    public ZooNavigator setRoute(List<RoutePackage> route) {
-        this.route = route;
-        return this;
-    }
-
     public ZooNavigator build(){ return this; }
 
     public void nextExhibit(){
-        //if(routeIndex + 1 < route.size()){ routeIndex++; }
-        //return currentExhibit();
         if(firstPrev) {
-            RawGraph.Node alt = current;
+            MetaVertex alt = current;
             current = next;
             next = current;
             firstPrev = false;
@@ -67,8 +62,6 @@ public class ZooNavigator {
     }
 
     public void previousExhibit(){
-        //if(routeIndex - 1 >= 0){ routeIndex--; }
-        //return currentExhibit();
         if(!firstPrev){
             firstPrev = true;
             futureNodes.add(next);
@@ -81,7 +74,7 @@ public class ZooNavigator {
         }
     }
 
-    public RawGraph.Node currentExhibit() {
+    public MetaVertex currentExhibit() {
         return current;
     }
 
@@ -93,23 +86,29 @@ public class ZooNavigator {
 
     /**
      * Everything below is legacy based on RouteMaker and RoutePackage,
-     * currently using Searcher
+     * currently using Searcher and MetaVertex
      */
+
     public List<RoutePackage> route(List<String> nodes){
             return routeMaker.route(nodes);
     }
 
-    public void reroute(List<String> nodes){
-        List<RoutePackage> oldRoute = route;
-        List<String> newRouteNodes = new ArrayList<String>();
-        for(int i = routeIndex; i < nodes.size(); ++i){
-            newRouteNodes.add(nodes.get(i));
-            oldRoute.remove(i);
-        }
-        List<RoutePackage> newRoute = route(newRouteNodes);
-        oldRoute.addAll(newRoute);
-        setRoute(oldRoute); //note, not returning THE old route, but an edited route
+    public ZooNavigator setRoute(List<RoutePackage> route) {
+        this.route = route;
+        return this;
     }
+
+//    public void reroute(List<String> nodes){
+//        List<RoutePackage> oldRoute = route;
+//        List<String> newRouteNodes = new ArrayList<String>();
+//        for(int i = routeIndex; i < nodes.size(); ++i){
+//            newRouteNodes.add(nodes.get(i));
+//            oldRoute.remove(i);
+//        }
+//        List<RoutePackage> newRoute = route(newRouteNodes);
+//        oldRoute.addAll(newRoute);
+//        setRoute(oldRoute); //note, not returning THE old route, but an edited route
+//    }
 
 //    public void setRoute(List<RoutePackage> route){
 //        this.route = route;
