@@ -49,7 +49,7 @@ android {
 dependencies {
     def guava_version = "31.1-android"
     implementation "com.google.guava:guava:$guava_version"
-    implementation 'androidx.fragment:fragment-testing:1.4.1'
+    debugImplementation 'androidx.fragment:fragment-testing:1.4.1'
     implementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation 'com.google.android.gms:play-services-maps:18.0.2'
     implementation 'com.google.firebase:firebase-crashlytics-buildtools:2.7.1'
