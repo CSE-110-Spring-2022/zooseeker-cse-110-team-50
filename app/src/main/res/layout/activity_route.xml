@@ -6,35 +6,110 @@
     android:layout_height="match_parent"
     tools:context=".Route.RouteActivity">
 
-    <TextView
-        android:id="@+id/route_text_view"
+    <LinearLayout
+        android:id="@+id/route_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_margin="26dp"
-        android:textSize="18dp"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/toggle_directions_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="17dp"
-        android:layout_marginBottom="24dp"
-        android:backgroundTint="#4C67EF"
-        android:text="Toggle\nDirections"
-        app:layout_constraintBottom_toTopOf="@+id/route_next_button"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:text="Route"
+            android:textSize="30dp"
+            android:background="@drawable/route_header_bg"
+            android:paddingHorizontal="16dp"
+            android:textColor="#fff"
+            android:gravity="center_vertical"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="26dp"/>
 
-    <Button
-        android:id="@+id/route_next_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:text="Next"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical"
+            android:fillViewport="true"
+            android:layout_weight="1.0">
+            <TextView
+                android:id="@+id/route_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:padding="26dp"
+                android:textSize="18dp"
+                android:layout_weight="1.0"/>
+        </ScrollView>
 
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="190dp"
+            android:background="@drawable/route_button_bg"
+            android:padding="16dp"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+                <Button
+                    android:id="@+id/route_back_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Back"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+                <Button
+                    android:id="@+id/route_skip_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Skip"
+                    android:layout_marginHorizontal="22dp"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+                <Button
+                    android:id="@+id/route_next_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Next"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:gravity="center">
+
+
+                <Button
+                    android:id="@+id/route_reverse_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Reverse"
+                    android:layout_marginHorizontal="22dp"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+                <Button
+                    android:id="@+id/toggle_directions_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#4C67EF"
+                    android:text="Toggle Detail"
+                    app:layout_constraintBottom_toTopOf="@+id/route_next_button"
+                    app:layout_constraintEnd_toEndOf="parent" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/route_delete_all_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#f00"
+                android:text="Delete All"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </LinearLayout>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
