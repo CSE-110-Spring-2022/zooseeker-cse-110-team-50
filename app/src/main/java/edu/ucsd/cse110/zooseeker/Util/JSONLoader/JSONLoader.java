@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.ucsd.cse110.zooseeker.Persistence.Place;
-import edu.ucsd.cse110.zooseeker.Util.Router.RawGraph;
+import edu.ucsd.cse110.zooseeker.Util.Router.ZooGraphMapper;
 
 public class JSONLoader {
     public static String BASE_PATH = "";
@@ -75,15 +75,15 @@ public class JSONLoader {
         return ret;
     }
 
-    public static RawGraph loadRawGraph(Context context) {
+    public static ZooGraphMapper loadRawGraph(Context context) {
         final String PATH = BASE_PATH + "sample_zoo_graph.json";
-        RawGraph graph = null;
+        ZooGraphMapper graph = null;
 
         try {
             InputStream input = context.getAssets().open(PATH);
             Reader reader = new InputStreamReader(input);
             Gson gson = new Gson();
-            Type type = new TypeToken<RawGraph>(){}.getType();
+            Type type = new TypeToken<ZooGraphMapper>(){}.getType();
             graph = gson.fromJson(reader, type);
         } catch (IOException e) {
             e.printStackTrace();
@@ -95,15 +95,15 @@ public class JSONLoader {
     * Below is for testing
     * */
 
-    public static RawGraph loadTestRawGraph(Context context) {
+    public static ZooGraphMapper loadTestRawGraph(Context context) {
         final String PATH = "test/sample_zoo_graph.json";
-        RawGraph graph = null;
+        ZooGraphMapper graph = null;
 
         try {
             InputStream input = context.getAssets().open(PATH);
             Reader reader = new InputStreamReader(input);
             Gson gson = new Gson();
-            Type type = new TypeToken<RawGraph>(){}.getType();
+            Type type = new TypeToken<ZooGraphMapper>(){}.getType();
             graph = gson.fromJson(reader, type);
         } catch (IOException e) {
             e.printStackTrace();

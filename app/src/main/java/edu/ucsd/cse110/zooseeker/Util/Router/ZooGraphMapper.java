@@ -2,7 +2,7 @@ package edu.ucsd.cse110.zooseeker.Util.Router;
 
 import java.util.List;
 
-public class RawGraph {
+public class ZooGraphMapper {
     public static class Node {
         public String id;
     }

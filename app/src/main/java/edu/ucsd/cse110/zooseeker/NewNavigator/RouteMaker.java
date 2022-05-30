@@ -14,7 +14,7 @@ import java.util.PriorityQueue;
 import edu.ucsd.cse110.zooseeker.Navigator.NodeWithDist;
 import edu.ucsd.cse110.zooseeker.Navigator.RoutePackage;
 import edu.ucsd.cse110.zooseeker.Navigator.RouteStep;
-import edu.ucsd.cse110.zooseeker.Util.Router.RawGraph;
+import edu.ucsd.cse110.zooseeker.Util.Router.ZooGraphMapper;
 //import edu.ucsd.cse110.zooseeker.Util.Router.Router;
 
 
@@ -49,13 +49,13 @@ public class RouteMaker {
         return this;
     }
 
-    public RouteMaker loadFromRawGraph(RawGraph rawGraph){
+    public RouteMaker loadFromRawGraph(ZooGraphMapper zooGraphMapper){
         graph = new DefaultUndirectedWeightedGraph<>(EdgeWithId.class);
-        rawGraph.nodes.stream().forEach((node) -> {
+        zooGraphMapper.nodes.stream().forEach((node) -> {
             graph.addVertex(node.id);
         });
 
-        rawGraph.edges.stream().forEach((edge) -> {
+        zooGraphMapper.edges.stream().forEach((edge) -> {
             EdgeWithId newEdge = new EdgeWithId(edge.id);
             graph.addEdge(edge.source, edge.target, newEdge);
             graph.setEdgeWeight(newEdge, edge.weight);

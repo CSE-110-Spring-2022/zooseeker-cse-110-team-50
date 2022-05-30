@@ -12,20 +12,20 @@ import java.util.PriorityQueue;
 
 import edu.ucsd.cse110.zooseeker.NewNavigator.EdgeWithId;
 import edu.ucsd.cse110.zooseeker.NewNavigator.MetaVertex;
-import edu.ucsd.cse110.zooseeker.Util.Router.RawGraph;
+import edu.ucsd.cse110.zooseeker.Util.Router.ZooGraphMapper;
 
 public class Searcher {
     Graph<String, EdgeWithId> graph;
     Map<String, String> edgeInfo;
     Map<String, String> placeInfo;
 
-    public Searcher(RawGraph rawGraph){
+    public Searcher(ZooGraphMapper zooGraphMapper){
         //Graph<String, EdgeWithId> loadedGraph =
-        this.graph = GraphLoader.loadFromRawGraph(rawGraph);
+        this.graph = GraphLoader.loadFromRawGraph(zooGraphMapper);
     }
 
-    public static Searcher builder(RawGraph rawGraph){
-        return new Searcher(rawGraph);
+    public static Searcher builder(ZooGraphMapper zooGraphMapper){
+        return new Searcher(zooGraphMapper);
     }
 
     public Searcher build(){ return this; }
@@ -40,13 +40,13 @@ public class Searcher {
         return this;
     }
 
-    public Searcher loadFromRawGraph(RawGraph rawGraph){
+    public Searcher loadFromRawGraph(ZooGraphMapper zooGraphMapper){
         graph = new DefaultUndirectedWeightedGraph<>(EdgeWithId.class);
-        rawGraph.nodes.stream().forEach((node) -> {
+        zooGraphMapper.nodes.stream().forEach((node) -> {
             graph.addVertex(node.id);
         });
 
-        rawGraph.edges.stream().forEach((edge) -> {
+        zooGraphMapper.edges.stream().forEach((edge) -> {
             EdgeWithId newEdge = new EdgeWithId(edge.id);
             graph.addEdge(edge.source, edge.target, newEdge);
             graph.setEdgeWeight(newEdge, edge.weight);
@@ -74,8 +74,8 @@ public class Searcher {
         return shortestPath;
     }
 
-    public void setGraph(RawGraph rawGraph){
-        graph = GraphLoader.loadFromRawGraph(rawGraph);
+    public void setGraph(ZooGraphMapper zooGraphMapper){
+        graph = GraphLoader.loadFromRawGraph(zooGraphMapper);
     }
 
     /**

@@ -13,8 +13,8 @@ import edu.ucsd.cse110.zooseeker.Persistence.PlaceDao;
 import edu.ucsd.cse110.zooseeker.Persistence.PlanItem;
 import edu.ucsd.cse110.zooseeker.Persistence.PlanItemDao;
 import edu.ucsd.cse110.zooseeker.Util.JSONLoader.JSONLoader;
-import edu.ucsd.cse110.zooseeker.Util.Router.RawGraph;
-import edu.ucsd.cse110.zooseeker.Util.Router.Router;
+import edu.ucsd.cse110.zooseeker.Util.Router.ZooGraphMapper;
+import edu.ucsd.cse110.zooseeker.Util.Router.LegacyRouter;
 
 /**
  * Things it should do:
@@ -41,7 +41,7 @@ public class ZooNavigator {
     List<MetaVertex> allExhibits;
     List<MetaVertex> routeExhibits;
 
-    private List<Router.RoutePackage> pkgList;
+    private List<LegacyRouter.RoutePackage> pkgList;
 
     MetaVertex current;
     MetaVertex next;
@@ -101,14 +101,14 @@ public class ZooNavigator {
             }
         }
         Map<String, String> edgeInfo = JSONLoader.loadEdgeInfo(context);
-        RawGraph rawGraph = JSONLoader.loadRawGraph(context);
+        ZooGraphMapper zooGraphMapper = JSONLoader.loadRawGraph(context);
 
         final Map<String, String> placeInfoMap = new HashMap<>();
         for (MetaVertex mt: allExhibits)
             placeInfoMap.put(mt.id, mt.name);
-        Router routeMaker = Router.builder()
+        LegacyRouter routeMaker = LegacyRouter.builder()
                 .loadEdgeInfo(edgeInfo)
-                .loadFromRawGraph(rawGraph)
+                .loadFromRawGraph(zooGraphMapper)
                 .loadPlaceInfo(placeInfoMap)
                 .build();
 
@@ -138,7 +138,7 @@ public class ZooNavigator {
         pkgList = routeMaker.route(allNodes);
     }
 
-    public List<Router.RoutePackage> getPkgList(){
+    public List<LegacyRouter.RoutePackage> getPkgList(){
         return pkgList;
     }
 
