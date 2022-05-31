@@ -29,7 +29,7 @@ public class RouteViewModel extends AndroidViewModel {
     private static String ZOO_NAVIGATOR_HASH_KEY = "DATA_HASH";
 
     // Live Data
-    private MutableLiveData<Boolean> isDirectionDetailed;
+    private final MutableLiveData<Boolean> isDirectionDetailed;
     private MutableLiveData<String> currentRouteToDisplay;
     private MutableLiveData<Pair<String, String>> fromAndTo;
     private MutableLiveData<Pair<Double, Double>> currentLocationCoordinate;

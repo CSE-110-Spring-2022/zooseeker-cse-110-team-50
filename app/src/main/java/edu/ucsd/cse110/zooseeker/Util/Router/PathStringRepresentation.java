@@ -74,6 +74,11 @@ public class PathStringRepresentation implements Serializable {
     ) {
         int count = 1;
         String stringRep = "";
+
+        if (graphPaths.isEmpty()) {
+            return stringRep;
+        }
+
         for (GraphPath<MetaNode, EdgeWithId> graphPath : graphPaths) {
             stringRep += ((count++) + ". " +
                     graphPath.getStartVertex().name +
