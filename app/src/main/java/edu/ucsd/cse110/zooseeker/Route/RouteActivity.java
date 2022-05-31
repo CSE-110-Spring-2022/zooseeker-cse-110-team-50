@@ -116,6 +116,10 @@ public class RouteActivity extends AppCompatActivity implements GPSSettingDialog
             rerouteButton.setBackgroundColor(enableReroute ? 0xf5AA42 : 0x555555);
         });
 
+        routeViewModel.getIsLocationMocked().observe(this, isLocationMocked -> {
+            gpsSettingButton.setText(isLocationMocked ? "Mock GPS" : "Real GPS");
+        });
+
         routeViewModel.getUIMessage().observe(this, uiMessage -> {
             this.uiMessage.setText(uiMessage);
         });
@@ -186,7 +190,10 @@ public class RouteActivity extends AppCompatActivity implements GPSSettingDialog
     }
 
     public void showGPSSettingDialog() {
-        DialogFragment dialog = new GPSSettingDialogFragment();
+        boolean isMock = routeViewModel.getIsLocationMocked().getValue();
+        double lat = routeViewModel.getCurrentLocationCoordinate().getValue().first;
+        double log = routeViewModel.getCurrentLocationCoordinate().getValue().second;
+        DialogFragment dialog = new GPSSettingDialogFragment(isMock, lat, log);
         dialog.show(getSupportFragmentManager(), "GPSSettingDialog");
     }
 

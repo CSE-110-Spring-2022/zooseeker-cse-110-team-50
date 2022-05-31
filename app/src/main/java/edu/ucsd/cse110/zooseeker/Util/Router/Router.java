@@ -100,7 +100,7 @@ public class Router implements Serializable {
 
         // reroute
         if (nearestUnvisitedNode.first < nearestEdge.first)
-            return notPlannedNodeIds.get(nearestEdge.second);
+            return notPlannedNodeIds.get(nearestUnvisitedNode.second);
         // don't reroute
         else
             return null;

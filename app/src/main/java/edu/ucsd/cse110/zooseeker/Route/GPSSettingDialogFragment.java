@@ -32,7 +32,15 @@ public class GPSSettingDialogFragment extends DialogFragment {
     EditText latitudeField;
     EditText longitudeField;
     boolean isMock;
+    double defaultLat;
+    double defaultLog;
 
+    public GPSSettingDialogFragment(boolean isMock, double lat, double log) {
+        super();
+        this.isMock = isMock;
+        defaultLat = lat;
+        defaultLog = log;
+    }
 
     // Override the Fragment.onAttach() method to instantiate the NoticeDialogListener
     @Override
@@ -58,6 +66,11 @@ public class GPSSettingDialogFragment extends DialogFragment {
         mockButton = view.findViewById(R.id.gps_mock_button);
         latitudeField = view.findViewById(R.id.gps_latitude_field);
         longitudeField = view.findViewById(R.id.gps_longitude_field);
+
+        realButton.setChecked(!isMock);
+        mockButton.setChecked(isMock);
+        latitudeField.setText("" + defaultLat);
+        longitudeField.setText("" + defaultLog);
 
         realButton.setOnClickListener(new View.OnClickListener() {
             @Override

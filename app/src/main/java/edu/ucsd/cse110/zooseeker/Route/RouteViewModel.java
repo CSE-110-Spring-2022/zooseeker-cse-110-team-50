@@ -104,7 +104,7 @@ public class RouteViewModel extends AndroidViewModel {
     }
 
     public LiveData<Boolean> getIsLocationMocked() {
-        return getIsLocationMocked();
+        return isLocationMocked;
     }
 
     public LiveData<String> getUIMessage() {
@@ -150,6 +150,10 @@ public class RouteViewModel extends AndroidViewModel {
         }
     }
 
+    public void shouldReroute() {
+        shouldReroute(currentLocationCoordinate.getValue().first, currentLocationCoordinate.getValue().second);
+    }
+
     public void setEnableReroute(boolean enable) {
         enableReroute.setValue(enable);
     }
@@ -184,16 +188,19 @@ public class RouteViewModel extends AndroidViewModel {
     public void next() {
         zooNavigator.next();
         updateCurrentRouteToDisplay();
+        shouldReroute();
     }
 
     public void back() {
         zooNavigator.back();
         updateCurrentRouteToDisplay();
+        shouldReroute();
     }
 
     public void skip() {
         zooNavigator.skip();
         updateCurrentRouteToDisplay();
+        shouldReroute();
     }
 
     public void reverse() {
