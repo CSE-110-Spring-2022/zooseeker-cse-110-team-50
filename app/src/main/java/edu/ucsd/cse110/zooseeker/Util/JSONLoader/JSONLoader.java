@@ -10,13 +10,15 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.zooseeker.Persistence.Place;
-import edu.ucsd.cse110.zooseeker.Util.Router.RawGraph;
+import edu.ucsd.cse110.zooseeker.Util.Router.ZooGraphMapper;
 
 public class JSONLoader {
     public static String BASE_PATH = "";
@@ -41,21 +43,24 @@ public class JSONLoader {
 
     public static List<Place> loadNodeInfo(Context context) {
         String PATH = BASE_PATH + "sample_node_info.json";
-        List<Place> ret;
+        List<NodeInfoMapper> ret;
         try {
             InputStream input = context.getAssets().open(PATH);
             Reader reader = new InputStreamReader(input);
             Gson gson = new Gson();
-            Type type = new TypeToken<List<Place>>(){}.getType();
+            Type type = new TypeToken<List<NodeInfoMapper>>(){}.getType();
             ret =  gson.fromJson(reader, type);
         } catch (IOException e) {
             e.printStackTrace();
             ret = Collections.emptyList();
         }
-        for (Place place : ret) {
-            place.placeId = place.placeId;
+
+        List<Place> places = new ArrayList<>();
+        for (NodeInfoMapper nodeInfoMapper : ret) {
+            places.add(nodeInfoMapper.toPlace());
         }
-        return ret;
+
+        return places;
     }
 
     public static List<NodeInfoMapper> loadNodeInfoMapper(Context context) {
@@ -75,15 +80,15 @@ public class JSONLoader {
         return ret;
     }
 
-    public static RawGraph loadRawGraph(Context context) {
+    public static ZooGraphMapper loadRawGraph(Context context) {
         final String PATH = BASE_PATH + "sample_zoo_graph.json";
-        RawGraph graph = null;
+        ZooGraphMapper graph = null;
 
         try {
             InputStream input = context.getAssets().open(PATH);
             Reader reader = new InputStreamReader(input);
             Gson gson = new Gson();
-            Type type = new TypeToken<RawGraph>(){}.getType();
+            Type type = new TypeToken<ZooGraphMapper>(){}.getType();
             graph = gson.fromJson(reader, type);
         } catch (IOException e) {
             e.printStackTrace();
@@ -95,15 +100,15 @@ public class JSONLoader {
     * Below is for testing
     * */
 
-    public static RawGraph loadTestRawGraph(Context context) {
+    public static ZooGraphMapper loadTestRawGraph(Context context) {
         final String PATH = "test/sample_zoo_graph.json";
-        RawGraph graph = null;
+        ZooGraphMapper graph = null;
 
         try {
             InputStream input = context.getAssets().open(PATH);
             Reader reader = new InputStreamReader(input);
             Gson gson = new Gson();
-            Type type = new TypeToken<RawGraph>(){}.getType();
+            Type type = new TypeToken<ZooGraphMapper>(){}.getType();
             graph = gson.fromJson(reader, type);
         } catch (IOException e) {
             e.printStackTrace();
@@ -112,8 +117,87 @@ public class JSONLoader {
         return graph;
     }
 
+    public static ZooGraphMapper loadTestRawGraph(Context context, String path) {
+        final String PATH = path;
+        ZooGraphMapper graph = null;
+
+        try {
+            InputStream input = context.getAssets().open(PATH);
+            Reader reader = new InputStreamReader(input);
+            Gson gson = new Gson();
+            Type type = new TypeToken<ZooGraphMapper>(){}.getType();
+            graph = gson.fromJson(reader, type);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return graph;
+    }
+
+    public static List<Place> loadTestNodeInfo(Context context) {
+        String PATH = BASE_PATH + "test/sample_node_info.json";
+        List<NodeInfoMapper> ret;
+        try {
+            InputStream input = context.getAssets().open(PATH);
+            Reader reader = new InputStreamReader(input);
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<NodeInfoMapper>>(){}.getType();
+            ret =  gson.fromJson(reader, type);
+        } catch (IOException e) {
+            e.printStackTrace();
+            ret = Collections.emptyList();
+        }
+
+        List<Place> places = new ArrayList<>();
+        for (NodeInfoMapper nodeInfoMapper : ret) {
+            places.add(nodeInfoMapper.toPlace());
+        }
+
+        return places;
+    }
+
+    public static List<Place> loadTestNodeInfo(Context context, String path) {
+        String PATH = BASE_PATH + path;
+        List<NodeInfoMapper> ret;
+        try {
+            InputStream input = context.getAssets().open(PATH);
+            Reader reader = new InputStreamReader(input);
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<NodeInfoMapper>>(){}.getType();
+            ret =  gson.fromJson(reader, type);
+        } catch (IOException e) {
+            e.printStackTrace();
+            ret = Collections.emptyList();
+        }
+
+        List<Place> places = new ArrayList<>();
+        for (NodeInfoMapper nodeInfoMapper : ret) {
+            places.add(nodeInfoMapper.toPlace());
+        }
+
+        return places;
+    }
+
     public static Map<String, String> loadTestEdgeInfo(Context context) {
-        final String PATH = "test/sample_edge_info.json";
+        final String PATH = BASE_PATH + "test/sample_edge_info.json";
+        List<EdgeInfoMapper> ret;
+        try {
+            InputStream input = context.getAssets().open(PATH);
+            Reader reader = new InputStreamReader(input);
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<EdgeInfoMapper>>(){}.getType();
+            ret =  gson.fromJson(reader, type);
+        } catch (IOException e) {
+            e.printStackTrace();
+            ret = Collections.emptyList();
+        }
+        Map<String, String> edgeInfo = new HashMap<>();
+        for(EdgeInfoMapper ei : ret) edgeInfo.put(ei.id, ei.street);
+        return edgeInfo;
+    }
+
+    public static Map<String, String> loadTestEdgeInfo(Context context, String path) {
+        final String PATH = BASE_PATH + path;
         List<EdgeInfoMapper> ret;
         try {
             InputStream input = context.getAssets().open(PATH);
