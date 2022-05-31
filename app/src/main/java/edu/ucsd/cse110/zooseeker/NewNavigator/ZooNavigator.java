@@ -23,19 +23,21 @@ public class ZooNavigator implements Serializable {
 
     //Current implementation stuff
     List<String> futureNodes;
-    Stack<String> pastNodes;
-    List<String> planList; // list of all node ids in plan list
+    List<String> pastNodes;
+    public List<String> planList; // list of all node ids in plan list
     String currentVertex;
     String nextVertex;
     Router router;
+    int hashCode;
 
-    // Sometime in the future for checks
-
-    //comment
+    public int hashCode() {
+        return hashCode;
+    }
 
     public ZooNavigator(List<String> ids, Router router){
+        hashCode = ids.hashCode();
         this.router = router;
-        pastNodes = new Stack<>();
+        pastNodes = new ArrayList<>();
         planList = new ArrayList<>(ids);
         futureNodes = new ArrayList<>(ids);
         planList.add("entrance_exit_gate");
@@ -44,7 +46,7 @@ public class ZooNavigator implements Serializable {
         if(nextVertex == null){
             nextVertex = "entrance_exit_gate";
         }
-        Log.d("ZooNavigator", "\n" + getRoutePreview());
+        hashCode = planList.hashCode();
     }
 
     public void next(){
@@ -53,7 +55,7 @@ public class ZooNavigator implements Serializable {
         }
 
         if(planList.contains(currentVertex) && !pastNodes.contains(currentVertex)){
-            pastNodes.push(currentVertex);
+            pastNodes.add(currentVertex);
         }
         currentVertex = nextVertex;
         nextVertex = getClosestNode();
@@ -71,7 +73,7 @@ public class ZooNavigator implements Serializable {
             futureNodes.add(nextVertex);
         }
         nextVertex = currentVertex;
-        currentVertex = pastNodes.pop();
+        currentVertex = pastNodes.remove(pastNodes.size()-1);
     }
 
     public void reverse(){
@@ -106,7 +108,7 @@ public class ZooNavigator implements Serializable {
 
     public void reroute(String id){
         if(planList.contains(currentVertex) && !pastNodes.contains(currentVertex)){
-            pastNodes.push(currentVertex);
+            pastNodes.add(currentVertex);
         }
         if(!futureNodes.contains(nextVertex) && !nextVertex.equals(ENTRANCE_EXIT_GATE_NODE_ID)
                 && planList.contains(nextVertex)){

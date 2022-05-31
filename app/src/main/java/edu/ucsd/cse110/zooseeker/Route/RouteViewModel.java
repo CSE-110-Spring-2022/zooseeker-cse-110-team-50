@@ -2,6 +2,7 @@ package edu.ucsd.cse110.zooseeker.Route;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.ucsd.cse110.zooseeker.NewNavigator.ZooNavigator;
+import edu.ucsd.cse110.zooseeker.NewNavigator.ZooNavigatorJsonMapper;
 import edu.ucsd.cse110.zooseeker.Persistence.MainDatabase;
 import edu.ucsd.cse110.zooseeker.Persistence.Place;
 import edu.ucsd.cse110.zooseeker.Persistence.PlaceDao;
@@ -23,6 +25,8 @@ import edu.ucsd.cse110.zooseeker.Util.Router.Router;
 public class RouteViewModel extends AndroidViewModel {
 
     private static int SHOULD_REROUTE_THROTTLE = 0;
+    private static String ZOO_NAVIGATOR_KEY = "SERIALIZED_DATA";
+    private static String ZOO_NAVIGATOR_HASH_KEY = "DATA_HASH";
 
     // Live Data
     private MutableLiveData<Boolean> isDirectionDetailed;
@@ -42,6 +46,9 @@ public class RouteViewModel extends AndroidViewModel {
     public ZooNavigator zooNavigator;
     private String nodeIdToRerouteFrom;
 
+    // shared preference
+    SharedPreferences zooNavigatorPref;
+
     // Ctor
     public RouteViewModel(@NonNull Application application) {
         super(application);
@@ -52,7 +59,12 @@ public class RouteViewModel extends AndroidViewModel {
         placeDao = mainDb.placeDao();
         planItemDao = mainDb.planItemDao();
 
-        // initialize navigator
+
+        Router router = new Router(getApplication());
+        zooNavigatorPref = application.getSharedPreferences("ZooNavigator", Context.MODE_PRIVATE);
+        String serializedData = zooNavigatorPref.getString(ZOO_NAVIGATOR_KEY, null);
+        int dataHashCode = zooNavigatorPref.getInt(ZOO_NAVIGATOR_HASH_KEY, -1);
+
         List<PlanItem> planItemList = planItemDao.getAll();
         List<String> zooNavigatorIds = new ArrayList<>();
         for(PlanItem planItem : planItemList){
@@ -66,9 +78,15 @@ public class RouteViewModel extends AndroidViewModel {
                 }
             }
         }
-        Router router = new Router(getApplication());
-        zooNavigator = new ZooNavigator(zooNavigatorIds, router);
 
+        int newHashCode = zooNavigatorIds.hashCode();
+
+        if (serializedData == null) {
+            zooNavigator = new ZooNavigator(zooNavigatorIds, router);
+        }
+        else {
+            zooNavigator = ZooNavigatorJsonMapper.fromJson(serializedData).toZooNavigator(router);
+        }
 
         // initialize LiveData
         isDirectionDetailed = new MutableLiveData<>(false);
@@ -81,6 +99,14 @@ public class RouteViewModel extends AndroidViewModel {
         setCurrentLocationCoordinate(17.123124123, 17.8787);
     }
 
+
+    private void updateSharedPreference() {
+        String json = ZooNavigatorJsonMapper.fromZooNavigator(zooNavigator).toSerializedJson();
+        SharedPreferences.Editor editor = zooNavigatorPref.edit();
+        editor.putString(ZOO_NAVIGATOR_KEY, json);
+        editor.putInt(ZOO_NAVIGATOR_HASH_KEY, zooNavigator.hashCode());
+        editor.commit();
+    }
 
     public LiveData<Boolean> getIsDirectionDetailed() {
         return isDirectionDetailed;
@@ -96,10 +122,12 @@ public class RouteViewModel extends AndroidViewModel {
 
     public LiveData<Pair<String, String>> getFromAndTo() {
         updateCurrentRouteToDisplay();
+        updateSharedPreference();
         return fromAndTo;
     }
 
     public LiveData<Pair<Double, Double>> getCurrentLocationCoordinate() {
+        updateSharedPreference();
         return currentLocationCoordinate;
     }
 
@@ -215,6 +243,7 @@ public class RouteViewModel extends AndroidViewModel {
         resetUiMessage();
         zooNavigator.reroute(nodeIdToRerouteFrom);
         setEnableReroute(false);
+        updateSharedPreference();
         updateCurrentRouteToDisplay();
     }
 
