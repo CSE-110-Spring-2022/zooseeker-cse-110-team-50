@@ -12,17 +12,118 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:text="Route"
-            android:textSize="30dp"
             android:background="@drawable/route_header_bg"
-            android:paddingHorizontal="16dp"
-            android:textColor="#fff"
-            android:gravity="center_vertical"
+            android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="26dp"/>
+            android:layout_marginTop="16dp"
+            android:paddingVertical="10dp"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1.0">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="65dp"
+                            android:layout_height="wrap_content"
+                            android:text="Latitude: "
+                            android:textSize="10dp"
+                            android:textAlignment="textEnd"
+                            android:textColor="#fff" />
+                        <TextView
+                            android:id="@+id/route_latitude"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="74.01380139"
+                            android:textSize="10dp"
+                            android:textColor="#fff"
+                            android:textAlignment="textStart" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="65dp"
+                            android:layout_height="wrap_content"
+                            android:text="Longitude: "
+                            android:textSize="10dp"
+                            android:textAlignment="textEnd"
+                            android:paddingLeft="16dp"
+                            android:textColor="#fff" />
+                        <TextView
+                            android:id="@+id/route_longitude"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="17.00123971"
+                            android:textSize="10dp"
+                            android:textColor="#fff"
+                            android:textAlignment="textStart" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/route_gps_setting_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:textSize="8dp"
+                    android:backgroundTint="#666"
+                    android:layout_marginRight="16dp"
+                    android:text="Real Location"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="from"
+                    android:textSize="12dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="10dp"
+                    android:textColor="#fff"
+                    android:gravity="center_vertical" />
+                <TextView
+                    android:id="@+id/route_from_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="XXXXX"
+                    android:textSize="22dp"
+                    android:textFontWeight="900"
+                    android:textColor="#fff"
+                    android:gravity="center_vertical" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="to"
+                    android:textSize="12dp"
+                    android:paddingHorizontal="10dp"
+                    android:textColor="#fff"
+                    android:gravity="center_vertical" />
+                <TextView
+                    android:id="@+id/route_to_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="YYYYY"
+                    android:textSize="22dp"
+                    android:textFontWeight="900"
+                    android:textColor="#fff"
+                    android:gravity="center_vertical" />
+            </LinearLayout>
+        </LinearLayout>
+
 
         <ScrollView
             android:layout_width="match_parent"
@@ -30,6 +131,7 @@
             android:scrollbars="vertical"
             android:fillViewport="true"
             android:layout_weight="1.0">
+
             <TextView
                 android:id="@+id/route_text_view"
                 android:layout_width="match_parent"
@@ -44,11 +146,17 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="190dp"
+            android:layout_height="220dp"
             android:background="@drawable/route_button_bg"
             android:padding="16dp"
             android:orientation="vertical"
             android:gravity="center">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:text="Have Fun!"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -82,14 +190,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:gravity="center">
-
-
                 <Button
                     android:id="@+id/route_reverse_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Reverse"
-                    android:layout_marginHorizontal="22dp"
+                    android:layout_marginRight="22dp"
                     app:layout_constraintBottom_toBottomOf="parent" />
 
                 <Button
@@ -101,15 +207,28 @@
                     app:layout_constraintBottom_toTopOf="@+id/route_next_button"
                     app:layout_constraintEnd_toEndOf="parent" />
             </LinearLayout>
-
-            <Button
-                android:id="@+id/route_delete_all_button"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#f00"
-                android:text="Delete All"
-                app:layout_constraintBottom_toBottomOf="parent" />
-
+                android:layout_marginTop="6dp"
+                android:gravity="center">
+                <Button
+                    android:id="@+id/route_delete_all_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#f00"
+                    android:text="Delete All"
+                    android:layout_marginRight="22dp"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+                <Button
+                    android:id="@+id/route_reroute_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#f5aa42"
+                    android:clickable="false"
+                    android:text="Reroute"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
