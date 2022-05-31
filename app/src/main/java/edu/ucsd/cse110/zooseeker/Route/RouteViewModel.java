@@ -2,8 +2,14 @@ package edu.ucsd.cse110.zooseeker.Route;
 
 import android.app.Application;
 import android.content.Context;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.util.Log;
 import android.util.Pair;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -16,6 +22,7 @@ import java.util.function.DoubleBinaryOperator;
 
 import edu.ucsd.cse110.zooseeker.Location.Coord;
 import edu.ucsd.cse110.zooseeker.Location.LocationModel;
+import edu.ucsd.cse110.zooseeker.Location.LocationPermissionChecker;
 import edu.ucsd.cse110.zooseeker.NewNavigator.ZooNavigator;
 import edu.ucsd.cse110.zooseeker.Persistence.MainDatabase;
 import edu.ucsd.cse110.zooseeker.Persistence.PlaceDao;
@@ -47,6 +54,7 @@ public class RouteViewModel extends AndroidViewModel {
     private int currentRouteIndex = 0;
 
 
+
     // Ctor
     public RouteViewModel(@NonNull Application application) {
         super(application);
@@ -73,8 +81,11 @@ public class RouteViewModel extends AndroidViewModel {
         setIsLocationMocked(false);
     }
 
-    public void setViewModel(LocationModel locationModel){
+    public void setViewModel(LocationModel locationModel, LocationManager locationManager){
         this.locationModel = locationModel;
+        var provider = LocationManager.GPS_PROVIDER;
+        //var locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationModel.addLocationProviderSource(locationManager, provider);
     }
 
     public LiveData<Boolean> getIsDirectionDetailed() {

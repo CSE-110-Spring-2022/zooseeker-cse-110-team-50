@@ -30,6 +30,7 @@ public class LocationPermissionChecker {
         });
     }
 
+    //Sets up permissions for location
     public boolean ensurePermissions() {
         var requiredPermissions = new String[]{
                 Manifest.permission.ACCESS_FINE_LOCATION,
