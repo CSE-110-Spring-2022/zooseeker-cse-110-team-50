@@ -19,6 +19,7 @@ import edu.ucsd.cse110.zooseeker.Persistence.PlaceDao;
 import edu.ucsd.cse110.zooseeker.Persistence.PlanItem;
 import edu.ucsd.cse110.zooseeker.Persistence.PlanItemDao;
 import edu.ucsd.cse110.zooseeker.Util.Router.Router;
+import edu.ucsd.cse110.zooseeker.Util.SaveLoad.ZooNavigatorSaverLoader;
 
 public class RouteViewModel extends AndroidViewModel {
 
@@ -81,6 +82,14 @@ public class RouteViewModel extends AndroidViewModel {
         setCurrentLocationCoordinate(17.123124123, 17.8787);
     }
 
+    public void setZooNavigator(ZooNavigatorSaverLoader znsl){
+        if(znsl == null){
+            return;
+        }
+        if(znsl.hasZooNavigator()){
+            this.zooNavigator = znsl.getZooNavigator();
+        }
+    }
 
     public LiveData<Boolean> getIsDirectionDetailed() {
         return isDirectionDetailed;

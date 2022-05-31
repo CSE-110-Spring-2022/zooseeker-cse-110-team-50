@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Zooseeker">
         <activity
-            android:name=".RouteSummary.RouteSummary"
+            android:name=".RouteSummary.RouteSummaryActivity"
             android:exported="false" />
 
         <meta-data

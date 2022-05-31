@@ -10,7 +10,7 @@ import android.widget.TextView;
 import edu.ucsd.cse110.zooseeker.NewNavigator.ZooNavigator;
 import edu.ucsd.cse110.zooseeker.R;
 
-public class RouteSummary extends AppCompatActivity {
+public class RouteSummaryActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +20,7 @@ public class RouteSummary extends AppCompatActivity {
         getSupportActionBar().hide();
 
         Bundle extras = getIntent().getExtras();
-        ZooNavigator zooNavigator = (ZooNavigator) extras.getSerializable("ZOONAVIGATOR");
+        ZooNavigator zooNavigator = (ZooNavigator) extras.getSerializable("zoonavigatorInput");
 
         String routeSummary = zooNavigator.getRoutePreview();
 

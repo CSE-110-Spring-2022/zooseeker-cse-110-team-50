@@ -17,8 +17,8 @@ import edu.ucsd.cse110.zooseeker.Location.LocationPermissionChecker;
 import edu.ucsd.cse110.zooseeker.Persistence.MainDatabase;
 import edu.ucsd.cse110.zooseeker.Persistence.PlanItemDao;
 import edu.ucsd.cse110.zooseeker.R;
-import edu.ucsd.cse110.zooseeker.RouteSummary.RouteSummary;
-import edu.ucsd.cse110.zooseeker.Util.Router.Router;
+import edu.ucsd.cse110.zooseeker.RouteSummary.RouteSummaryActivity;
+import edu.ucsd.cse110.zooseeker.Util.SaveLoad.ZooNavigatorSaverLoader;
 
 
 public class RouteActivity extends AppCompatActivity implements GPSSettingDialogFragment.DialogListener{
@@ -26,6 +26,7 @@ public class RouteActivity extends AppCompatActivity implements GPSSettingDialog
     // ViewModel
     RouteViewModel routeViewModel;
     LocationModel locationModel;
+    ZooNavigatorSaverLoader znsl;
 
     // DAOs
     MainDatabase db;
@@ -81,6 +82,13 @@ public class RouteActivity extends AppCompatActivity implements GPSSettingDialog
 
         // ViewModels
         routeViewModel = new ViewModelProvider(this).get(RouteViewModel.class);
+        Bundle extras = getIntent().getExtras();
+        if(extras != null){
+            this.znsl = (ZooNavigatorSaverLoader) extras.getSerializable("znsl");
+            if(znsl != null){
+                routeViewModel.setZooNavigator(this.znsl);
+            }
+        }
         locationModel = new ViewModelProvider(this).get(LocationModel.class);
         var provider = LocationManager.GPS_PROVIDER;
         var locationManager = (LocationManager) getSystemService(this.LOCATION_SERVICE);
@@ -172,6 +180,7 @@ public class RouteActivity extends AppCompatActivity implements GPSSettingDialog
             @Override
             public void onClick(View view) {
                 planItemDao.nukeTable();
+                znsl.deleteZooNavigator(getPreferences(MODE_PRIVATE));
                 finish();
             }
         });
@@ -183,10 +192,17 @@ public class RouteActivity extends AppCompatActivity implements GPSSettingDialog
             }
         });
 
-        // Start Route Summary
-        Intent intent = new Intent(this, RouteSummary.class);
-        intent.putExtra("ZOONAVIGATOR", routeViewModel.zooNavigator);
-        startActivity(intent);
+        if(znsl == null){
+            znsl = new ZooNavigatorSaverLoader(getPreferences(MODE_PRIVATE));
+            Intent intent = new Intent(this, RouteSummaryActivity.class);
+            intent.putExtra("zoonavigatorInput", routeViewModel.zooNavigator);
+            startActivity(intent);
+        }
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //znsl.saveZooNavigator(getPreferences(MODE_PRIVATE), routeViewModel.zooNavigator);
     }
 
     public void showGPSSettingDialog() {

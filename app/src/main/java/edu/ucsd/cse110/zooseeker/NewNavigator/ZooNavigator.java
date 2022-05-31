@@ -47,6 +47,19 @@ public class ZooNavigator implements Serializable {
         Log.d("ZooNavigator", "\n" + getRoutePreview());
     }
 
+    public ZooNavigator(List<String> futureNodes, List<String> pastNodes, List<String> planList,
+                        String currentVertex, String nextVertex, Router router){
+        this.router = router;
+        this.pastNodes = new Stack<>();
+        for(String pNode : pastNodes){
+            this.pastNodes.push(pNode);
+        }
+        this.planList = new ArrayList<>(planList);
+        this.futureNodes = new ArrayList<>(futureNodes);
+        this.currentVertex = currentVertex;
+        this.nextVertex = nextVertex;
+    }
+
     public void next(){
         if(nextVertex.equals("entrance_exit_gate") && futureNodes.size() == 0){
             return;
