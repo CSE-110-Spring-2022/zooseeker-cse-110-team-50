@@ -8,6 +8,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
@@ -161,8 +162,9 @@ public class GraphTest {
         exhibitToVisit.add("hippo");
         exhibitToVisit.add("crocodile");
         exhibitToVisit.add("owens_aviary");
-        exhibitToVisit.add("toucan");
+        exhibitToVisit.add("toucan");  // a duplicate
         String route = router.routePreview(ENTRANCE_EXIT_GATE, ENTRANCE_EXIT_GATE, exhibitToVisit);
-//        assertNotNull(route);
+        Log.d("GraphTest", route);
+        assertNotNull(route);
     }
 }

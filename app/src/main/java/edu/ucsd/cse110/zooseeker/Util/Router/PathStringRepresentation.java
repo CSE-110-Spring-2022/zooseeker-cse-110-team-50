@@ -76,7 +76,7 @@ public class PathStringRepresentation {
         for (GraphPath<MetaNode, EdgeWithId> graphPath : graphPaths) {
             stringRep += ((count++) + ". " +
                     graphPath.getStartVertex().name +
-                    " \n" + graphPath.getWeight() + " ft");
+                    " \n" + graphPath.getWeight() + " ft" + "\n");
         }
 
         stringRep += count + ". Entrance and Exit Gate";

@@ -8,6 +8,7 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -112,10 +113,26 @@ public class Router {
             }
         }
 
+        // only add an exhibit group once
+        List<String> originalToVisit = toVisit;
+        toVisit = new ArrayList<>();
+        Map<String, Boolean> isAdded = new HashMap<>();
+        for (String id : this.metaNodeMap.keySet()) {
+            isAdded.put(id, false);
+        }
+        for (String n : originalToVisit) {
+            String id = this.metaNodeMap.get(n).id;
+            if (!isAdded.get(id)) {
+                toVisit.add(id);
+                isAdded.put(n, true);
+            }
+        }
+
         // Add path to source
         int nearestNodeIdx = this.nearestNodeIdx(source, toVisit);
         String currNode = toVisit.get(nearestNodeIdx);
         graphPathList.add(this.shortestGraphPath(source, currNode));
+        toVisit.remove(nearestNodeIdx);
 
         while (!toVisit.isEmpty()) {
             nearestNodeIdx = this.nearestNodeIdx(currNode, toVisit);
