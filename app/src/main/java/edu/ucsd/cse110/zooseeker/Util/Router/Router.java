@@ -70,8 +70,11 @@ public class Router {
         for (String currNode : nodeIdList) {
             GraphPath<MetaNode, EdgeWithId> graphPath = this.shortestGraphPath(node, currNode);
 
-            if (graphPath.getWeight() < totalWeight)
+            if (graphPath.getWeight() < totalWeight) {
                 nearestNode = currNode;
+                totalWeight = graphPath.getWeight();
+            }
+
         }
         return nearestNode;
     }
