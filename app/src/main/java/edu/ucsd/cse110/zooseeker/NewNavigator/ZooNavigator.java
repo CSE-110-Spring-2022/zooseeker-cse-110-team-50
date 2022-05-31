@@ -1,19 +1,8 @@
 package edu.ucsd.cse110.zooseeker.NewNavigator;
 
-
-import android.content.Context;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import edu.ucsd.cse110.zooseeker.Persistence.Place;
-import edu.ucsd.cse110.zooseeker.Persistence.PlaceDao;
-import edu.ucsd.cse110.zooseeker.Persistence.PlanItem;
-import edu.ucsd.cse110.zooseeker.Persistence.PlanItemDao;
-import edu.ucsd.cse110.zooseeker.Util.JSONLoader.JSONLoader;
-import edu.ucsd.cse110.zooseeker.Util.Router.RawGraph;
+import java.util.Stack;
 import edu.ucsd.cse110.zooseeker.Util.Router.Router;
 
 /**
@@ -27,151 +16,118 @@ import edu.ucsd.cse110.zooseeker.Util.Router.Router;
 
 public class ZooNavigator {
 
-    //past implementation stuff
-    //private int routeIndex = 0;
-//    Graph<String, EdgeWithId> graph;
-//    Map<String, String> edgeInfo;
-//    Map<String, String> placeInfo;
-    //List<RoutePackage> route;
-    //RouteMaker routeMaker = RouteMaker.builder();
-
     //Current implementation stuff
-    List<MetaVertex> futureNodes;
-    List<MetaVertex> pastNodes;
-    List<MetaVertex> allExhibits;
-    List<MetaVertex> routeExhibits;
-
-    private List<Router.RoutePackage> pkgList;
-
-    MetaVertex current;
-    MetaVertex next;
+    List<String> futureNodes;
+    Stack<String> pastNodes;
+    List<String> routeExhibits;
+    String currentVertex;
+    String nextVertex;
+    Router router;
 
     // Sometime in the future for checks
-    Boolean firstPrev = false;
 
     //comment
 
-    public ZooNavigator(PlaceDao placeDao, PlanItemDao planItemDao, Context context){
-        futureNodes = new ArrayList<>();
-        pastNodes = new ArrayList<>();
-        allExhibits = new ArrayList<>();
-        routeExhibits = new ArrayList<>();
-
-        // Put all of planItemDao places to routeExhibits. Put all of placeDao places to allExhibits
-
-        List<Place> allPlaceExhibits = placeDao.getAll();
-
-        // Convert allPlaceExhibit places to MetaVertex
-
-        // Go through each place
-        for(Place place : allPlaceExhibits){
-
-            if(place.parentId == null){
-                allExhibits.add(new MetaVertex(place));
-            }
-            else{
-                // There is a place with a parentId. Do duplicate checks
-                boolean isDuplicate = false;
-                if(place.kind.equals("exhibit_group")){
-                    continue;
-                }
-                for(MetaVertex mt : allExhibits){
-                    if(mt.id.equals(place.parentId)){
-                        mt.addPlace(place);
-                        isDuplicate = true;
-                        break;
-                    }
-                }
-                if(!isDuplicate){
-                    allExhibits.add(new MetaVertex(place));
-                }
-            }
-
-            // Now we add lats and longs associated with parents in each meta vertex
-
-            // Look up in placeDao each mt.id, make it a place, get its lats and longs, and store it
-            // in mt
-
-            for(MetaVertex mt : allExhibits){
-                if(mt.hasParent){
-                    Place parent = placeDao.get(mt.id);
-                    mt.setName(parent.name);
-                    mt.setLatLng(parent.lat, parent.lng);
-                }
-            }
+    public ZooNavigator(List<String> ids, Router router){
+        this.router = router;
+        pastNodes = new Stack<>();
+        routeExhibits = new ArrayList<>(ids);
+        futureNodes = new ArrayList<>(ids);
+        routeExhibits.add("entrance_exit_gate");
+        currentVertex = "entrance_exit_gate";
+        nextVertex = getClosestNode();
+        if(nextVertex == null){
+            nextVertex = "entrance_exit_gate";
         }
-        Map<String, String> edgeInfo = JSONLoader.loadEdgeInfo(context);
-        RawGraph rawGraph = JSONLoader.loadRawGraph(context);
-
-        final Map<String, String> placeInfoMap = new HashMap<>();
-        for (MetaVertex mt: allExhibits)
-            placeInfoMap.put(mt.id, mt.name);
-        Router routeMaker = Router.builder()
-                .loadEdgeInfo(edgeInfo)
-                .loadFromRawGraph(rawGraph)
-                .loadPlaceInfo(placeInfoMap)
-                .build();
-
-        List<PlanItem> allPlanItems = planItemDao.getAll();
-
-        List<String> allNodes = new ArrayList<>();
-        for(PlanItem item : allPlanItems){
-            Place place = placeDao.get(item.placeId);
-            if(place.parentId == null){
-                allNodes.add(item.placeId);
-            }
-            else{
-                // it has a parent
-                // check for duplicates
-                boolean isDuplicate = false;
-                for(String stringItem : allNodes){
-                    if(stringItem.equals(place.parentId)){
-                        // there is a duplicate. go to next iteration and don't add to allNodes
-                        isDuplicate = true;
-                    }
-                }
-                if(!isDuplicate){
-                    allNodes.add(place.parentId);
-                }
-            }
-        }
-        pkgList = routeMaker.route(allNodes);
-    }
-
-    public List<Router.RoutePackage> getPkgList(){
-        return pkgList;
     }
 
     public void next(){
+        if(nextVertex.equals("entrance_exit_gate") && futureNodes.size() == 0){
+            return;
+        }
 
+        if(routeExhibits.contains(currentVertex) && !pastNodes.contains(currentVertex)){
+            pastNodes.push(currentVertex);
+        }
+        currentVertex = nextVertex;
+        nextVertex = getClosestNode();
+        if(nextVertex == null){
+            nextVertex = "entrance_exit_gate";
+        }
     }
 
     public void back(){
-
+        if(pastNodes.size() == 0){
+            return;
+        }
+        if(!futureNodes.contains(nextVertex) && !nextVertex.equals("entrance_exit_gate")
+                && routeExhibits.contains(nextVertex)){
+            futureNodes.add(nextVertex);
+        }
+        nextVertex = currentVertex;
+        currentVertex = pastNodes.pop();
     }
 
     public void reverse(){
-
+        String temp = currentVertex;
+        currentVertex = nextVertex;
+        nextVertex = temp;
     }
 
     public void skip(){
+        if(nextVertex.equals("entrance_exit_gate") && futureNodes.size() == 0){
+            return;
+        }
+        routeExhibits.remove(nextVertex);
+        nextVertex = getClosestNode();
+        if(nextVertex == null){
+            nextVertex = "entrance_exit_gate";
+        }
+    }
 
+    private String getClosestNode(){
+        if(futureNodes.size() == 0){
+            return null;
+        }
+        String closestNode = router.nearestNode(currentVertex, futureNodes);
+        futureNodes.remove(closestNode);
+        return closestNode;
+    }
+
+    public void reroute(String id){
+        if(routeExhibits.contains(currentVertex) && !pastNodes.contains(currentVertex)){
+            pastNodes.push(currentVertex);
+        }
+        if(!futureNodes.contains(nextVertex) && !nextVertex.equals("entrance_exit_gate")
+                && routeExhibits.contains(nextVertex)){
+            futureNodes.add(nextVertex);
+        }
+        currentVertex = id;
+        futureNodes.remove(id);
+        nextVertex = getClosestNode();
+        if(nextVertex == null){
+            nextVertex = "entrance_exit_gate";
+        }
     }
 
     public String getCurrNode(){
-        return null;
+        return currentVertex;
     }
 
     public String getNextNode(){
-        return null;
+        return nextVertex;
     }
 
-    public List<String> getRouteBrief(){
-        return null;
+    public String getRouteBrief(){
+        return router.shortestGraphPathInStringBrief(currentVertex, nextVertex);
     }
 
-    public List<String> getRouteDetailed(){
-        return null;
+    public String getRouteDetailed(){
+        return router.shortestGraphPathInStringDetailed(currentVertex, nextVertex);
+    }
+
+    public String getRoutePreview(){
+        return router.routePreview("entrance_exit_gate", "entrance_exit_gate", futureNodes);
     }
 
 

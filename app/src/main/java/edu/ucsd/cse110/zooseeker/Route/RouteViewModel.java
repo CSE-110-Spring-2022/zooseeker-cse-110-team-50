@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.DoubleBinaryOperator;
 
@@ -18,7 +19,9 @@ import edu.ucsd.cse110.zooseeker.Location.Coord;
 import edu.ucsd.cse110.zooseeker.Location.LocationModel;
 import edu.ucsd.cse110.zooseeker.NewNavigator.ZooNavigator;
 import edu.ucsd.cse110.zooseeker.Persistence.MainDatabase;
+import edu.ucsd.cse110.zooseeker.Persistence.Place;
 import edu.ucsd.cse110.zooseeker.Persistence.PlaceDao;
+import edu.ucsd.cse110.zooseeker.Persistence.PlanItem;
 import edu.ucsd.cse110.zooseeker.Persistence.PlanItemDao;
 import edu.ucsd.cse110.zooseeker.Util.Router.Router;
 
@@ -41,7 +44,6 @@ public class RouteViewModel extends AndroidViewModel {
 
     // Navigator
     private ZooNavigator zooNavigator;
-    private List<Router.RoutePackage> routePackageList;
 
     // Navigator related user data
     private int currentRouteIndex = 0;
@@ -59,8 +61,21 @@ public class RouteViewModel extends AndroidViewModel {
         planItemDao = mainDb.planItemDao();
 
         // initialize navigator
-        zooNavigator = new ZooNavigator(placeDao, planItemDao, context);
-        routePackageList = zooNavigator.getPkgList();
+        List<PlanItem> planItemList = planItemDao.getAll();
+        List<String> zooNavigatorIds = new ArrayList<>();
+        for(PlanItem planItem : planItemList){
+            Place place = placeDao.get(planItem.placeId);
+            if(place.parentId == null){
+                zooNavigatorIds.add(place.placeId);
+            }
+            else{
+                if(!zooNavigatorIds.contains(place.parentId)){
+                    zooNavigatorIds.add(place.parentId);
+                }
+            }
+        }
+        Router router = new Router(getApplication());
+        zooNavigator = new ZooNavigator(zooNavigatorIds, router);
 
         // initialize LiveData
         isDirectionDetailed = new MutableLiveData<>(false);
@@ -122,22 +137,32 @@ public class RouteViewModel extends AndroidViewModel {
     }
 
     public void next() {
-        if (routePackageList.size() > currentRouteIndex + 1) currentRouteIndex++;
+        zooNavigator.next();
         updateCurrentRouteToDisplay();
     }
 
     public void back() {
-        if (currentRouteIndex - 1 >= 0) currentRouteIndex--;
+        zooNavigator.back();
+        updateCurrentRouteToDisplay();
+    }
+
+    public void skip() {
+        zooNavigator.skip();
+        updateCurrentRouteToDisplay();
+    }
+
+    public void reverse() {
+        zooNavigator.reverse();
         updateCurrentRouteToDisplay();
     }
 
     private void updateCurrentRouteToDisplay() {
         String routeStr = isDirectionDetailed.getValue()
-                ? routePackageList.get(currentRouteIndex).toStringDetailed()
-                : routePackageList.get(currentRouteIndex).toStringBrief();
+                ? zooNavigator.getRouteDetailed()
+                : zooNavigator.getRouteBrief();
 
-        String from = routePackageList.get(currentRouteIndex).getStart();
-        String to = routePackageList.get(currentRouteIndex).getEnd();
+        String from = placeDao.get(zooNavigator.getCurrNode()).name;
+        String to = placeDao.get(zooNavigator.getNextNode()).name;
 
         // limit max length of from and to to 8 characters
         if (from.length() > 10) from = from.substring(0, 8).trim() + "...";
