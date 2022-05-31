@@ -59,33 +59,26 @@ public class RouteViewModel extends AndroidViewModel {
         placeDao = mainDb.placeDao();
         planItemDao = mainDb.planItemDao();
 
+        // Initialize SharePreference file
+        zooNavigatorPref =
+                application.getSharedPreferences("ZooNavigator", Context.MODE_PRIVATE);
 
+        // initialize new router
         Router router = new Router(getApplication());
-        zooNavigatorPref = application.getSharedPreferences("ZooNavigator", Context.MODE_PRIVATE);
-        String serializedData = zooNavigatorPref.getString(ZOO_NAVIGATOR_KEY, null);
-        int dataHashCode = zooNavigatorPref.getInt(ZOO_NAVIGATOR_HASH_KEY, -1);
 
-        List<PlanItem> planItemList = planItemDao.getAll();
-        List<String> zooNavigatorIds = new ArrayList<>();
-        for(PlanItem planItem : planItemList){
-            Place place = placeDao.get(planItem.placeId);
-            if(place.parentId == null){
-                zooNavigatorIds.add(place.placeId);
-            }
-            else{
-                if(!zooNavigatorIds.contains(place.parentId)){
-                    zooNavigatorIds.add(place.parentId);
-                }
-            }
-        }
+        // get shared preference
+        ZooNavigatorJsonMapper serializedZooNavigatorJsonMapper =
+                retrieveSerializedZooNavigatorMapper();
 
-        int newHashCode = zooNavigatorIds.hashCode();
+        ZooNavigator newNavigator = initializeNewZooNavigator(router);
 
-        if (serializedData == null) {
-            zooNavigator = new ZooNavigator(zooNavigatorIds, router);
+        if (serializedZooNavigatorJsonMapper == null
+                || newNavigator.getInitialPlanListHashCode() !=
+                serializedZooNavigatorJsonMapper.initialPlanListHashCode) {
+            zooNavigator = newNavigator;
         }
         else {
-            zooNavigator = ZooNavigatorJsonMapper.fromJson(serializedData).toZooNavigator(router);
+            zooNavigator = serializedZooNavigatorJsonMapper.toZooNavigator(router);
         }
 
         // initialize LiveData
@@ -99,12 +92,36 @@ public class RouteViewModel extends AndroidViewModel {
         setCurrentLocationCoordinate(17.123124123, 17.8787);
     }
 
+    private ZooNavigatorJsonMapper retrieveSerializedZooNavigatorMapper() {
+        String serializedData = zooNavigatorPref.getString(ZOO_NAVIGATOR_KEY, null);
+        if (serializedData == null) {
+            return null;
+        }
+        return ZooNavigatorJsonMapper.fromJson(serializedData);
+    }
 
-    private void updateSharedPreference() {
+    private ZooNavigator initializeNewZooNavigator(Router router) {
+        List<PlanItem> planItemList = planItemDao.getAll();
+        List<String> zooNavigatorIds = new ArrayList<>();
+        for(PlanItem planItem : planItemList){
+            Place place = placeDao.get(planItem.placeId);
+            if(place.parentId == null){
+                zooNavigatorIds.add(place.placeId);
+            }
+            else{
+                if(!zooNavigatorIds.contains(place.parentId)){
+                    zooNavigatorIds.add(place.parentId);
+                }
+            }
+        }
+        return new ZooNavigator(zooNavigatorIds, router);
+    }
+
+
+    private void updateSerializedZooNavigatorMapper() {
         String json = ZooNavigatorJsonMapper.fromZooNavigator(zooNavigator).toSerializedJson();
         SharedPreferences.Editor editor = zooNavigatorPref.edit();
         editor.putString(ZOO_NAVIGATOR_KEY, json);
-        editor.putInt(ZOO_NAVIGATOR_HASH_KEY, zooNavigator.hashCode());
         editor.commit();
     }
 
@@ -122,12 +139,12 @@ public class RouteViewModel extends AndroidViewModel {
 
     public LiveData<Pair<String, String>> getFromAndTo() {
         updateCurrentRouteToDisplay();
-        updateSharedPreference();
+        updateSerializedZooNavigatorMapper();
         return fromAndTo;
     }
 
     public LiveData<Pair<Double, Double>> getCurrentLocationCoordinate() {
-        updateSharedPreference();
+        updateSerializedZooNavigatorMapper();
         return currentLocationCoordinate;
     }
 
@@ -172,7 +189,8 @@ public class RouteViewModel extends AndroidViewModel {
         String nodeToRerouteFrom = zooNavigator.shouldReroute(lat, log);
 
         if (nodeToRerouteFrom != null) {
-            setUiMessage("You are off route! Do you want to reroute from " + placeDao.get(nodeToRerouteFrom).name + "?");
+            setUiMessage("You are off route! Do you want to reroute from " +
+                            placeDao.get(nodeToRerouteFrom).name + "?");
             setEnableReroute(true);
             nodeIdToRerouteFrom = nodeToRerouteFrom;
         } else {
@@ -182,7 +200,10 @@ public class RouteViewModel extends AndroidViewModel {
     }
 
     public void shouldReroute() {
-        shouldReroute(currentLocationCoordinate.getValue().first, currentLocationCoordinate.getValue().second);
+        shouldReroute(
+                currentLocationCoordinate.getValue().first,
+                currentLocationCoordinate.getValue().second
+        );
     }
 
     public void setEnableReroute(boolean enable) {
@@ -218,24 +239,28 @@ public class RouteViewModel extends AndroidViewModel {
 
     public void next() {
         zooNavigator.next();
+        updateSerializedZooNavigatorMapper();
         updateCurrentRouteToDisplay();
         shouldReroute();
     }
 
     public void back() {
         zooNavigator.back();
+        updateSerializedZooNavigatorMapper();
         updateCurrentRouteToDisplay();
         shouldReroute();
     }
 
     public void skip() {
         zooNavigator.skip();
+        updateSerializedZooNavigatorMapper();
         updateCurrentRouteToDisplay();
         shouldReroute();
     }
 
     public void reverse() {
         zooNavigator.reverse();
+        updateSerializedZooNavigatorMapper();
         updateCurrentRouteToDisplay();
     }
 
@@ -243,7 +268,7 @@ public class RouteViewModel extends AndroidViewModel {
         resetUiMessage();
         zooNavigator.reroute(nodeIdToRerouteFrom);
         setEnableReroute(false);
-        updateSharedPreference();
+        updateSerializedZooNavigatorMapper();
         updateCurrentRouteToDisplay();
     }
 

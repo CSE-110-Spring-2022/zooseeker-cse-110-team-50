@@ -1,11 +1,9 @@
 package edu.ucsd.cse110.zooseeker.NewNavigator;
 
-import android.util.Log;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
+
 import edu.ucsd.cse110.zooseeker.Util.Router.Router;
 
 /**
@@ -28,14 +26,13 @@ public class ZooNavigator implements Serializable {
     String currentVertex;
     String nextVertex;
     Router router;
-    int hashCode;
+    private int initialPlanListHashCode;
 
-    public int hashCode() {
-        return hashCode;
-    }
 
     public ZooNavigator(List<String> ids, Router router){
-        hashCode = ids.hashCode();
+        // immutable hash code
+        setInitialPlanListHashCode(ids);
+
         this.router = router;
         pastNodes = new ArrayList<>();
         planList = new ArrayList<>(ids);
@@ -46,7 +43,18 @@ public class ZooNavigator implements Serializable {
         if(nextVertex == null){
             nextVertex = "entrance_exit_gate";
         }
-        hashCode = planList.hashCode();
+    }
+
+    public int getInitialPlanListHashCode() {
+        return initialPlanListHashCode;
+    }
+
+    private void setInitialPlanListHashCode(List<String> initialPlanList) {
+        initialPlanListHashCode = initialPlanList.hashCode();
+    }
+
+    public void dangerouslyUpdateInitialPlanListHashCode(int code) {
+        initialPlanListHashCode = code;
     }
 
     public void next(){
