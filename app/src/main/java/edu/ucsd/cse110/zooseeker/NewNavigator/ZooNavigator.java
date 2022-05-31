@@ -18,7 +18,6 @@ import edu.ucsd.cse110.zooseeker.Util.Router.Router;
  */
 
 public class ZooNavigator implements Serializable {
-
     // Constants
     public static final String ENTRANCE_EXIT_GATE_NODE_ID = "entrance_exit_gate";
 
@@ -138,6 +137,8 @@ public class ZooNavigator implements Serializable {
     }
 
     public String getRoutePreview(){
-        return router.routePreview("entrance_exit_gate", "entrance_exit_gate", futureNodes);
+        List<String> routePreviewList = new ArrayList<>(planList);
+        routePreviewList.remove("entrance_exit_gate");
+        return router.routePreview("entrance_exit_gate", "entrance_exit_gate", routePreviewList);
     }
 }

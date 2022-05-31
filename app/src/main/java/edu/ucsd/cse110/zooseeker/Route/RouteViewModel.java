@@ -2,6 +2,7 @@ package edu.ucsd.cse110.zooseeker.Route;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import edu.ucsd.cse110.zooseeker.Persistence.Place;
 import edu.ucsd.cse110.zooseeker.Persistence.PlaceDao;
 import edu.ucsd.cse110.zooseeker.Persistence.PlanItem;
 import edu.ucsd.cse110.zooseeker.Persistence.PlanItemDao;
+import edu.ucsd.cse110.zooseeker.RouteSummary.RouteSummary;
 import edu.ucsd.cse110.zooseeker.Util.Router.Router;
 
 public class RouteViewModel extends AndroidViewModel {
@@ -37,7 +39,7 @@ public class RouteViewModel extends AndroidViewModel {
     private PlanItemDao planItemDao;
 
     // Navigator
-    private ZooNavigator zooNavigator;
+    public ZooNavigator zooNavigator;
 
     // Ctor
     public RouteViewModel(@NonNull Application application) {
@@ -65,6 +67,7 @@ public class RouteViewModel extends AndroidViewModel {
         }
         Router router = new Router(getApplication());
         zooNavigator = new ZooNavigator(zooNavigatorIds, router);
+
 
         // initialize LiveData
         isDirectionDetailed = new MutableLiveData<>(false);

@@ -5,6 +5,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.location.LocationManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +17,8 @@ import edu.ucsd.cse110.zooseeker.Location.LocationPermissionChecker;
 import edu.ucsd.cse110.zooseeker.Persistence.MainDatabase;
 import edu.ucsd.cse110.zooseeker.Persistence.PlanItemDao;
 import edu.ucsd.cse110.zooseeker.R;
+import edu.ucsd.cse110.zooseeker.RouteSummary.RouteSummary;
+import edu.ucsd.cse110.zooseeker.Util.Router.Router;
 
 
 public class RouteActivity extends AppCompatActivity implements GPSSettingDialogFragment.DialogListener{
@@ -78,6 +81,7 @@ public class RouteActivity extends AppCompatActivity implements GPSSettingDialog
         var provider = LocationManager.GPS_PROVIDER;
         var locationManager = (LocationManager) getSystemService(this.LOCATION_SERVICE);
         locationModel.addLocationProviderSource(locationManager, provider);
+
 
         locationModel.getLastKnownCoords().observe(this, lastKnownCoord -> {
             Log.d("ROUTE ACTIVITY", "" + lastKnownCoord.lat + "" + lastKnownCoord.lng);
@@ -155,6 +159,11 @@ public class RouteActivity extends AppCompatActivity implements GPSSettingDialog
             }
         });
 
+
+        // Start Route Summary
+        Intent intent = new Intent(this, RouteSummary.class);
+        intent.putExtra("ZOONAVIGATOR", routeViewModel.zooNavigator);
+        startActivity(intent);
     }
 
     public void showGPSSettingDialog() {

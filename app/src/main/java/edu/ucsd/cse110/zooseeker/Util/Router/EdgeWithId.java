@@ -6,7 +6,9 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 
 import edu.ucsd.cse110.zooseeker.Util.Geometry.Point2D;
 
-public class EdgeWithId extends DefaultWeightedEdge {
+import java.io.Serializable;
+
+public class EdgeWithId extends DefaultWeightedEdge implements Serializable {
     public String id, name;
     public Double distance;
     public MetaNode source, target;

@@ -1,11 +1,12 @@
 package edu.ucsd.cse110.zooseeker.Util.Router;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.ucsd.cse110.zooseeker.Util.Geometry.Point2D;
 
-public class MetaNode {
+public class MetaNode implements Serializable {
 
     String id, name, kind;
     Double lat, lng;

@@ -5,6 +5,7 @@ import android.util.Pair;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.Map;
 
 import edu.ucsd.cse110.zooseeker.Persistence.Place;
 
-public class GraphBuilder {
+public class GraphBuilder implements Serializable {
     List<Place> places;
     Map<String, String> edgeInfo;
     Map<String, MetaNode> metaNodeMap;  // id -> metaNode

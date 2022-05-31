@@ -2,10 +2,11 @@ package edu.ucsd.cse110.zooseeker.Util.Router;
 
 import org.jgrapht.GraphPath;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PathStringRepresentation {
+public class PathStringRepresentation implements Serializable {
     public static String toStringDetailed(GraphPath<MetaNode, EdgeWithId> graphPath) {
 
         int cnt = 1;
@@ -76,7 +77,7 @@ public class PathStringRepresentation {
         for (GraphPath<MetaNode, EdgeWithId> graphPath : graphPaths) {
             stringRep += ((count++) + ". " +
                     graphPath.getStartVertex().name +
-                    " \n" + graphPath.getWeight() + " ft" + "\n");
+                    "\n\n" + graphPath.getWeight() + " ft" + "\n\n");
         }
 
         stringRep += count + ". Entrance and Exit Gate";

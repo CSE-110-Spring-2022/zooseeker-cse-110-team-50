@@ -12,6 +12,7 @@
         <entry key="app/src/main/res/drawable/search_result_item_bg.xml" value="0.125" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_route.xml" value="0.3112852607991793" />
+        <entry key="app/src/main/res/layout/activity_route_summary.xml" value="0.1953125" />
         <entry key="app/src/main/res/layout/exhibit_list_item.xml" value="0.25317028985507245" />
         <entry key="app/src/main/res/layout/fragment_gpa_setting_dialog_fragment.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/fragment_gps_setting_dialog.xml" value="0.3098958333333333" />

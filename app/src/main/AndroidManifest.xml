@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="edu.ucsd.cse110.zooseeker">
-
     <!-- Allow our app to request the user's location -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
-    <!-- Allow our app to access the internet, and check that it is working -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- Allow our app to access the internet, and check that it is working -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
@@ -17,6 +14,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Zooseeker">
+        <activity
+            android:name=".RouteSummary.RouteSummary"
+            android:exported="false" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
