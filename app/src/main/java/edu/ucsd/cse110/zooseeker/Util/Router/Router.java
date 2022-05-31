@@ -161,6 +161,10 @@ public class Router implements Serializable {
             }
         }
 
+        if (toVisit.isEmpty()) {
+            return graphPathList;
+        }
+
         // only add an exhibit group once
         List<String> originalToVisit = toVisit;
         toVisit = new ArrayList<>();
