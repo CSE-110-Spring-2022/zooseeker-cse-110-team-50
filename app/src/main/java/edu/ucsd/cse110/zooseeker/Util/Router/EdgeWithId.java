@@ -2,7 +2,9 @@ package edu.ucsd.cse110.zooseeker.Util.Router;
 
 import org.jgrapht.graph.DefaultWeightedEdge;
 
-public class EdgeWithId extends DefaultWeightedEdge {
+import java.io.Serializable;
+
+public class EdgeWithId extends DefaultWeightedEdge implements Serializable {
     public String id, name;
     public Double distance;
     public MetaNode source, target;

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +20,7 @@ import edu.ucsd.cse110.zooseeker.Persistence.MainDatabase;
 import edu.ucsd.cse110.zooseeker.Persistence.PlaceDao;
 import edu.ucsd.cse110.zooseeker.Persistence.PlanItemDao;
 import edu.ucsd.cse110.zooseeker.R;
+import edu.ucsd.cse110.zooseeker.RouteSummary.RouteSummary;
 import edu.ucsd.cse110.zooseeker.Util.Router.Router;
 
 public class RouteActivity extends AppCompatActivity implements GPSSettingDialogFragment.DialogListener{
@@ -77,6 +79,13 @@ public class RouteActivity extends AppCompatActivity implements GPSSettingDialog
 
         // ViewModels
         model = new ViewModelProvider(this).get(RouteViewModel.class);
+
+        // Start Route Summary
+        Intent intent = new Intent(this, RouteSummary.class);
+        intent.putExtra("ZOONAVIGATOR", model.zooNavigator);
+        startActivity(intent);
+
+        // Create location model
         LocationModel locationModel = new ViewModelProvider(this).get(LocationModel.class);
 
         model.setViewModel(locationModel);

@@ -2,6 +2,7 @@ package edu.ucsd.cse110.zooseeker.NewNavigator;
 
 import android.util.Log;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -16,12 +17,12 @@ import edu.ucsd.cse110.zooseeker.Util.Router.Router;
  *  -signal as public interfaces
  */
 
-public class ZooNavigator {
+public class ZooNavigator implements Serializable {
 
     //Current implementation stuff
     List<String> futureNodes;
     Stack<String> pastNodes;
-    List<String> routeExhibits;
+    List<String> planList;
     String currentVertex;
     String nextVertex;
     Router router;
@@ -33,9 +34,9 @@ public class ZooNavigator {
     public ZooNavigator(List<String> ids, Router router){
         this.router = router;
         pastNodes = new Stack<>();
-        routeExhibits = new ArrayList<>(ids);
+        planList = new ArrayList<>(ids);
         futureNodes = new ArrayList<>(ids);
-        routeExhibits.add("entrance_exit_gate");
+        planList.add("entrance_exit_gate");
         currentVertex = "entrance_exit_gate";
         nextVertex = getClosestNode();
         if(nextVertex == null){
@@ -49,7 +50,7 @@ public class ZooNavigator {
             return;
         }
 
-        if(routeExhibits.contains(currentVertex) && !pastNodes.contains(currentVertex)){
+        if(planList.contains(currentVertex) && !pastNodes.contains(currentVertex)){
             pastNodes.push(currentVertex);
         }
         currentVertex = nextVertex;
@@ -64,7 +65,7 @@ public class ZooNavigator {
             return;
         }
         if(!futureNodes.contains(nextVertex) && !nextVertex.equals("entrance_exit_gate")
-                && routeExhibits.contains(nextVertex)){
+                && planList.contains(nextVertex)){
             futureNodes.add(nextVertex);
         }
         nextVertex = currentVertex;
@@ -81,7 +82,7 @@ public class ZooNavigator {
         if(nextVertex.equals("entrance_exit_gate") && futureNodes.size() == 0){
             return;
         }
-        routeExhibits.remove(nextVertex);
+        planList.remove(nextVertex);
         nextVertex = getClosestNode();
         if(nextVertex == null){
             nextVertex = "entrance_exit_gate";
@@ -98,11 +99,11 @@ public class ZooNavigator {
     }
 
     public void reroute(String id){
-        if(routeExhibits.contains(currentVertex) && !pastNodes.contains(currentVertex)){
+        if(planList.contains(currentVertex) && !pastNodes.contains(currentVertex)){
             pastNodes.push(currentVertex);
         }
         if(!futureNodes.contains(nextVertex) && !nextVertex.equals("entrance_exit_gate")
-                && routeExhibits.contains(nextVertex)){
+                && planList.contains(nextVertex)){
             futureNodes.add(nextVertex);
         }
         currentVertex = id;
@@ -130,7 +131,9 @@ public class ZooNavigator {
     }
 
     public String getRoutePreview(){
-        return router.routePreview("entrance_exit_gate", "entrance_exit_gate", futureNodes);
+        List<String> routePreviewList = new ArrayList<>(planList);
+        routePreviewList.remove("entrance_exit_gate");
+        return router.routePreview("entrance_exit_gate", "entrance_exit_gate", routePreviewList);
     }
 
 

@@ -7,6 +7,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.Map;
 import edu.ucsd.cse110.zooseeker.Persistence.Place;
 import edu.ucsd.cse110.zooseeker.Util.JSONLoader.JSONLoader;
 
-public class Router {
+public class Router implements Serializable {
     Graph<MetaNode, EdgeWithId> graph;
     Map<String, MetaNode> metaNodeMap;
 
@@ -87,8 +88,10 @@ public class Router {
             String currNode = nodeList.get(i);
             GraphPath<MetaNode, EdgeWithId> graphPath = this.shortestGraphPath(node, currNode);
 
-            if (graphPath.getWeight() < totalWeight)
+            if (graphPath.getWeight() < totalWeight) {
                 idx = i;
+                totalWeight = graphPath.getWeight();
+            }
         }
 
         return idx;
