@@ -1,215 +1,228 @@
 package edu.ucsd.cse110.zooseeker.Util.Router;
 
+import android.content.Context;
+import android.util.Pair;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
-import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
-import org.jgrapht.graph.DefaultWeightedEdge;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.PriorityQueue;
-import java.util.Set;
 
-/**
- * NOTE: LEGACY CODE, NOT TO BE USED IN FINAL APP
- */
+import edu.ucsd.cse110.zooseeker.Persistence.Place;
+import edu.ucsd.cse110.zooseeker.Util.JSONLoader.JSONLoader;
 
 public class Router {
+    Graph<MetaNode, EdgeWithId> graph;
+    Map<String, MetaNode> metaNodeMap;
 
-    Graph<String, EdgeWithId> graph;
-    Map<String, String> edgeInfo;
-    Map<String, String> placeInfo;
-
-    public class EdgeWithId extends DefaultWeightedEdge {
-        public String edgeId;
-        public EdgeWithId(String id) {
-            edgeId = id;
-        }
+    public Router(Context context) {
+        List<Place> nodeInfo = JSONLoader.loadNodeInfo(context);
+        Map<String, String> edgeInfo = JSONLoader.loadEdgeInfo(context);
+        ZooGraphMapper zooGraphMapper = JSONLoader.loadRawGraph(context);
+        Pair<Graph<MetaNode, EdgeWithId>, Map<String, MetaNode>> graphWithInfo = new GraphBuilder()
+                .loadNodes(nodeInfo)
+                .loadEdgeInfo(edgeInfo)
+                .loadGraphInfo(zooGraphMapper)
+                .build();
+        this.graph = graphWithInfo.first;
+        this.metaNodeMap = graphWithInfo.second;
     }
 
-    private class NodeWithDist {
-        public String id;
-        public double distance;
-        public NodeWithDist(String id, double distance) {this.id = id; this.distance = distance; }
+    public Router(List<Place> nodeInfo, Map<String, String> edgeInfo, ZooGraphMapper zooGraphMapper) {
+        Pair<Graph<MetaNode, EdgeWithId>, Map<String, MetaNode>> graphWithInfo = new GraphBuilder()
+                .loadNodes(nodeInfo)
+                .loadEdgeInfo(edgeInfo)
+                .loadGraphInfo(zooGraphMapper)
+                .build();
+        this.graph = graphWithInfo.first;
+        this.metaNodeMap = graphWithInfo.second;
     }
 
-    public class RouteStep {
-        public String edgeId;
-        public double distance;
-        public String to;
-        public RouteStep(String edgeId, double distance, String to) {
-            this.edgeId = edgeId;
-            this.distance = distance;
-            this.to = placeInfo.get(to);
-        }
+    public GraphPath<MetaNode, EdgeWithId> shortestGraphPath(String source, String target) {
+        DijkstraShortestPath<MetaNode, EdgeWithId> dijkstraShortestPath =
+                new DijkstraShortestPath<MetaNode, EdgeWithId>(graph);
+        GraphPath<MetaNode, EdgeWithId> graphPath = dijkstraShortestPath.getPath(
+                metaNodeMap.get(source), metaNodeMap.get(target)
+        );
+        return graphPath;
     }
 
-    public class RoutePackage {
-        private String start;
-        private String end;
-        private List<RouteStep> steps = new ArrayList<>();
-        public RoutePackage(String startPlaceId, String endPlaceId) {
-            this.start = placeInfo.get(startPlaceId);
-            this.end = placeInfo.get(endPlaceId);
-        }
+    public String shortestGraphPathInStringDetailed(String source, String target) {
+        return PathStringRepresentation.toStringDetailed(
+                shortestGraphPath(source, target)
+        );
+    }
 
-        public String getStart() {
-            return start;
-        }
+    public String shortestGraphPathInStringBrief(String source, String target) {
+        return PathStringRepresentation.toStringBrief(
+                shortestGraphPath(source, target)
+        );
+    }
 
-        public String getEnd() {
-            return end;
-        }
+    public String nearestNode(String node, List<String> nodeIdList) {
 
-        public List<RouteStep> getSteps() {
-            return steps;
-        }
+        String nearestNode = null;
+        double totalWeight = Double.POSITIVE_INFINITY;
+        for (String currNode : nodeIdList) {
+            GraphPath<MetaNode, EdgeWithId> graphPath = this.shortestGraphPath(node, currNode);
 
-        public void addStep(RouteStep step) {
-            steps.add(step);
-        }
-
-        public String toStringDetailed() {
-            int cnt = 1;
-            String ret = "From " + start + "\n\n\n";
-            for (RouteStep step : steps) {
-
-                //if(start == step.to){
-                //    continue;
-                //}
-                ret += (cnt++ + ". Proceed on " +
-                        edgeInfo.get(step.edgeId) +
-                        " " + step.distance +
-                        " ft toward " + step.to + "\n\n");
+            if (graphPath.getWeight() < totalWeight) {
+                nearestNode = currNode;
+                totalWeight = graphPath.getWeight();
             }
 
-            ret += "\nDestination: " + end + "\n";
-            return ret;
+        }
+        return nearestNode;
+    }
+
+    private int nearestNodeIdx(String node, List<String> nodeList) {
+
+        int idx = -1;
+        double totalWeight = Double.POSITIVE_INFINITY;
+        for (int i = 0; i < nodeList.size(); i++) {
+            String currNode = nodeList.get(i);
+            GraphPath<MetaNode, EdgeWithId> graphPath = this.shortestGraphPath(node, currNode);
+
+            if (graphPath.getWeight() < totalWeight)
+                idx = i;
         }
 
-        public String toStringBrief() {
-            int cnt = 1;
-            String ret = "From " + start + "\n\n\n";
-            List<String> compressedEdges = new ArrayList();
-            List<Double> compressedDistances = new ArrayList();
-            List<String> endOfPaths = new ArrayList();
-            int index = -1;
+        return idx;
+    }
 
-            for(RouteStep step : steps){
-                //if(start == step.to){
-                //    continue;
-                //}
-                if(index == -1){
-                    // first time. We will add the place and the distances
-                    compressedEdges.add(edgeInfo.get(step.edgeId));
-                    index = 0;
-                    compressedDistances.add(step.distance);
-                    endOfPaths.add(step.to);
-                    continue;
-                }
-                if(!compressedEdges.get(index).equals(edgeInfo.get(step.edgeId))){
-                    // We are in a new place. Add to the compressedEdges
-                    index++;
-                    compressedEdges.add(edgeInfo.get(step.edgeId));
-                    compressedDistances.add(step.distance);
-                    endOfPaths.add(step.to);
-                }
-                else{
-                    compressedDistances.set(index, compressedDistances.get(index) + step.distance);
-                    endOfPaths.set(index, step.to);
-                }
-            }
-            index = 0;
-            for (String edge : compressedEdges){
-                ret += (cnt++ + ". Proceed on " +
-                        edge +
-                        " " + compressedDistances.get(index) +
-                        " ft toward " + endOfPaths.get(index) + "\n\n");
-                index++;
-            }
-            ret += "\nDestination: " + end + "\n";
-            return ret;
+    public List<GraphPath<MetaNode, EdgeWithId>> route(String source, String target, List<String> toVisit) {
+        List<GraphPath<MetaNode, EdgeWithId>> graphPathList = new ArrayList<>();
+
+        if (toVisit.isEmpty()) {
+            return graphPathList;
         }
-    }
 
-    public static Router builder() {
-        return new Router();
-    }
-
-    public Router build() {
-        return this;
-    }
-
-    public Router loadEdgeInfo(Map<String, String> edgeInfo) {
-        this.edgeInfo = edgeInfo;
-        return this;
-    }
-
-    public Router loadPlaceInfo(Map<String, String> placeInfo) {
-        this.placeInfo = placeInfo;
-        return this;
-    }
-
-    public Router loadFromRawGraph(RawGraph rawGraph) {
-        graph = new DefaultUndirectedWeightedGraph<>(EdgeWithId.class);
-        rawGraph.nodes.stream().forEach((node) -> {
-            graph.addVertex(node.id);
-        });
-
-        rawGraph.edges.stream().forEach((edge) -> {
-            EdgeWithId newEdge = new EdgeWithId(edge.id);
-            graph.addEdge(edge.source, edge.target, newEdge);
-            graph.setEdgeWeight(newEdge, edge.weight);
-        });
-        return this;
-    }
-
-    public GraphPath<String, EdgeWithId> shortestPath(String source, String target) {
-        DijkstraShortestPath<String, EdgeWithId> dijkstraAlg =
-                new DijkstraShortestPath<>(graph);
-        ShortestPathAlgorithm.SingleSourcePaths<String, EdgeWithId> iPaths = dijkstraAlg.getPaths(source);
-        return iPaths.getPath(target);
-    }
-
-    public GraphPath<String, EdgeWithId> getPathToClosestNode(String source, List<String> targets) {
-        PriorityQueue<NodeWithDist> pq = new PriorityQueue<>((x, y) -> (int)(x.distance - y.distance));
-        GraphPath<String, EdgeWithId> shortestPath = shortestPath(source, targets.get(0));
-        GraphPath<String, EdgeWithId> newPath;
-        for (String target : targets) {
-            newPath = shortestPath(source, target);
-            if (newPath.getWeight() < shortestPath.getWeight()) {
-                shortestPath = newPath;
+        // remove source in the list
+        for (int i = 0; i < toVisit.size(); i++) {
+            if (toVisit.get(i).equals(source)) {
+                toVisit.remove(i);
+                break;
             }
         }
-        return shortestPath;
-    }
-
-    public List<RoutePackage> route(List<String> nodes) {
-        List<GraphPath<String, EdgeWithId>> routes = new ArrayList<>();
-        String START = "entrance_exit_gate";
-        String current = START;
-        nodes.remove(current);
-        while(!nodes.isEmpty()) {
-            routes.add(getPathToClosestNode(current, nodes));
-            current = routes.get(routes.size()-1).getEndVertex();
-            nodes.remove(current);
-        }
-        routes.add(shortestPath(current, START));
-
-        List<RoutePackage> ret = new ArrayList<>();
-        for (GraphPath<String, EdgeWithId> route : routes) {
-            RoutePackage pkg = new RoutePackage(route.getStartVertex(), route.getEndVertex());
-            for (EdgeWithId edge : route.getEdgeList()) {
-                pkg.addStep(new RouteStep(edge.edgeId, graph.getEdgeWeight(edge), graph.getEdgeTarget(edge)));
+        // remove target in the list
+        for (int i = 0; i < toVisit.size(); i++) {
+            if (toVisit.get(i).equals(target)) {
+                toVisit.remove(i);
+                break;
             }
-            ret.add(pkg);
         }
-        return ret;
+
+        // only add an exhibit group once
+        List<String> originalToVisit = toVisit;
+        toVisit = new ArrayList<>();
+        Map<String, Boolean> isAdded = new HashMap<>();
+        for (String id : this.metaNodeMap.keySet()) {
+            isAdded.put(id, false);
+        }
+        for (String n : originalToVisit) {
+            String id = this.metaNodeMap.get(n).id;
+            if (!isAdded.get(id)) {
+                toVisit.add(id);
+                isAdded.put(n, true);
+            }
+        }
+
+        // Add path to source
+        int nearestNodeIdx = this.nearestNodeIdx(source, toVisit);
+        String currNode = toVisit.get(nearestNodeIdx);
+        graphPathList.add(this.shortestGraphPath(source, currNode));
+        toVisit.remove(nearestNodeIdx);
+
+        while (!toVisit.isEmpty()) {
+            nearestNodeIdx = this.nearestNodeIdx(currNode, toVisit);
+            String targetNode = toVisit.get(nearestNodeIdx);
+            graphPathList.add(this.shortestGraphPath(currNode, targetNode));
+            currNode = targetNode;
+            toVisit.remove(nearestNodeIdx);
+        }
+
+        // Add path to target
+        graphPathList.add(this.shortestGraphPath(currNode, target));
+
+        return graphPathList;
+
     }
+
+    public String routePreview(String source, String target, List<String> toVisit) {
+        List<GraphPath<MetaNode, EdgeWithId>> graphPathList = this.route(source, target, toVisit);
+        return PathStringRepresentation.toStringPreview(graphPathList, toVisit);
+
+    }
+
+    /**
+     * NOT TO BE USED IN THE APP
+     */
+//    public List<GraphPath<MetaNode, EdgeWithId>> route(String source, String target, List<String> toVisit) {
+//        List<GraphPath<MetaNode, EdgeWithId>> graphPathList = new ArrayList<>();
+//
+//        if (toVisit.isEmpty()) {
+//            return graphPathList;
+//        }
+//
+//        MetaNode src = this.metaNodeMap.get(source);
+//        MetaNode tar = this.metaNodeMap.get(target);
+//        List<MetaNode> nodeToVisit = new ArrayList<>();
+//        for (String s : toVisit) {
+//            nodeToVisit.add(this.metaNodeMap.get(s));
+//        }
+//
+//        // remove source in the list
+//        for (int i = 0; i < nodeToVisit.size(); i++) {
+//            if (nodeToVisit.get(i).equals(src)) {
+//                nodeToVisit.remove(i);
+//                break;
+//            }
+//        }
+//
+//        // remove target in the list
+//        for (int i = 0; i < nodeToVisit.size(); i++) {
+//            if (nodeToVisit.get(i).equals(tar)) {
+//                nodeToVisit.remove(i);
+//                break;
+//            }
+//        }
+//
+//        if (nodeToVisit.isEmpty()) {
+//            // node to visit only contains source and target
+//            graphPathList.add(shortestGraphPath(source, target));
+//            return graphPathList;
+//        }
+//
+//        // Greedy to find local minima
+//        int currTargetIdx = nearestNodeIdx(src, nodeToVisit);
+//        MetaNode currTarget = nodeToVisit.get(currTargetIdx);
+//        graphPathList.add(shortestGraphPath(src.id, currTarget.id));
+//
+//        while (!nodeToVisit.isEmpty()) {
+//            MetaNode currSrc = currTarget;
+//            currTargetIdx = nearestNodeIdx(currTarget, nodeToVisit);
+//            currTarget = nodeToVisit.get(currTargetIdx);
+//            graphPathList.add(shortestGraphPath(currSrc.id, currTarget.id));
+//            nodeToVisit.remove(currTargetIdx);
+//        }
+//
+//        graphPathList.add(shortestGraphPath(currTarget.id, tar.id));
+//
+//        return graphPathList;
+//    }
+
+    public Pair<List<EdgeWithId>, Double> shortestPathWithDistance(String node1Id, String node2Id) {
+        GraphPath<MetaNode, EdgeWithId> graphPath = this.shortestGraphPath(node1Id, node2Id);
+        return new Pair<>(graphPath.getEdgeList(), graphPath.getWeight());
+    }
+
+    public List<EdgeWithId> shortestPath(String node1Id, String node2Id) {
+        GraphPath<MetaNode, EdgeWithId> graphPath = this.shortestGraphPath(node1Id, node2Id);
+        return graphPath.getEdgeList();
+    }
+
 }

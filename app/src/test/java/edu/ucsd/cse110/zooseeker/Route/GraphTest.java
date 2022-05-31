@@ -8,6 +8,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
@@ -32,16 +33,20 @@ import edu.ucsd.cse110.zooseeker.Persistence.MainDatabase;
 import edu.ucsd.cse110.zooseeker.Persistence.Place;
 import edu.ucsd.cse110.zooseeker.Persistence.PlaceDao;
 import edu.ucsd.cse110.zooseeker.Util.JSONLoader.JSONLoader;
+import edu.ucsd.cse110.zooseeker.Util.Router.EdgeWithId;
+import edu.ucsd.cse110.zooseeker.Util.Router.LegacyRouter;
+import edu.ucsd.cse110.zooseeker.Util.Router.MetaNode;
 import edu.ucsd.cse110.zooseeker.Util.Router.Router;
 
 @Config(sdk = 31)
 @RunWith(RobolectricTestRunner.class)
 public class GraphTest {
-    MainActivity activity;
-    MainDatabase mainDb;
-    PlaceDao placeDao;
-    Router router;
-    Map<String, String> placeInfoMap;
+    public MainActivity activity;
+    public MainDatabase mainDb;
+    public PlaceDao placeDao;
+    public Router router;
+    public Map<String, String> placeInfoMap;
+    public final String ENTRANCE_EXIT_GATE = "entrance_exit_gate";
 
     /**
      * Sets up the graph and activity for testing.
@@ -62,11 +67,11 @@ public class GraphTest {
         placeInfoMap = new HashMap<>();
         for (Place place: placeDao.getAll())
             placeInfoMap.put(place.placeId, place.name);
-        router = Router.builder()
-                .loadEdgeInfo(JSONLoader.loadTestEdgeInfo(getApplicationContext()))
-                .loadFromRawGraph(JSONLoader.loadTestRawGraph(getApplicationContext()))
-                .loadPlaceInfo(placeInfoMap)
-                .build();
+        router = new Router(
+                JSONLoader.loadTestNodeInfo(context, "test/t1-ms1-delivery/sample_node_info.json"),
+                JSONLoader.loadTestEdgeInfo(context, "test/t1-ms1-delivery/sample_edge_info.json"),
+                JSONLoader.loadTestRawGraph(context, "test/t1-ms1-delivery/sample_zoo_graph.json")
+        );
         assertNotNull(router);
     }
 
@@ -83,27 +88,50 @@ public class GraphTest {
      */
     @Test
     public void getShortestPathExists() {
-        GraphPath<String, Router.EdgeWithId> pathActual
-                = router.shortestPath("gators", "gorillas");
+        List<EdgeWithId> pathActual
+                = router.shortestPath(ENTRANCE_EXIT_GATE, "fern_canyon");
+        assertNotNull(pathActual);
+
+        // a child exhibit
+        pathActual = router.shortestPath(ENTRANCE_EXIT_GATE, "toucan");
+        assertNotNull(pathActual);
     }
 
     /**
-     * Tests if the path is the shorted path between two places.
+     * Tests if the path is the shorted path between two vertices.
      */
     @Test
-    public void testIsShortestPath() {
-        GraphPath<String, Router.EdgeWithId> pathActual
-                = router.shortestPath("gators", "gorillas");
-
-        List<Router.EdgeWithId> edgeListActual = pathActual.getEdgeList();
+    public void testIsShortestPathToExhibit() {
+        List<EdgeWithId> edgeListActual
+                = router.shortestPath("entrance_exit_gate", "koi");
 
         List<String> edgeListIDExpected = new ArrayList<String>();
-        edgeListIDExpected.add("edge-5");
-        edgeListIDExpected.add("edge-1");
+        edgeListIDExpected.add("gate_to_front");
+        edgeListIDExpected.add("front_to_lagoon1");
+        edgeListIDExpected.add("lagoon1_to_koi");
 
         for (int i = 0; i < edgeListActual.size(); i++) {
-            String idActual = edgeListActual.get(i).edgeId;
+            String idActual = edgeListActual.get(i).id;
             assertEquals(edgeListIDExpected.get(i), idActual);
+        }
+
+    }
+
+    /**
+     * Tests if the paths to the exhibit group and one of its child exhibits are identical
+     */
+    @Test
+    public void testIsShortestPathToExhibitGroup() {
+        List<EdgeWithId> edgeListToChild
+                = router.shortestPath("entrance_exit_gate", "toucan");
+
+        List<EdgeWithId> edgeListToExhibitGroup
+                = router.shortestPath("entrance_exit_gate", "parker_aviary");
+
+        assertEquals(edgeListToChild.size(), edgeListToExhibitGroup.size());
+
+        for (int i = 0; i < edgeListToChild.size(); i++) {
+            assertEquals(edgeListToChild.get(i).id, edgeListToExhibitGroup.get(i).id);
         }
 
     }
@@ -112,8 +140,8 @@ public class GraphTest {
      * Checks if putting the information into the router is a null value
      * when a target vertex does not exist
      */
-    @Test
-    public void getPathTargetNotExists() {
+    @Test(expected = IllegalArgumentException.class)
+    public void testPathTargetNotExists() {
         assertNull(router.shortestPath("gators", "no_a_place"));
     }
 
@@ -122,7 +150,21 @@ public class GraphTest {
      * when a source vertex does not exist
      */
     @Test(expected = IllegalArgumentException.class)
-    public void getPathSourceNotExists() {
+    public void testPathSourceNotExists() {
         assertNull(router.shortestPath("no_a_place", "gators"));
+    }
+
+
+    @Test
+    public void testPreviewExists() {
+        List<String> exhibitToVisit = new ArrayList<>();
+        exhibitToVisit.add("siamang");
+        exhibitToVisit.add("hippo");
+        exhibitToVisit.add("crocodile");
+        exhibitToVisit.add("owens_aviary");
+        exhibitToVisit.add("toucan");  // a duplicate
+        String route = router.routePreview(ENTRANCE_EXIT_GATE, ENTRANCE_EXIT_GATE, exhibitToVisit);
+        Log.d("GraphTest", route);
+        assertNotNull(route);
     }
 }
