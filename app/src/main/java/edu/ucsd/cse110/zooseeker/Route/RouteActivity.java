@@ -1,139 +1,173 @@
 package edu.ucsd.cse110.zooseeker.Route;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 
-import edu.ucsd.cse110.zooseeker.Navigator.*;
-import edu.ucsd.cse110.zooseeker.NewNavigator.RouteMaker;
+
+import edu.ucsd.cse110.zooseeker.Location.LocationModel;
 import edu.ucsd.cse110.zooseeker.NewNavigator.ZooNavigator;
 import edu.ucsd.cse110.zooseeker.Persistence.MainDatabase;
-import edu.ucsd.cse110.zooseeker.Persistence.Place;
 import edu.ucsd.cse110.zooseeker.Persistence.PlaceDao;
-import edu.ucsd.cse110.zooseeker.Persistence.PlanItem;
 import edu.ucsd.cse110.zooseeker.Persistence.PlanItemDao;
 import edu.ucsd.cse110.zooseeker.R;
-import edu.ucsd.cse110.zooseeker.Util.JSONLoader.JSONLoader;
-import edu.ucsd.cse110.zooseeker.Util.Router.RawGraph;
 import edu.ucsd.cse110.zooseeker.Util.Router.Router;
 
-public class RouteActivity extends AppCompatActivity {
+public class RouteActivity extends AppCompatActivity implements GPSSettingDialogFragment.DialogListener{
 
     private List<Router.RoutePackage> pkgList;
     private int routeIndex = 0;
     private PlaceDao placeDao = MainDatabase.getSingleton(this).placeDao();
     boolean isDetailedDirections = true;
-    TextView routeTextView;
-    Button toggleDirectionsButton;
+
     ZooNavigator zooNavigator;
+
+    // ViewModel
+    RouteViewModel model;
+
+    // DAOs
+    MainDatabase db;
+    PlanItemDao planItemDao;
+
+    // View Elements
+    TextView routeTextView;
+    TextView fromTextView;
+    TextView toTextView;
+    TextView routeLatitude;
+    TextView routeLongitude;
+    Button gpsSettingButton;
+    Button nextButton;
+    Button skipButton;
+    Button backButton;
+    Button reverseButton;
+    Button toggleDirectionsButton;
+    Button deleteAllButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route);
 
-        Button nextButton = findViewById(R.id.route_next_button);
+        getSupportActionBar().hide();
 
+        // DADOs
+        db = MainDatabase.getSingleton(this);
+        planItemDao = db.planItemDao();
+
+        // initialize all view elements
+        routeTextView = findViewById(R.id.route_text_view);
+        fromTextView = findViewById(R.id.route_from_text);
+        toTextView = findViewById(R.id.route_to_text);
+        routeLatitude = findViewById(R.id.route_latitude);
+        routeLongitude = findViewById(R.id.route_longitude);
+        gpsSettingButton = findViewById(R.id.route_gps_setting_button);
+        nextButton = findViewById(R.id.route_next_button);
+        backButton = findViewById(R.id.route_back_button);
+        skipButton = findViewById(R.id.route_skip_button);
+        reverseButton = findViewById(R.id.route_reverse_button);
         toggleDirectionsButton = findViewById(R.id.toggle_directions_button);
+        deleteAllButton = findViewById(R.id.route_delete_all_button);
 
-        nextButton.setOnClickListener(new View.OnClickListener()
-        {
+        // ViewModels
+        model = new ViewModelProvider(this).get(RouteViewModel.class);
+        LocationModel locationModel = new ViewModelProvider(this).get(LocationModel.class);
+
+        model.setViewModel(locationModel);
+
+        model.getIsDirectionDetailed().observe(this, isDirectionDetailed -> {
+            String btnText = isDirectionDetailed ? "Detailed\nDirections" : "Brief\nDirections";
+            toggleDirectionsButton.setText(btnText);
+        });
+
+        model.getCurrentRouteToDisplay().observe(this, currentRouteToDisplay -> {
+            routeTextView.setText(currentRouteToDisplay);
+        });
+
+        model.getFromAndTo().observe(this, fromAndTo -> {
+            fromTextView.setText(fromAndTo.first);
+            toTextView.setText(fromAndTo.second);
+        });
+
+        model.getCurrentLocationCoordinate().observe(this, currentLocationCoordinate -> {
+            routeLatitude.setText("" + currentLocationCoordinate.first);
+            routeLongitude.setText("" + currentLocationCoordinate.second);
+        });
+
+        gpsSettingButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
-                nextExhibit(v);
+            public void onClick(View view) {
+                showGPSSettingDialog();
             }
         });
 
-        toggleDirectionsButton.setOnClickListener(new View.OnClickListener()
-        {
+        nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
-                toggleDirections(v);
+                model.next();
             }
         });
 
-        /*
-        JSONLoader.loadRawGraph(getApplicationContext());
-        final Map<String, String> placeInfoMap = new HashMap<>();
-        for (Place place: placeDao.getAll())
-            placeInfoMap.put(place.placeId, place.name);
+        skipButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                model.skip();
+            }
+        });
 
-        Map<String, String> edgeInfo = JSONLoader.loadEdgeInfo(getApplicationContext());
-        RawGraph rawGraph = JSONLoader.loadRawGraph(getApplicationContext());
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                model.back();
+            }
+        });
 
-        RouteMaker routeMaker = RouteMaker.builder()
-                .loadEdgeInfo(edgeInfo)
-                .loadFromRawGraph(rawGraph)
-                .loadPlaceInfo(placeInfoMap)
-                .build();
+        reverseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                model.reverse();
+            }
+        });
 
-        Router router = Router.builder()
-                .loadEdgeInfo(edgeInfo)
-                .loadFromRawGraph(rawGraph)
-                .loadPlaceInfo(placeInfoMap)
-                .build();
+        toggleDirectionsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                model.toggleIsDirectionDetailed();
+            }
+        });
 
+        deleteAllButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                planItemDao.nukeTable();
+                finish();
+            }
+        });
 
-         */
-        MainDatabase db = MainDatabase.getSingleton(this);
-        PlanItemDao planItemDao = db.planItemDao();
-        Context context = getApplicationContext();
-        zooNavigator = new ZooNavigator(placeDao, planItemDao, context);
-/*
-        List<PlanItem> allPlanItems = planItemDao.getAll();
-        List<String> allNodes = allPlanItems.stream().map((item) -> item.placeId).collect(Collectors.toList());
-        pkgList = routeMaker.route(allNodes);
-        toggleDirectionsButton.setText("Brief\nDirections");
-//        for (Router.RoutePackage pkg : pkgList) {
-//            routeStr += pkg.toString() + "\n";
-//        }
-
-
- */
-        pkgList = zooNavigator.getPkgList();
-        routeTextView = findViewById(R.id.route_text_view);
-        if(isDetailedDirections){
-            routeTextView.setText(pkgList.get(routeIndex).toStringDetailed());
-        }
-        else{
-            routeTextView.setText(pkgList.get(routeIndex).toStringBrief());
-        }
     }
 
-    public void toggleDirections(View v){
-        if(isDetailedDirections){
-            routeTextView.setText(pkgList.get(routeIndex).toStringBrief());
-            isDetailedDirections = false;
-            toggleDirectionsButton.setText("Detailed\nDirections");
-        }
-        else{
-            routeTextView.setText(pkgList.get(routeIndex).toStringDetailed());
-            isDetailedDirections = true;
-            toggleDirectionsButton.setText("Brief\nDirections");
-        }
+    public void showGPSSettingDialog() {
+        DialogFragment dialog = new GPSSettingDialogFragment();
+        dialog.show(getSupportFragmentManager(), "GPSSettingDialog");
     }
 
-    public void nextExhibit(View v){
-        if(routeIndex + 1 < pkgList.size()) routeIndex++;
 
-        routeTextView = findViewById(R.id.route_text_view);
-        if(isDetailedDirections){
-            routeTextView.setText(pkgList.get(routeIndex).toStringDetailed());
-        }
-        else{
-            routeTextView.setText(pkgList.get(routeIndex).toStringBrief());
-        }
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog, boolean isMock, double latitude, double longitude) {
+        if (isMock) model.setCurrentLocationCoordinate(latitude, longitude);
+        else model.setCurrentLocationCoordinate(17.3498479, 38.2398239);
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
     }
 }
