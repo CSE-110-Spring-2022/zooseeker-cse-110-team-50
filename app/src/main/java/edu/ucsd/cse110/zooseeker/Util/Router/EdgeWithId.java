@@ -1,6 +1,10 @@
 package edu.ucsd.cse110.zooseeker.Util.Router;
 
+import android.util.Pair;
+
 import org.jgrapht.graph.DefaultWeightedEdge;
+
+import edu.ucsd.cse110.zooseeker.Util.Geometry.Point2D;
 
 public class EdgeWithId extends DefaultWeightedEdge {
     public String id, name;
@@ -20,6 +24,10 @@ public class EdgeWithId extends DefaultWeightedEdge {
         this.source = source;
         this.target = target;
         this.distance = distance;
+    }
+
+    public Pair<Point2D, Point2D> getEdgeSegment() {
+        return new Pair<>(source.getPoint2DCoord(), target.getPoint2DCoord());
     }
 
     public void setName(String name) {

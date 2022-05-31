@@ -8,14 +8,10 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.DoubleBinaryOperator;
 
-import edu.ucsd.cse110.zooseeker.Location.LocationModel;
 import edu.ucsd.cse110.zooseeker.NewNavigator.ZooNavigator;
 import edu.ucsd.cse110.zooseeker.Persistence.MainDatabase;
 import edu.ucsd.cse110.zooseeker.Persistence.Place;
@@ -25,6 +21,8 @@ import edu.ucsd.cse110.zooseeker.Persistence.PlanItemDao;
 import edu.ucsd.cse110.zooseeker.Util.Router.Router;
 
 public class RouteViewModel extends AndroidViewModel {
+
+    private static int SHOULD_REROUTE_THROTTLE = 0;
 
     // Live Data
     private MutableLiveData<Boolean> isDirectionDetailed;
@@ -106,9 +104,21 @@ public class RouteViewModel extends AndroidViewModel {
         this.isLocationMocked.setValue(isLocationMocked);
     }
 
-    public void setRealCurrentLocationCoordinate(double latitude, double longitude) {
-        if (!isLocationMocked.getValue())
-            setCurrentLocationCoordinate(latitude, longitude);
+    public void setRealCurrentLocationCoordinate(double lat, double lon) {
+        if (!isLocationMocked.getValue()) {
+            setCurrentLocationCoordinate(lat, lon);
+            String nodeToRerouteFrom;
+            
+            // Throttled call to should reroute
+            int THROTTLE_THRESHOLD = 10;
+            if (SHOULD_REROUTE_THROTTLE % THROTTLE_THRESHOLD == 0) {
+                nodeToRerouteFrom = zooNavigator.shouldReroute(lat, lon);
+                SHOULD_REROUTE_THROTTLE = 0;
+            }
+            else {
+                SHOULD_REROUTE_THROTTLE++;
+            }
+        }
     }
 
     // Set coordinate pair interface

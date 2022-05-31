@@ -11,8 +11,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.zooseeker.Persistence.Place;
+import edu.ucsd.cse110.zooseeker.Util.Geometry.Distance2D;
+import edu.ucsd.cse110.zooseeker.Util.Geometry.NearestObjectUtil;
+import edu.ucsd.cse110.zooseeker.Util.Geometry.Point2D;
 import edu.ucsd.cse110.zooseeker.Util.JSONLoader.JSONLoader;
 
 public class Router {
@@ -61,6 +65,44 @@ public class Router {
         return PathStringRepresentation.toStringBrief(
                 shortestGraphPath(source, target)
         );
+    }
+
+    public String shouldReroute(List<String> planList, String current, String next, double lat, double lon) {
+
+
+        Point2D currentLocation = new Point2D(lat, lon);
+
+        // Get all nodes that aren't planned
+        List<Point2D> notPlannedNodes = new ArrayList<>();
+        List<String> notPlannedNodeIds = new ArrayList<>();
+        for (String nodeId : metaNodeMap.keySet()) {
+            if (!planList.contains(nodeId)) {
+                notPlannedNodes.add(metaNodeMap.get(nodeId).getPoint2DCoord());
+                notPlannedNodeIds.add(nodeId);
+            }
+        }
+
+        // Get EdgeSegments of current path
+        GraphPath<MetaNode, EdgeWithId> path = shortestGraphPath(current, next);
+        List<Pair<Point2D, Point2D>> edgeSegments = path
+                .getEdgeList()
+                .stream()
+                .map((EdgeWithId::getEdgeSegment))
+                .collect(Collectors.toList());
+
+        //
+        Pair<Double, Integer> nearestUnvisitedNode
+                = NearestObjectUtil.nearestPoint(currentLocation, notPlannedNodes);
+
+        Pair<Double, Integer> nearestEdge
+                = NearestObjectUtil.nearestLineSegment(currentLocation, edgeSegments);
+
+        // reroute
+        if (nearestUnvisitedNode.first < nearestEdge.first)
+            return notPlannedNodeIds.get(nearestEdge.second);
+        // don't reroute
+        else
+            return null;
     }
 
     public String nearestNode(String node, List<String> nodeIdList) {

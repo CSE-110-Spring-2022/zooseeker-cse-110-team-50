@@ -2,6 +2,7 @@ package edu.ucsd.cse110.zooseeker.NewNavigator;
 
 import android.util.Log;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -16,12 +17,15 @@ import edu.ucsd.cse110.zooseeker.Util.Router.Router;
  *  -signal as public interfaces
  */
 
-public class ZooNavigator {
+public class ZooNavigator implements Serializable {
+
+    // Constants
+    public static final String ENTRANCE_EXIT_GATE_NODE_ID = "entrance_exit_gate";
 
     //Current implementation stuff
     List<String> futureNodes;
     Stack<String> pastNodes;
-    List<String> routeExhibits;
+    List<String> planList; // list of all node ids in plan list
     String currentVertex;
     String nextVertex;
     Router router;
@@ -33,9 +37,9 @@ public class ZooNavigator {
     public ZooNavigator(List<String> ids, Router router){
         this.router = router;
         pastNodes = new Stack<>();
-        routeExhibits = new ArrayList<>(ids);
+        planList = new ArrayList<>(ids);
         futureNodes = new ArrayList<>(ids);
-        routeExhibits.add("entrance_exit_gate");
+        planList.add("entrance_exit_gate");
         currentVertex = "entrance_exit_gate";
         nextVertex = getClosestNode();
         if(nextVertex == null){
@@ -49,7 +53,7 @@ public class ZooNavigator {
             return;
         }
 
-        if(routeExhibits.contains(currentVertex) && !pastNodes.contains(currentVertex)){
+        if(planList.contains(currentVertex) && !pastNodes.contains(currentVertex)){
             pastNodes.push(currentVertex);
         }
         currentVertex = nextVertex;
@@ -64,7 +68,7 @@ public class ZooNavigator {
             return;
         }
         if(!futureNodes.contains(nextVertex) && !nextVertex.equals("entrance_exit_gate")
-                && routeExhibits.contains(nextVertex)){
+                && planList.contains(nextVertex)){
             futureNodes.add(nextVertex);
         }
         nextVertex = currentVertex;
@@ -78,13 +82,13 @@ public class ZooNavigator {
     }
 
     public void skip(){
-        if(nextVertex.equals("entrance_exit_gate") && futureNodes.size() == 0){
+        if(nextVertex.equals(ENTRANCE_EXIT_GATE_NODE_ID) && futureNodes.size() == 0){
             return;
         }
-        routeExhibits.remove(nextVertex);
+        planList.remove(nextVertex);
         nextVertex = getClosestNode();
         if(nextVertex == null){
-            nextVertex = "entrance_exit_gate";
+            nextVertex = ENTRANCE_EXIT_GATE_NODE_ID;
         }
     }
 
@@ -97,19 +101,23 @@ public class ZooNavigator {
         return closestNode;
     }
 
+    public String shouldReroute(double latitude, double longitude) {
+        return router.shouldReroute(planList, currentVertex, nextVertex, latitude, longitude);
+    }
+
     public void reroute(String id){
-        if(routeExhibits.contains(currentVertex) && !pastNodes.contains(currentVertex)){
+        if(planList.contains(currentVertex) && !pastNodes.contains(currentVertex)){
             pastNodes.push(currentVertex);
         }
-        if(!futureNodes.contains(nextVertex) && !nextVertex.equals("entrance_exit_gate")
-                && routeExhibits.contains(nextVertex)){
+        if(!futureNodes.contains(nextVertex) && !nextVertex.equals(ENTRANCE_EXIT_GATE_NODE_ID)
+                && planList.contains(nextVertex)){
             futureNodes.add(nextVertex);
         }
         currentVertex = id;
         futureNodes.remove(id);
         nextVertex = getClosestNode();
         if(nextVertex == null){
-            nextVertex = "entrance_exit_gate";
+            nextVertex = ENTRANCE_EXIT_GATE_NODE_ID;
         }
     }
 
@@ -132,87 +140,4 @@ public class ZooNavigator {
     public String getRoutePreview(){
         return router.routePreview("entrance_exit_gate", "entrance_exit_gate", futureNodes);
     }
-
-
-
-
-
-
-
-
-
-
-   /*
-
-    public ZooNavigator build(){ return this; }
-
-    public void nextExhibit(){
-        if(firstPrev) {
-            MetaVertex alt = current;
-            current = next;
-            next = current;
-            firstPrev = false;
-        }
-        else {
-            pastNodes.add(current);
-            current = next;
-            next = searcher.closestNode(current, futureNodes);
-        }
-    }
-
-    public void previousExhibit(){
-        if(!firstPrev){
-            firstPrev = true;
-            futureNodes.add(next);
-            next = searcher.closestNode(current, pastNodes);
-        }
-        else{
-            futureNodes.add(current);
-            current = next;
-            next = searcher.closestNode(current, pastNodes);
-        }
-    }
-
-    public MetaVertex currentExhibit() {
-        return current;
-    }
-
-    public void skip(){
-        //route.remove(routeIndex);
-        next = searcher.closestNode(current, futureNodes);
-    }
-
-
-    /**
-     * Everything below is legacy based on RouteMaker and RoutePackage,
-     * currently using Searcher and MetaVertex
-     */
-/*
-    public List<RoutePackage> route(List<String> nodes){
-            return routeMaker.route(nodes);
-    }
-
-    public ZooNavigator setRoute(List<RoutePackage> route) {
-        this.route = route;
-        return this;
-    }
-
-
- */
-//    public void reroute(List<String> nodes){
-//        List<RoutePackage> oldRoute = route;
-//        List<String> newRouteNodes = new ArrayList<String>();
-//        for(int i = routeIndex; i < nodes.size(); ++i){
-//            newRouteNodes.add(nodes.get(i));
-//            oldRoute.remove(i);
-//        }
-//        List<RoutePackage> newRoute = route(newRouteNodes);
-//        oldRoute.addAll(newRoute);
-//        setRoute(oldRoute); //note, not returning THE old route, but an edited route
-//    }
-
-//    public void setRoute(List<RoutePackage> route){
-//        this.route = route;
-//    }
-
 }
