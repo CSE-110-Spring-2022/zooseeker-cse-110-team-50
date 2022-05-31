@@ -1,10 +1,15 @@
 package edu.ucsd.cse110.zooseeker.Route;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Context;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -14,6 +19,9 @@ import java.util.List;
 
 
 import edu.ucsd.cse110.zooseeker.Location.LocationModel;
+import edu.ucsd.cse110.zooseeker.Location.LocationPermissionChecker;
+import edu.ucsd.cse110.zooseeker.Navigator.*;
+import edu.ucsd.cse110.zooseeker.NewNavigator.RouteMaker;
 import edu.ucsd.cse110.zooseeker.NewNavigator.ZooNavigator;
 import edu.ucsd.cse110.zooseeker.Persistence.MainDatabase;
 import edu.ucsd.cse110.zooseeker.Persistence.PlaceDao;
@@ -23,6 +31,7 @@ import edu.ucsd.cse110.zooseeker.Util.Router.Router;
 
 public class RouteActivity extends AppCompatActivity implements GPSSettingDialogFragment.DialogListener{
 
+    private List<Router.RoutePackage> pkgList;
     private int routeIndex = 0;
     private PlaceDao placeDao = MainDatabase.getSingleton(this).placeDao();
     boolean isDetailedDirections = true;
@@ -50,6 +59,17 @@ public class RouteActivity extends AppCompatActivity implements GPSSettingDialog
     Button toggleDirectionsButton;
     Button deleteAllButton;
 
+    //Location
+    LocationPermissionChecker locationPermissionChecker;
+
+    //Gets permission for tracking
+//    final ActivityResultLauncher<String[]> requestPermissionLauncher =
+//            registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), perms ->{
+//                perms.forEach((perm, isGranted) ->{
+//                    Log.i("Testing Permissions", String.format("Permission %s granted: %s", perm, isGranted));
+//                });
+//            });
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,11 +95,16 @@ public class RouteActivity extends AppCompatActivity implements GPSSettingDialog
         toggleDirectionsButton = findViewById(R.id.toggle_directions_button);
         deleteAllButton = findViewById(R.id.route_delete_all_button);
 
+        /* Permissions setup for location */
+        locationPermissionChecker = new LocationPermissionChecker(this);
+        if(locationPermissionChecker.ensurePermissions()) return;
+
         // ViewModels
         model = new ViewModelProvider(this).get(RouteViewModel.class);
         LocationModel locationModel = new ViewModelProvider(this).get(LocationModel.class);
 
-        model.setViewModel(locationModel);
+        var locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        model.setViewModel(locationModel, locationManager);
 
         model.getIsDirectionDetailed().observe(this, isDirectionDetailed -> {
             String btnText = isDirectionDetailed ? "Detailed\nDirections" : "Brief\nDirections";
@@ -118,7 +143,7 @@ public class RouteActivity extends AppCompatActivity implements GPSSettingDialog
         skipButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                model.skip();
+
             }
         });
 
@@ -132,7 +157,7 @@ public class RouteActivity extends AppCompatActivity implements GPSSettingDialog
         reverseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                model.reverse();
+
             }
         });
 

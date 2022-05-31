@@ -53,7 +53,6 @@ public class LocationModel extends AndroidViewModel {
      * @param provider        the provider to use for location updates (usually GPS).
      * @apiNote This method should only be called after location permissions have been obtained.
      * @implNote If a location provider source already exists, it is removed.
-     * @TODO use method to get updates from location
      */
     @SuppressLint("MissingPermission")
     public void addLocationProviderSource(LocationManager locationManager, String provider) {
@@ -68,7 +67,7 @@ public class LocationModel extends AndroidViewModel {
             @Override
             public void onLocationChanged(@NonNull Location location) {
                 var coord = Coord.fromLocation(location);
-                //Log.i(TAG, String.format("Model received GPS location update: %s", coord));
+                Log.d("Testing", String.format("Model received GPS location update: %s", coord));
                 providerSource.postValue(coord);
             }
         };
@@ -89,7 +88,7 @@ public class LocationModel extends AndroidViewModel {
     }
 
     /**
-     * Mock location using coords, legacy example code
+     * Mock location using coords
      * @param coords
      */
     @VisibleForTesting
@@ -98,6 +97,13 @@ public class LocationModel extends AndroidViewModel {
     }
 
 
+    /**
+     * Legacy method from example code, not needed for our implementation
+     * @param route
+     * @param delay
+     * @param unit
+     * @return
+     */
     @VisibleForTesting
     public Future<?> mockRoute(List<Coord> route, long delay, TimeUnit unit) {
         return Executors.newSingleThreadExecutor().submit(() -> {
