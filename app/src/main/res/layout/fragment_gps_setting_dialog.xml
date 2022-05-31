@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Route.GPSSettingDialogFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="30dp"
+            android:layout_margin="1dp"
+            android:text="GPS Setting" />
+        <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <RadioButton
+                android:id="@+id/gps_real_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="25dp"
+                android:text="Real Location" />
+            <RadioButton
+                android:id="@+id/gps_mock_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mock Location" />
+        </RadioGroup>
+        <EditText
+            android:id="@+id/gps_latitude_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="14dp"
+            android:inputType="numberDecimal"
+            android:hint="latitude" />
+
+        <EditText
+            android:id="@+id/gps_longitude_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="14dp"
+            android:inputType="numberDecimal"
+            android:hint="longitude" />
+    </LinearLayout>
+</FrameLayout>
