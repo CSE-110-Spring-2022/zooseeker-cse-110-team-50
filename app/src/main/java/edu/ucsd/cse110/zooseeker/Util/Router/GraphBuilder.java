@@ -35,11 +35,11 @@ public class GraphBuilder {
         return this;
     }
 
-    public Pair<Graph, Map<String, MetaNode>> build() {
+    public Pair<Graph<MetaNode, EdgeWithId>, Map<String, MetaNode>> build() {
         this.constructMetaNodeList();
         this.constructEdgeList();
 
-        Graph<AbstractNode, EdgeWithId> graph =
+        Graph<MetaNode, EdgeWithId> graph =
                 new DefaultDirectedWeightedGraph<>(EdgeWithId.class);
 
         this.metaNodeList.stream().forEach((node) -> {
