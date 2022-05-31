@@ -144,9 +144,12 @@ public class RouteViewModel extends AndroidViewModel {
         String nodeToRerouteFrom = zooNavigator.shouldReroute(lat, log);
 
         if (nodeToRerouteFrom != null) {
-            setUiMessage("You are off route! Do you want to reroute from " + nodeToRerouteFrom + "?");
+            setUiMessage("You are off route! Do you want to reroute from " + placeDao.get(nodeToRerouteFrom).name + "?");
             setEnableReroute(true);
             nodeIdToRerouteFrom = nodeToRerouteFrom;
+        } else {
+            resetUiMessage();
+            setEnableReroute(false);
         }
     }
 
@@ -212,6 +215,7 @@ public class RouteViewModel extends AndroidViewModel {
         resetUiMessage();
         zooNavigator.reroute(nodeIdToRerouteFrom);
         setEnableReroute(false);
+        updateCurrentRouteToDisplay();
     }
 
     private void updateCurrentRouteToDisplay() {

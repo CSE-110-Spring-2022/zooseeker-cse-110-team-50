@@ -113,7 +113,7 @@ public class RouteActivity extends AppCompatActivity implements GPSSettingDialog
 
         routeViewModel.getEnableReroute().observe(this, enableReroute -> {
             rerouteButton.setClickable(enableReroute);
-            rerouteButton.setBackgroundColor(enableReroute ? 0xf5AA42 : 0x555555);
+            rerouteButton.setText(enableReroute ? "Reroute Enabled" : "Reroute Disabled");
         });
 
         routeViewModel.getIsLocationMocked().observe(this, isLocationMocked -> {
