@@ -15,7 +15,8 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.testing.FragmentScenario;
+//bad code, unable to import and doesn't build
+//import androidx.fragment.app.testing.FragmentScenario;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.room.Room;
 import androidx.test.core.app.ActivityScenario;

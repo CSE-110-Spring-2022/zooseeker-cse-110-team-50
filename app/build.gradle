@@ -4,7 +4,6 @@ plugins {
 
 android {
     compileSdk 32
-
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/LICENSE'
