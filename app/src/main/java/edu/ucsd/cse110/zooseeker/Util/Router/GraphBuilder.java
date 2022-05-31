@@ -72,6 +72,7 @@ public class GraphBuilder {
                     waitList.add(place);
                 } else {
                     metaNode.addNode(place.placeId);
+                    metaNodeMap.put(place.placeId, metaNode);
                 }
             }
         }
@@ -83,6 +84,7 @@ public class GraphBuilder {
                 throw new IllegalArgumentException("Does not contain meta node information.");
             } else {
                 metaNode.addNode(place.placeId);
+                metaNodeMap.put(place.placeId, metaNode);
             }
         }
     }

@@ -122,6 +122,7 @@ public class Router {
             String targetNode = toVisit.get(nearestNodeIdx);
             graphPathList.add(this.shortestGraphPath(currNode, targetNode));
             currNode = targetNode;
+            toVisit.remove(nearestNodeIdx);
         }
 
         // Add path to target
