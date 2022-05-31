@@ -42,7 +42,6 @@ public class RouteViewModel extends AndroidViewModel {
 
     // Navigator
     private ZooNavigator zooNavigator;
-    private List<Router.RoutePackage> routePackageList;
 
     // Navigator related user data
     private int currentRouteIndex = 0;
@@ -73,7 +72,8 @@ public class RouteViewModel extends AndroidViewModel {
                 }
             }
         }
-        zooNavigator = new ZooNavigator(zooNavigatorIds);
+        Router router = new Router(getApplication());
+        zooNavigator = new ZooNavigator(zooNavigatorIds, router);
 
         // initialize LiveData
         isDirectionDetailed = new MutableLiveData<>(false);

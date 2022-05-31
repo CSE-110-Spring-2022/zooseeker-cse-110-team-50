@@ -23,7 +23,6 @@ import edu.ucsd.cse110.zooseeker.Util.Router.Router;
 
 public class RouteActivity extends AppCompatActivity implements GPSSettingDialogFragment.DialogListener{
 
-    private List<Router.RoutePackage> pkgList;
     private int routeIndex = 0;
     private PlaceDao placeDao = MainDatabase.getSingleton(this).placeDao();
     boolean isDetailedDirections = true;

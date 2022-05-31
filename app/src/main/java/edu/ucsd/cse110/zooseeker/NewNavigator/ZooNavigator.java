@@ -1,20 +1,8 @@
 package edu.ucsd.cse110.zooseeker.NewNavigator;
 
-
-import android.content.Context;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Stack;
-
-import edu.ucsd.cse110.zooseeker.Persistence.Place;
-import edu.ucsd.cse110.zooseeker.Persistence.PlaceDao;
-import edu.ucsd.cse110.zooseeker.Persistence.PlanItem;
-import edu.ucsd.cse110.zooseeker.Persistence.PlanItemDao;
-import edu.ucsd.cse110.zooseeker.Util.JSONLoader.JSONLoader;
-import edu.ucsd.cse110.zooseeker.Util.Router.RawGraph;
 import edu.ucsd.cse110.zooseeker.Util.Router.Router;
 
 /**
@@ -34,12 +22,14 @@ public class ZooNavigator {
     List<String> routeExhibits;
     String currentVertex;
     String nextVertex;
+    Router router;
 
     // Sometime in the future for checks
 
     //comment
 
-    public ZooNavigator(List<String> ids){
+    public ZooNavigator(List<String> ids, Router router){
+        this.router = router;
         pastNodes = new Stack<>();
         routeExhibits = new ArrayList<>(ids);
         futureNodes = new ArrayList<>(ids);
@@ -99,7 +89,7 @@ public class ZooNavigator {
         if(futureNodes.size() == 0){
             return null;
         }
-        String closestNode = futureNodes.get(futureNodes.size() - 1);
+        String closestNode = router.nearestNode(currentVertex, futureNodes);
         futureNodes.remove(closestNode);
         return closestNode;
     }
@@ -129,15 +119,15 @@ public class ZooNavigator {
     }
 
     public String getRouteBrief(){
-        return currentVertex + "\nthis is the brief route\n" + nextVertex;
+        return router.shortestGraphPathInStringBrief(currentVertex, nextVertex);
     }
 
     public String getRouteDetailed(){
-        return currentVertex + "\nthis is the detailed route\n" + nextVertex;
+        return router.shortestGraphPathInStringDetailed(currentVertex, nextVertex);
     }
 
     public String getRoutePreview(){
-        return null;
+        return router.routePreview("entrance_exit_gate", "entrance_exit_gate", futureNodes);
     }
 
 
