@@ -18,9 +18,6 @@ import edu.ucsd.cse110.zooseeker.Util.Geometry.Point2D;
 import edu.ucsd.cse110.zooseeker.Util.JSONLoader.JSONLoader;
 
 public class Router {
-    List<Place> nodeInfo;
-    Map<String, String> edgeInfo;
-    ZooGraphMapper zooGraphMapper;
     Graph graph;
     Map<String, MetaNode> metaNodeMap;
 
@@ -56,16 +53,38 @@ public class Router {
         return graphPath;
     }
 
-    public Pair<List<EdgeWithId>, Double> shortestPathWithDistance(String node1Id, String node2Id) {
-        GraphPath<MetaNode, EdgeWithId> graphPath = this.shortestGraphPath(node1Id, node2Id);
-        return new Pair<>(graphPath.getEdgeList(), graphPath.getWeight());
+    public String nearestNode(String node, List<String> nodeIdList) {
+
+        String nearestNode = null;
+        Double totalWeight = Double.POSITIVE_INFINITY;
+        for (String currNode : nodeIdList) {
+            GraphPath<MetaNode, EdgeWithId> graphPath = this.shortestGraphPath(node, currNode);
+
+            if (graphPath.getWeight() < totalWeight)
+                nearestNode = currNode;
+        }
+        return nearestNode;
     }
 
-    public List<EdgeWithId> shortestPath(String node1Id, String node2Id) {
-        GraphPath<MetaNode, EdgeWithId> graphPath = this.shortestGraphPath(node1Id, node2Id);
-        return graphPath.getEdgeList();
+    private int nearestNodeIdx(AbstractNode node, List<MetaNode> nodeList) {
+
+        if (nodeList.size() == 0) {
+            return -1;
+        }
+
+        Point2D nodeCoord = node.getPoint2DCoord();
+        List<Point2D> nodeListCoord = nodeList.stream()
+                .map(AbstractNode::getPoint2DCoord)
+                .collect(Collectors.toList());
+
+        Pair<Double, Integer> nearestPoint = NearestObjectUtil.nearestPoint(nodeCoord, nodeListCoord);
+
+        return nearestPoint.second;
     }
 
+    /**
+     * NOT TO BE USED IN THE APP
+     */
     public List<GraphPath<MetaNode, EdgeWithId>> route(String source, String target, List<String> toVisit) {
         List<GraphPath<MetaNode, EdgeWithId>> graphPathList = new ArrayList<>();
 
@@ -120,48 +139,14 @@ public class Router {
         return graphPathList;
     }
 
-    /**
-     * Given a node, find the nearest node (in terms of the Euclidean distance)
-     * from a given list of node
-     * @param node the node
-     * @param nodeList the list of node
-     * @return (distance, nearestNode)
-     *
-     * If nodeList is empty, the distance will be -1
-     */
-    public static Pair<Double, AbstractNode> nearestNode(AbstractNode node, List<AbstractNode> nodeList) {
-
-        if (nodeList.size() == 0) {
-            return new Pair<>(-1.0, node);
-        }
-
-        Point2D nodeCoord = node.getPoint2DCoord();
-        List<Point2D> nodeListCoord = nodeList.stream()
-                .map(AbstractNode::getPoint2DCoord)
-                .collect(Collectors.toList());
-
-        Pair<Double, Integer> nearestPoint = NearestObjectUtil.nearestPoint(nodeCoord, nodeListCoord);
-
-        return new Pair<>(
-                nearestPoint.first,
-                nodeList.get(nearestPoint.second)
-        );
+    public Pair<List<EdgeWithId>, Double> shortestPathWithDistance(String node1Id, String node2Id) {
+        GraphPath<MetaNode, EdgeWithId> graphPath = this.shortestGraphPath(node1Id, node2Id);
+        return new Pair<>(graphPath.getEdgeList(), graphPath.getWeight());
     }
 
-    private static int nearestNodeIdx(AbstractNode node, List<MetaNode> nodeList) {
-
-        if (nodeList.size() == 0) {
-            return -1;
-        }
-
-        Point2D nodeCoord = node.getPoint2DCoord();
-        List<Point2D> nodeListCoord = nodeList.stream()
-                .map(AbstractNode::getPoint2DCoord)
-                .collect(Collectors.toList());
-
-        Pair<Double, Integer> nearestPoint = NearestObjectUtil.nearestPoint(nodeCoord, nodeListCoord);
-
-        return nearestPoint.second;
+    public List<EdgeWithId> shortestPath(String node1Id, String node2Id) {
+        GraphPath<MetaNode, EdgeWithId> graphPath = this.shortestGraphPath(node1Id, node2Id);
+        return graphPath.getEdgeList();
     }
 
 }
