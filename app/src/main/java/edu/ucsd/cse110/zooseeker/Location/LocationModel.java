@@ -89,7 +89,7 @@ public class LocationModel extends AndroidViewModel {
     }
 
     /**
-     * Mock location using coords, should be able to put in my own coords, maybe through UI? check piazza
+     * Mock location using coords, legacy example code
      * @param coords
      */
     @VisibleForTesting

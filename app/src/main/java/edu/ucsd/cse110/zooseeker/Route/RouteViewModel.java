@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import java.util.List;
 import java.util.function.DoubleBinaryOperator;
 
+import edu.ucsd.cse110.zooseeker.Location.Coord;
 import edu.ucsd.cse110.zooseeker.Location.LocationModel;
 import edu.ucsd.cse110.zooseeker.NewNavigator.ZooNavigator;
 import edu.ucsd.cse110.zooseeker.Persistence.MainDatabase;
@@ -30,6 +31,7 @@ public class RouteViewModel extends AndroidViewModel {
     private MutableLiveData<Pair<Double, Double>> currentLocationCoordinate;
     private MutableLiveData<Boolean> isLocationMocked;
     private LocationModel locationModel;
+    public LiveData<Coord> currentLocation;
 
 
     // DAOs
@@ -63,9 +65,11 @@ public class RouteViewModel extends AndroidViewModel {
         // initialize LiveData
         isDirectionDetailed = new MutableLiveData<>(false);
         fromAndTo = new MutableLiveData<>(new Pair<>("", ""));
+        currentLocation = locationModel.getLastKnownCoords();
         currentLocationCoordinate = new MutableLiveData<>();
         isLocationMocked = new MutableLiveData<>();
-        setCurrentLocationCoordinate(17.123124123, 17.8787);
+
+        setCurrentLocationCoordinate(currentLocation.getValue().lat, currentLocation.getValue().lng);
         setIsLocationMocked(false);
     }
 
