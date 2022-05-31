@@ -37,6 +37,7 @@ public class RouteActivity extends AppCompatActivity implements GPSSettingDialog
     TextView toTextView;
     TextView routeLatitude;
     TextView routeLongitude;
+    TextView uiMessage;
     Button gpsSettingButton;
     Button nextButton;
     Button skipButton;
@@ -44,6 +45,7 @@ public class RouteActivity extends AppCompatActivity implements GPSSettingDialog
     Button reverseButton;
     Button toggleDirectionsButton;
     Button deleteAllButton;
+    Button rerouteButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +71,8 @@ public class RouteActivity extends AppCompatActivity implements GPSSettingDialog
         reverseButton = findViewById(R.id.route_reverse_button);
         toggleDirectionsButton = findViewById(R.id.toggle_directions_button);
         deleteAllButton = findViewById(R.id.route_delete_all_button);
+        rerouteButton = findViewById(R.id.route_reroute_button);
+        uiMessage = findViewById(R.id.route_ui_message);
 
         // Get location permission from user
         LocationPermissionChecker locationPermissionChecker = new LocationPermissionChecker(this);
@@ -105,6 +109,15 @@ public class RouteActivity extends AppCompatActivity implements GPSSettingDialog
         routeViewModel.getCurrentLocationCoordinate().observe(this, currentLocationCoordinate -> {
             routeLatitude.setText("" + currentLocationCoordinate.first);
             routeLongitude.setText("" + currentLocationCoordinate.second);
+        });
+
+        routeViewModel.getEnableReroute().observe(this, enableReroute -> {
+            rerouteButton.setClickable(enableReroute);
+            rerouteButton.setBackgroundColor(enableReroute ? 0xf5AA42 : 0x555555);
+        });
+
+        routeViewModel.getUIMessage().observe(this, uiMessage -> {
+            this.uiMessage.setText(uiMessage);
         });
 
         gpsSettingButton.setOnClickListener(new View.OnClickListener() {
@@ -159,6 +172,12 @@ public class RouteActivity extends AppCompatActivity implements GPSSettingDialog
             }
         });
 
+        rerouteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                routeViewModel.reroute();
+            }
+        });
 
         // Start Route Summary
         Intent intent = new Intent(this, RouteSummary.class);
@@ -175,8 +194,9 @@ public class RouteActivity extends AppCompatActivity implements GPSSettingDialog
     @Override
     public void onDialogPositiveClick(DialogFragment dialog, boolean isMock, double latitude, double longitude) {
         routeViewModel.setIsLocationMocked(isMock);
-        if (isMock)
-            routeViewModel.setCurrentLocationCoordinate(latitude, longitude);
+        if (isMock) {
+            routeViewModel.setMockCurrentLocationCoordinate(latitude, longitude);
+        }
     }
 
     @Override
