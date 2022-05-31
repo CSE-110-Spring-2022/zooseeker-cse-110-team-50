@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -74,6 +75,9 @@ public class RouteActivity extends AppCompatActivity implements GPSSettingDialog
         // ViewModels
         routeViewModel = new ViewModelProvider(this).get(RouteViewModel.class);
         locationModel = new ViewModelProvider(this).get(LocationModel.class);
+        var provider = LocationManager.GPS_PROVIDER;
+        var locationManager = (LocationManager) getSystemService(this.LOCATION_SERVICE);
+        locationModel.addLocationProviderSource(locationManager, provider);
 
         locationModel.getLastKnownCoords().observe(this, lastKnownCoord -> {
             Log.d("ROUTE ACTIVITY", "" + lastKnownCoord.lat + "" + lastKnownCoord.lng);
@@ -161,8 +165,9 @@ public class RouteActivity extends AppCompatActivity implements GPSSettingDialog
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog, boolean isMock, double latitude, double longitude) {
-        if (isMock) routeViewModel.setCurrentLocationCoordinate(latitude, longitude);
-        else routeViewModel.setCurrentLocationCoordinate(17.3498479, 38.2398239);
+        routeViewModel.setIsLocationMocked(isMock);
+        if (isMock)
+            routeViewModel.setCurrentLocationCoordinate(latitude, longitude);
     }
 
     @Override

@@ -72,9 +72,8 @@ public class RouteViewModel extends AndroidViewModel {
         isDirectionDetailed = new MutableLiveData<>(false);
         fromAndTo = new MutableLiveData<>(new Pair<>("", ""));
         currentLocationCoordinate = new MutableLiveData<>();
-        isLocationMocked = new MutableLiveData<>();
+        isLocationMocked = new MutableLiveData<>(false);
         setCurrentLocationCoordinate(17.123124123, 17.8787);
-        setIsLocationMocked(false);
     }
 
 
