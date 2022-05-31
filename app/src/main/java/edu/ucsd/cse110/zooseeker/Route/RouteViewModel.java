@@ -80,12 +80,22 @@ public class RouteViewModel extends AndroidViewModel {
         // initialize LiveData
         isDirectionDetailed = new MutableLiveData<>(false);
         fromAndTo = new MutableLiveData<>(new Pair<>("", ""));
-        currentLocation = locationModel.getLastKnownCoords();
+        //currentLocation = locationModel.getLastKnownCoords();
         currentLocationCoordinate = new MutableLiveData<>();
         isLocationMocked = new MutableLiveData<>();
 
-        setCurrentLocationCoordinate(currentLocation.getValue().lat, currentLocation.getValue().lng);
+        //setCurrentLocationCoordinate(currentLocation.getValue().lat, currentLocation.getValue().lng);
         setIsLocationMocked(false);
+    }
+
+    public void setFirstViewModel(LocationModel locationModel){
+        this.locationModel = locationModel;
+        //locationModel.addLocationProviderSource();
+        currentLocation = locationModel.getLastKnownCoords();
+        if(currentLocation.getValue() == null){
+            throw new IllegalArgumentException("current location is null" );
+        }
+        setCurrentLocationCoordinate(currentLocation.getValue().lat, currentLocation.getValue().lng);
     }
 
     public void setViewModel(LocationModel locationModel){

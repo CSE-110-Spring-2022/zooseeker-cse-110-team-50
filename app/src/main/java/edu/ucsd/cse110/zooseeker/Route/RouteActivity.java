@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Context;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -75,11 +77,14 @@ public class RouteActivity extends AppCompatActivity implements GPSSettingDialog
         toggleDirectionsButton = findViewById(R.id.toggle_directions_button);
         deleteAllButton = findViewById(R.id.route_delete_all_button);
 
+        var locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
         // ViewModels
         model = new ViewModelProvider(this).get(RouteViewModel.class);
         LocationModel locationModel = new ViewModelProvider(this).get(LocationModel.class);
-
-        model.setViewModel(locationModel);
+        var provider = LocationManager.GPS_PROVIDER;
+        locationModel.addLocationProviderSource(locationManager,provider);
+        model.setFirstViewModel(locationModel);
 
         model.getIsDirectionDetailed().observe(this, isDirectionDetailed -> {
             String btnText = isDirectionDetailed ? "Detailed\nDirections" : "Brief\nDirections";
