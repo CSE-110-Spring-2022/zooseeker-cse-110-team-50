@@ -32,8 +32,6 @@ public class RouteViewModel extends AndroidViewModel {
     private MutableLiveData<Pair<String, String>> fromAndTo;
     private MutableLiveData<Pair<Double, Double>> currentLocationCoordinate;
     private MutableLiveData<Boolean> isLocationMocked;
-    private LocationModel locationModel;
-
 
     // DAOs
     private MainDatabase mainDb;
@@ -43,14 +41,9 @@ public class RouteViewModel extends AndroidViewModel {
     // Navigator
     private ZooNavigator zooNavigator;
 
-    // Navigator related user data
-    private int currentRouteIndex = 0;
-
-
     // Ctor
     public RouteViewModel(@NonNull Application application) {
         super(application);
-        //this.locationModel = new ViewModelProvider(this).get(LocationModel.class);
 
         // initialize DataBase related fields
         Context context = getApplication().getApplicationContext();
@@ -84,9 +77,6 @@ public class RouteViewModel extends AndroidViewModel {
         setIsLocationMocked(false);
     }
 
-    public void setViewModel(LocationModel locationModel){
-        this.locationModel = locationModel;
-    }
 
     public LiveData<Boolean> getIsDirectionDetailed() {
         return isDirectionDetailed;
