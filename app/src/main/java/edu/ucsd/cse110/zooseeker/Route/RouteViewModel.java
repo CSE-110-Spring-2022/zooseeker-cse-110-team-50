@@ -117,6 +117,11 @@ public class RouteViewModel extends AndroidViewModel {
         this.isLocationMocked.setValue(isLocationMocked);
     }
 
+    public void setRealCurrentLocationCoordinate(double latitude, double longitude) {
+        if (!isLocationMocked.getValue())
+            setCurrentLocationCoordinate(latitude, longitude);
+    }
+
     // Set coordinate pair interface
     public void setCurrentLocationCoordinate(Pair<Double, Double> coordinate) {
         currentLocationCoordinate.setValue(coordinate);
