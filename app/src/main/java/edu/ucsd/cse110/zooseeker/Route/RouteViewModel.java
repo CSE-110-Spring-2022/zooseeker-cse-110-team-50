@@ -1,5 +1,7 @@
 package edu.ucsd.cse110.zooseeker.Route;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
@@ -32,6 +34,8 @@ public class RouteViewModel extends AndroidViewModel {
     private MutableLiveData<Pair<String, String>> fromAndTo;
     private MutableLiveData<Pair<Double, Double>> currentLocationCoordinate;
     private MutableLiveData<Boolean> isLocationMocked;
+    private MutableLiveData<String> uiMessage;
+    private MutableLiveData<Boolean> enableReroute;
 
     // DAOs
     private MainDatabase mainDb;
@@ -74,6 +78,9 @@ public class RouteViewModel extends AndroidViewModel {
         fromAndTo = new MutableLiveData<>(new Pair<>("", ""));
         currentLocationCoordinate = new MutableLiveData<>();
         isLocationMocked = new MutableLiveData<>(false);
+        uiMessage = new MutableLiveData<>("");
+        enableReroute = new MutableLiveData<>(false);
+        resetUiMessage();
         setCurrentLocationCoordinate(17.123124123, 17.8787);
     }
 
@@ -107,21 +114,47 @@ public class RouteViewModel extends AndroidViewModel {
         this.isLocationMocked.setValue(isLocationMocked);
     }
 
-    public void setRealCurrentLocationCoordinate(double lat, double lon) {
+    public void setRealCurrentLocationCoordinate(double lat, double log) {
         if (!isLocationMocked.getValue()) {
-            setCurrentLocationCoordinate(lat, lon);
-            String nodeToRerouteFrom;
-            
-            // Throttled call to should reroute
-            int THROTTLE_THRESHOLD = 10;
-            if (SHOULD_REROUTE_THROTTLE % THROTTLE_THRESHOLD == 0) {
-                nodeToRerouteFrom = zooNavigator.shouldReroute(lat, lon);
-                SHOULD_REROUTE_THROTTLE = 0;
-            }
-            else {
-                SHOULD_REROUTE_THROTTLE++;
-            }
+            setCurrentLocationCoordinate(lat, log);
+            shouldRerouteThrottled(lat, log);
         }
+    }
+
+    public void shouldRerouteThrottled(double lat, double log) {
+        int THROTTLE_THRESHOLD = 10;
+        if (SHOULD_REROUTE_THROTTLE % THROTTLE_THRESHOLD == 0) {
+            shouldReroute(lat, log);
+            SHOULD_REROUTE_THROTTLE = 0;
+        }
+        else {
+            SHOULD_REROUTE_THROTTLE++;
+        }
+    }
+
+    public void shouldReroute(double lat, double log) {
+        String nodeToRerouteFrom = zooNavigator.shouldReroute(lat, log);
+
+        if (nodeToRerouteFrom != null) {
+            setUiMessage("You are off route! Do you want to reroute from " + nodeToRerouteFrom);
+            setEnableReroute(true);
+        }
+    }
+
+    public void setEnableReroute(boolean enable) {
+        enableReroute.setValue(enable);
+    }
+
+    public LiveData<Boolean> getEnableReroute() {
+        return enableReroute;
+    }
+
+    public void setUiMessage(String mes) {
+        uiMessage.setValue(mes);
+    }
+
+    public void resetUiMessage() {
+        uiMessage.setValue("Have Fun!");
     }
 
     // Set coordinate pair interface
@@ -157,6 +190,10 @@ public class RouteViewModel extends AndroidViewModel {
     public void reverse() {
         zooNavigator.reverse();
         updateCurrentRouteToDisplay();
+    }
+
+    public void reroute() {
+
     }
 
     private void updateCurrentRouteToDisplay() {

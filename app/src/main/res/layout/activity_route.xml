@@ -153,6 +153,7 @@
             android:gravity="center">
 
             <TextView
+                android:id="@+id/route_ui_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
