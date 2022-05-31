@@ -81,7 +81,7 @@ public class RouteActivity extends AppCompatActivity implements GPSSettingDialog
         gpsSettingButton = findViewById(R.id.route_gps_setting_button);
         nextButton = findViewById(R.id.route_next_button);
         backButton = findViewById(R.id.route_back_button);
-        skipButton = findViewById(R.id.route_skip_button);
+
         reverseButton = findViewById(R.id.route_reverse_button);
         toggleDirectionsButton = findViewById(R.id.toggle_directions_button);
         deleteAllButton = findViewById(R.id.route_delete_all_button);
