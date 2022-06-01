@@ -8,6 +8,7 @@ import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
+import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -19,9 +20,9 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 
 import androidx.test.espresso.ViewInteraction;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
-import androidx.test.rule.ActivityTestRule;
-import androidx.test.runner.AndroidJUnit4;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -36,14 +37,31 @@ import org.junit.runner.RunWith;
 public class SearchUITest {
 
     @Rule
-    public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
-
-    /**
-     * Added Search test to test search functionality and search output
-     */
+    public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
+            new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
     public void searchUITest() {
+        ViewInteraction bottomNavigationItemView = onView(
+                allOf(withId(R.id.planFragment), withContentDescription("PLAN"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.bottom_navigation_view),
+                                        0),
+                                1),
+                        isDisplayed()));
+        bottomNavigationItemView.perform(click());
+
+        ViewInteraction bottomNavigationItemView2 = onView(
+                allOf(withId(R.id.searchFragment), withContentDescription("HOME"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.bottom_navigation_view),
+                                        0),
+                                0),
+                        isDisplayed()));
+        bottomNavigationItemView2.perform(click());
+
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.search_bar_text_field),
                         childAtPosition(
@@ -52,49 +70,13 @@ public class SearchUITest {
                                         0),
                                 0),
                         isDisplayed()));
-        appCompatEditText.perform(replaceText("elephant"), closeSoftKeyboard());
+        appCompatEditText.perform(replaceText("a"), closeSoftKeyboard());
 
         ViewInteraction textView = onView(
-                allOf(withId(R.id.search_result_item_name), withText("Elephant Odyssey"),
+                allOf(withId(R.id.search_result_item_name), withText("Blue Capped Motmot"),
                         withParent(withParent(IsInstanceOf.<View>instanceOf(android.view.ViewGroup.class))),
                         isDisplayed()));
-        textView.check(matches(withText("Elephant Odyssey")));
-
-        ViewInteraction appCompatEditText2 = onView(
-                allOf(withId(R.id.search_bar_text_field), withText("elephant"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.widget.FrameLayout")),
-                                        0),
-                                0),
-                        isDisplayed()));
-        appCompatEditText2.perform(click());
-
-        ViewInteraction appCompatEditText3 = onView(
-                allOf(withId(R.id.search_bar_text_field), withText("elephant"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.widget.FrameLayout")),
-                                        0),
-                                0),
-                        isDisplayed()));
-        appCompatEditText3.perform(replaceText("alligators"));
-
-        ViewInteraction appCompatEditText4 = onView(
-                allOf(withId(R.id.search_bar_text_field), withText("alligators"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.widget.FrameLayout")),
-                                        0),
-                                0),
-                        isDisplayed()));
-        appCompatEditText4.perform(closeSoftKeyboard());
-
-        ViewInteraction textView2 = onView(
-                allOf(withId(R.id.search_result_item_name), withText("Alligators"),
-                        withParent(withParent(IsInstanceOf.<View>instanceOf(android.view.ViewGroup.class))),
-                        isDisplayed()));
-        textView2.check(matches(withText("Alligators")));
+        textView.check(matches(withText("Blue Capped Motmot")));
     }
 
     private static Matcher<View> childAtPosition(
