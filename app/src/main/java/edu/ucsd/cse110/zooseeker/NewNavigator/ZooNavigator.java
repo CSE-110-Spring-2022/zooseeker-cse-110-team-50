@@ -29,7 +29,7 @@ public class ZooNavigator implements Serializable {
     private int initialPlanListHashCode;
 
 
-    public ZooNavigator(List<String> ids, Router router){
+    public ZooNavigator(List<String> ids, Router router, double lat, double log){
         // immutable hash code
         setInitialPlanListHashCode(ids);
 
@@ -37,12 +37,39 @@ public class ZooNavigator implements Serializable {
         pastNodes = new ArrayList<>();
         planList = new ArrayList<>(ids);
         futureNodes = new ArrayList<>(ids);
-        planList.add("entrance_exit_gate");
-        currentVertex = "entrance_exit_gate";
+        currentVertex = planList.get(0);
+//        currentVertex = getStartNode(lat, log);
+        futureNodes.remove(currentVertex);
         nextVertex = getClosestNode();
         if(nextVertex == null){
             nextVertex = "entrance_exit_gate";
         }
+    }
+
+    // Call only from ZooNavigatorJsonMapper
+    public ZooNavigator(
+            List<String> ids,
+            Router router,
+            List<String> pastNodes,
+            List<String> futureNodes,
+            String currentVertex,
+            String nextVertex) {
+        // immutable hash code
+        setInitialPlanListHashCode(ids);
+
+        this.router = router;
+        planList = new ArrayList<>(ids);
+        this.pastNodes = new ArrayList<>(pastNodes);
+        this.futureNodes = new ArrayList<>(futureNodes);
+        this.currentVertex = currentVertex;
+        this.nextVertex = nextVertex;
+        if(nextVertex == null){
+            this.nextVertex = "entrance_exit_gate";
+        }
+    }
+
+    private String getStartNode(double lat, double log) {
+        return "";
     }
 
     public int getInitialPlanListHashCode() {
@@ -157,7 +184,8 @@ public class ZooNavigator implements Serializable {
         for(String fNode : futureNodes){
             routePreviewList.add(fNode);
         }
-        routePreviewList.remove("entrance_exit_gate");
-        return router.routePreview("entrance_exit_gate", "entrance_exit_gate", routePreviewList);
+        String start = routePreviewList.remove(0);
+
+        return router.routePreview(start, "entrance_exit_gate", routePreviewList);
     }
 }

@@ -59,6 +59,19 @@ public class RouteViewModel extends AndroidViewModel {
         placeDao = mainDb.placeDao();
         planItemDao = mainDb.planItemDao();
 
+        // initialize LiveData
+        isDirectionDetailed = new MutableLiveData<>(false);
+        fromAndTo = new MutableLiveData<>(new Pair<>("", ""));
+        currentLocationCoordinate = new MutableLiveData<>();
+        isLocationMocked = new MutableLiveData<>(false);
+        uiMessage = new MutableLiveData<>("");
+        enableReroute = new MutableLiveData<>(false);
+        resetUiMessage();
+        // set default location to Entrance Exit Gate
+        setCurrentLocationCoordinate(32.73561, -117.14936);
+
+        double currLat = 32.73561, currLog = -117.14936;
+
         // Initialize SharePreference file
         zooNavigatorPref =
                 application.getSharedPreferences("ZooNavigator", Context.MODE_PRIVATE);
@@ -70,7 +83,7 @@ public class RouteViewModel extends AndroidViewModel {
         ZooNavigatorJsonMapper serializedZooNavigatorJsonMapper =
                 retrieveSerializedZooNavigatorMapper();
 
-        ZooNavigator newNavigator = initializeNewZooNavigator(router);
+        ZooNavigator newNavigator = initializeNewZooNavigator(router, currLat, currLog);
 
         if (serializedZooNavigatorJsonMapper == null
                 || newNavigator.getInitialPlanListHashCode() !=
@@ -81,16 +94,7 @@ public class RouteViewModel extends AndroidViewModel {
             zooNavigator = serializedZooNavigatorJsonMapper.toZooNavigator(router);
         }
 
-        // initialize LiveData
-        isDirectionDetailed = new MutableLiveData<>(false);
-        fromAndTo = new MutableLiveData<>(new Pair<>("", ""));
-        currentLocationCoordinate = new MutableLiveData<>();
-        isLocationMocked = new MutableLiveData<>(false);
-        uiMessage = new MutableLiveData<>("");
-        enableReroute = new MutableLiveData<>(false);
-        resetUiMessage();
-        // set default location to Entrance Exit Gate
-        setCurrentLocationCoordinate(32.73561, -117.14936);
+
     }
 
     private ZooNavigatorJsonMapper retrieveSerializedZooNavigatorMapper() {
@@ -101,7 +105,7 @@ public class RouteViewModel extends AndroidViewModel {
         return ZooNavigatorJsonMapper.fromJson(serializedData);
     }
 
-    private ZooNavigator initializeNewZooNavigator(Router router) {
+    private ZooNavigator initializeNewZooNavigator(Router router, double lat, double log) {
         List<PlanItem> planItemList = planItemDao.getAll();
         List<String> zooNavigatorIds = new ArrayList<>();
         for(PlanItem planItem : planItemList){
@@ -115,7 +119,7 @@ public class RouteViewModel extends AndroidViewModel {
                 }
             }
         }
-        return new ZooNavigator(zooNavigatorIds, router);
+        return new ZooNavigator(zooNavigatorIds, router, lat, log);
     }
 
 
