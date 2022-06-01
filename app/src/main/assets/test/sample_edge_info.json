@@ -1,30 +1,106 @@
 [
     {
-        "id": "edge-0",
-        "street": "Entrance Way"
+        "id": "gate_to_front",
+        "street": "Gate Path"
     },
     {
-        "id": "edge-1",
-        "street": "Africa Rocks Street"
+        "id": "front_to_monkey",
+        "street": "Front Street"
     },
     {
-        "id": "edge-2",
-        "street": "Africa Rocks Street"
+        "id": "monkey_to_flamingo",
+        "street": "Monkey Trail"
     },
     {
-        "id": "edge-3",
-        "street": "Africa Rocks Street"
+        "id": "flamingo_to_capuchin",
+        "street": "Monkey Trail"
     },
     {
-        "id": "edge-4",
-        "street": "Arctic Avenue"
+        "id": "capuchin_to_hippo_monkey",
+        "street": "Monkey Trail"
     },
     {
-        "id": "edge-5",
-        "street": "Reptile Road"
+        "id": "hippo_monkey_to_scripps",
+        "street": "Monkey Trail"
     },
     {
-        "id": "edge-6",
-        "street": "Sharp Teeth Shortcut"
+        "id": "scripps_to_gorilla",
+        "street": "Monkey Trail"
+    },
+    {
+        "id": "gorilla_to_benchley",
+        "street": "Monkey Trail"
+    },
+    {
+        "id": "front_to_fern",
+        "street": "Treetops Way"
+    },
+    {
+        "id": "fern_to_orangutan",
+        "street": "Treetops Way"
+    },
+    {
+        "id": "treetops_to_siamang",
+        "street": "Orangutan Trail"
+    },
+    {
+        "id": "treetops_to_hippo",
+        "street": "Treetops Way"
+    },
+    {
+        "id": "hippo_to_hippo",
+        "street": "Hippo Trail"
+    },
+    {
+        "id": "hippo_to_crocodile",
+        "street": "Hippo Trail"
+    },
+    {
+        "id": "crocodile_to_monkey_hippo",
+        "street": "Hippo Trail"
+    },
+    {
+        "id": "hippo_to_parker",
+        "street": "Treetops Way"
+    },
+    {
+        "id": "siamang_to_orangutan",
+        "street": "Orangutan Trail"
+    },
+    {
+        "id": "orangutan_to_parker",
+        "street": "Orangutan Trail"
+    },
+    {
+        "id": "parker_to_owens",
+        "street": "Aviary Trail"
+    },
+    {
+        "id": "parker_to_benchley",
+        "street": "Treetops Way"
+    },
+    {
+        "id": "owens_to_fern",
+        "street": "Aviary Trail"
+    },
+    {
+        "id": "fern_to_fern",
+        "street": "Fern Canyon Trail"
+    },
+    {
+        "id": "front_to_lagoon1",
+        "street": "Front Street"
+    },
+    {
+        "id": "lagoon1_to_lagoon2",
+        "street": "Front Street"
+    },
+    {
+        "id": "lagoon1_to_koi",
+        "street": "Terrace Lagoon Loop"
+    },
+    {
+        "id": "lagoon2_to_koi",
+        "street": "Terrace Lagoon Loop"
     }
 ]

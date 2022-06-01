@@ -207,63 +207,6 @@ public class Router implements Serializable {
 
     }
 
-    /**
-     * NOT TO BE USED IN THE APP
-     */
-//    public List<GraphPath<MetaNode, EdgeWithId>> route(String source, String target, List<String> toVisit) {
-//        List<GraphPath<MetaNode, EdgeWithId>> graphPathList = new ArrayList<>();
-//
-//        if (toVisit.isEmpty()) {
-//            return graphPathList;
-//        }
-//
-//        MetaNode src = this.metaNodeMap.get(source);
-//        MetaNode tar = this.metaNodeMap.get(target);
-//        List<MetaNode> nodeToVisit = new ArrayList<>();
-//        for (String s : toVisit) {
-//            nodeToVisit.add(this.metaNodeMap.get(s));
-//        }
-//
-//        // remove source in the list
-//        for (int i = 0; i < nodeToVisit.size(); i++) {
-//            if (nodeToVisit.get(i).equals(src)) {
-//                nodeToVisit.remove(i);
-//                break;
-//            }
-//        }
-//
-//        // remove target in the list
-//        for (int i = 0; i < nodeToVisit.size(); i++) {
-//            if (nodeToVisit.get(i).equals(tar)) {
-//                nodeToVisit.remove(i);
-//                break;
-//            }
-//        }
-//
-//        if (nodeToVisit.isEmpty()) {
-//            // node to visit only contains source and target
-//            graphPathList.add(shortestGraphPath(source, target));
-//            return graphPathList;
-//        }
-//
-//        // Greedy to find local minima
-//        int currTargetIdx = nearestNodeIdx(src, nodeToVisit);
-//        MetaNode currTarget = nodeToVisit.get(currTargetIdx);
-//        graphPathList.add(shortestGraphPath(src.id, currTarget.id));
-//
-//        while (!nodeToVisit.isEmpty()) {
-//            MetaNode currSrc = currTarget;
-//            currTargetIdx = nearestNodeIdx(currTarget, nodeToVisit);
-//            currTarget = nodeToVisit.get(currTargetIdx);
-//            graphPathList.add(shortestGraphPath(currSrc.id, currTarget.id));
-//            nodeToVisit.remove(currTargetIdx);
-//        }
-//
-//        graphPathList.add(shortestGraphPath(currTarget.id, tar.id));
-//
-//        return graphPathList;
-//    }
-
     public Pair<List<EdgeWithId>, Double> shortestPathWithDistance(String node1Id, String node2Id) {
         GraphPath<MetaNode, EdgeWithId> graphPath = this.shortestGraphPath(node1Id, node2Id);
         return new Pair<>(graphPath.getEdgeList(), graphPath.getWeight());
@@ -273,5 +216,5 @@ public class Router implements Serializable {
         GraphPath<MetaNode, EdgeWithId> graphPath = this.shortestGraphPath(node1Id, node2Id);
         return graphPath.getEdgeList();
     }
-
+ 
 }

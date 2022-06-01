@@ -55,12 +55,10 @@ public class ZooNavigatorJsonMapper {
     }
 
     public ZooNavigator toZooNavigator(Router router) {
-        ZooNavigator zooNavigator = new ZooNavigator(planList, router);
-        zooNavigator.pastNodes = new ArrayList<>(pastNodes);
-        zooNavigator.futureNodes = new ArrayList<>(futureNodes);
-        zooNavigator.currentVertex = currentVertex;
-        zooNavigator.nextVertex = nextVertex;
+        ZooNavigator zooNavigator = new ZooNavigator(
+                        planList, router, pastNodes, futureNodes, currentVertex, nextVertex);
         zooNavigator.dangerouslyUpdateInitialPlanListHashCode(initialPlanListHashCode);
+
         return zooNavigator;
     }
 }

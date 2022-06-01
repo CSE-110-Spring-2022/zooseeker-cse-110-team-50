@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+import edu.ucsd.cse110.zooseeker.Location.LocationPermissionChecker;
 import edu.ucsd.cse110.zooseeker.Persistence.MainDatabase;
 import edu.ucsd.cse110.zooseeker.Plan.PlanFragment;
 import edu.ucsd.cse110.zooseeker.Search.SearchFragment;
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
         bottomNavigationView.setOnItemSelectedListener(this);
 
+        askForLocationPermission();
     }
 
 
@@ -46,6 +48,11 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 return true;
         }
         return false;
+    }
+
+    private void askForLocationPermission() {
+        LocationPermissionChecker locationPermissionChecker = new LocationPermissionChecker(this);
+        boolean isPermissionAlreadyGranted = locationPermissionChecker.ensurePermissions();
     }
 }
 

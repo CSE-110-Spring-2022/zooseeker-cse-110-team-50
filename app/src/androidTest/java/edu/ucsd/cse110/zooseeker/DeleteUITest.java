@@ -5,12 +5,10 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
@@ -20,28 +18,46 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 
 import androidx.test.espresso.ViewInteraction;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
+import androidx.test.rule.ActivityTestRule;
+import androidx.test.runner.AndroidJUnit4;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.hamcrest.core.IsInstanceOf;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class SearchUITest {
+public class DeleteUITest {
 
     @Rule
-    public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
-            new ActivityScenarioRule<>(MainActivity.class);
+    public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void searchUITest() {
+    public void deleteUITest() {
+        ViewInteraction appCompatEditText = onView(
+                allOf(withId(R.id.search_bar_text_field),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("android.widget.FrameLayout")),
+                                        0),
+                                0),
+                        isDisplayed()));
+        appCompatEditText.perform(replaceText("gorill"), closeSoftKeyboard());
+
+        ViewInteraction materialButton = onView(
+                allOf(withId(R.id.add_btn), withText("Add"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                        0),
+                                1),
+                        isDisplayed()));
+        materialButton.perform(click());
+
         ViewInteraction bottomNavigationItemView = onView(
                 allOf(withId(R.id.planFragment), withContentDescription("PLAN"),
                         childAtPosition(
@@ -52,31 +68,16 @@ public class SearchUITest {
                         isDisplayed()));
         bottomNavigationItemView.perform(click());
 
-        ViewInteraction bottomNavigationItemView2 = onView(
-                allOf(withId(R.id.searchFragment), withContentDescription("HOME"),
+        ViewInteraction materialButton2 = onView(
+                allOf(withId(R.id.delete_all_plans_button), withText("Clear"),
                         childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.bottom_navigation_view),
-                                        0),
+                                allOf(withId(R.id.linearLayoutButtons),
+                                        childAtPosition(
+                                                withClassName(is("android.widget.FrameLayout")),
+                                                2)),
                                 0),
                         isDisplayed()));
-        bottomNavigationItemView2.perform(click());
-
-        ViewInteraction appCompatEditText = onView(
-                allOf(withId(R.id.search_bar_text_field),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.widget.FrameLayout")),
-                                        0),
-                                0),
-                        isDisplayed()));
-        appCompatEditText.perform(replaceText("a"), closeSoftKeyboard());
-
-        ViewInteraction textView = onView(
-                allOf(withId(R.id.search_result_item_name), withText("Blue Capped Motmot"),
-                        withParent(withParent(IsInstanceOf.<View>instanceOf(android.view.ViewGroup.class))),
-                        isDisplayed()));
-        textView.check(matches(withText("Blue Capped Motmot")));
+        materialButton2.perform(click());
     }
 
     private static Matcher<View> childAtPosition(
