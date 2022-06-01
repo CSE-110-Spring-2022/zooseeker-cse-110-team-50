@@ -115,7 +115,9 @@ public class RouteViewModel extends AndroidViewModel {
                 }
             }
         }
-        return new ZooNavigator(zooNavigatorIds, router);
+        double lat = currentLocationCoordinate.getValue().first;
+        double log = currentLocationCoordinate.getValue().second;
+        return new ZooNavigator(zooNavigatorIds, router, lat, log);
     }
 
 

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.ucsd.cse110.zooseeker.Util.Geometry.Point2D;
 import edu.ucsd.cse110.zooseeker.Util.Router.Router;
 
 /**
@@ -29,6 +30,23 @@ public class ZooNavigator implements Serializable {
     private int initialPlanListHashCode;
 
 
+    public ZooNavigator(List<String> ids, Router router, double lat, double log){
+        // immutable hash code
+        setInitialPlanListHashCode(ids);
+
+        this.router = router;
+        pastNodes = new ArrayList<>();
+        planList = new ArrayList<>(ids);
+        futureNodes = new ArrayList<>(ids);
+        currentVertex = getStartNodeId(lat, log);
+        futureNodes.remove(currentVertex);
+        nextVertex = getClosestNode();
+        if(nextVertex == null){
+            nextVertex = "entrance_exit_gate";
+        }
+    }
+
+    // call it only from persistence
     public ZooNavigator(List<String> ids, Router router){
         // immutable hash code
         setInitialPlanListHashCode(ids);
@@ -37,12 +55,15 @@ public class ZooNavigator implements Serializable {
         pastNodes = new ArrayList<>();
         planList = new ArrayList<>(ids);
         futureNodes = new ArrayList<>(ids);
-        planList.add("entrance_exit_gate");
-        currentVertex = "entrance_exit_gate";
         nextVertex = getClosestNode();
         if(nextVertex == null){
             nextVertex = "entrance_exit_gate";
         }
+    }
+
+
+    public String getStartNodeId(double lat, double log) {
+        return router.getNearestNode(lat, log, planList);
     }
 
     public int getInitialPlanListHashCode() {
@@ -111,7 +132,7 @@ public class ZooNavigator implements Serializable {
     }
 
     public String shouldReroute(double latitude, double longitude) {
-        return router.shouldReroute(planList, currentVertex, nextVertex, latitude, longitude);
+        return router.shouldReroute(futureNodes, currentVertex, nextVertex, latitude, longitude);
     }
 
     public void reroute(String id){
@@ -149,15 +170,20 @@ public class ZooNavigator implements Serializable {
     public String getRoutePreview(){
 
         List<String> routePreviewList = new ArrayList<>();
-        for(String pNode : pastNodes){
-            routePreviewList.add(pNode);
-        }
-        routePreviewList.add(currentVertex);
+//        for(String pNode : pastNodes){
+//            routePreviewList.add(pNode);
+//        }
+//        routePreviewList.add(currentVertex);
+//        routePreviewList.add(nextVertex);
+//        for(String fNode : futureNodes){
+//            routePreviewList.add(fNode);
+//        }
+//        routePreviewList.remove("entrance_exit_gate");
         routePreviewList.add(nextVertex);
-        for(String fNode : futureNodes){
+        for (String fNode : futureNodes) {
             routePreviewList.add(fNode);
         }
-        routePreviewList.remove("entrance_exit_gate");
-        return router.routePreview("entrance_exit_gate", "entrance_exit_gate", routePreviewList);
+
+        return router.routePreview(currentVertex, "entrance_exit_gate", routePreviewList);
     }
 }

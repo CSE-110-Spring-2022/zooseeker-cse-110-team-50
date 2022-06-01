@@ -47,6 +47,17 @@ public class Router implements Serializable {
         this.metaNodeMap = graphWithInfo.second;
     }
 
+    public String getNearestNode(double lat, double log, List<String> nodeSet) {
+        Point2D currentLocation = new Point2D(lat, log);
+        List<Point2D> nodeSetCoords = nodeSet
+                .stream()
+                .map(nodeId -> metaNodeMap.get(nodeId).getPoint2DCoord())
+                .collect(Collectors.toList());
+
+        Pair<Double, Integer> closestNodeInfo = NearestObjectUtil.nearestPoint(currentLocation, nodeSetCoords);
+        return nodeSet.get(closestNodeInfo.second);
+    }
+
     public GraphPath<MetaNode, EdgeWithId> shortestGraphPath(String source, String target) {
         DijkstraShortestPath<MetaNode, EdgeWithId> dijkstraShortestPath =
                 new DijkstraShortestPath<MetaNode, EdgeWithId>(graph);
@@ -68,19 +79,16 @@ public class Router implements Serializable {
         );
     }
 
-    public String shouldReroute(List<String> planList, String current, String next, double lat, double lon) {
-
+    public String shouldReroute(List<String> futureNodes, String current, String next, double lat, double lon) {
 
         Point2D currentLocation = new Point2D(lat, lon);
 
         // Get all nodes that aren't planned
-        List<Point2D> notPlannedNodes = new ArrayList<>();
-        List<String> notPlannedNodeIds = new ArrayList<>();
-        for (String nodeId : metaNodeMap.keySet()) {
-            if (!planList.contains(nodeId)) {
-                notPlannedNodes.add(metaNodeMap.get(nodeId).getPoint2DCoord());
-                notPlannedNodeIds.add(nodeId);
-            }
+        List<String> futureNodeIds = new ArrayList<>(futureNodes);
+        List<Point2D> futureNodePoint2Ds = new ArrayList<>();
+
+        for (String nodeId : futureNodes) {
+            futureNodePoint2Ds.add(metaNodeMap.get(nodeId).getPoint2DCoord());
         }
 
         // Get EdgeSegments of current path
@@ -93,14 +101,14 @@ public class Router implements Serializable {
 
         //
         Pair<Double, Integer> nearestUnvisitedNode
-                = NearestObjectUtil.nearestPoint(currentLocation, notPlannedNodes);
+                = NearestObjectUtil.nearestPoint(currentLocation, futureNodePoint2Ds);
 
         Pair<Double, Integer> nearestEdge
                 = NearestObjectUtil.nearestLineSegment(currentLocation, edgeSegments);
 
         // reroute
         if (nearestUnvisitedNode.first < nearestEdge.first)
-            return notPlannedNodeIds.get(nearestUnvisitedNode.second);
+            return futureNodeIds.get(nearestUnvisitedNode.second);
         // don't reroute
         else
             return null;
