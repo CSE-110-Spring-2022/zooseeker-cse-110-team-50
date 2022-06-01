@@ -154,7 +154,8 @@ public class ZooNavigator implements Serializable {
     }
 
     public String shouldReroute(double latitude, double longitude) {
-        return router.shouldReroute(planList, currentVertex, nextVertex, latitude, longitude);
+        if (futureNodes.size() == 0) return null;
+        return router.shouldReroute(futureNodes, currentVertex, nextVertex, latitude, longitude);
     }
 
     public void reroute(String id){

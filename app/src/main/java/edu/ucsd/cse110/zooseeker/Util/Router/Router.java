@@ -68,20 +68,26 @@ public class Router implements Serializable {
         );
     }
 
-    public String shouldReroute(List<String> planList, String current, String next, double lat, double lon) {
-
-
+    public String shouldReroute(List<String> nodeSet, String current, String next, double lat, double lon) {
         Point2D currentLocation = new Point2D(lat, lon);
 
-        // Get all nodes that aren't planned
-        List<Point2D> notPlannedNodes = new ArrayList<>();
-        List<String> notPlannedNodeIds = new ArrayList<>();
-        for (String nodeId : metaNodeMap.keySet()) {
-            if (!planList.contains(nodeId)) {
-                notPlannedNodes.add(metaNodeMap.get(nodeId).getPoint2DCoord());
-                notPlannedNodeIds.add(nodeId);
-            }
+        List<String> nodeIdSet = new ArrayList<>(nodeSet);
+        List<Point2D> nodeSetCoords = new ArrayList<>();
+
+        for (String nodeId : nodeIdSet) {
+            nodeSetCoords.add(metaNodeMap.get(nodeId).getPoint2DCoord());
         }
+
+
+        // Get all nodes that aren't planned
+//        List<Point2D> notPlannedNodes = new ArrayList<>();
+//        List<String> notPlannedNodeIds = new ArrayList<>();
+//        for (String nodeId : metaNodeMap.keySet()) {
+//            if (!planList.contains(nodeId)) {
+//                notPlannedNodes.add(metaNodeMap.get(nodeId).getPoint2DCoord());
+//                notPlannedNodeIds.add(nodeId);
+//            }
+//        }
 
         // Get EdgeSegments of current path
         GraphPath<MetaNode, EdgeWithId> path = shortestGraphPath(current, next);
@@ -91,16 +97,15 @@ public class Router implements Serializable {
                 .map((EdgeWithId::getEdgeSegment))
                 .collect(Collectors.toList());
 
-        //
         Pair<Double, Integer> nearestUnvisitedNode
-                = NearestObjectUtil.nearestPoint(currentLocation, notPlannedNodes);
+                = NearestObjectUtil.nearestPoint(currentLocation, nodeSetCoords);
 
         Pair<Double, Integer> nearestEdge
                 = NearestObjectUtil.nearestLineSegment(currentLocation, edgeSegments);
 
         // reroute
         if (nearestUnvisitedNode.first < nearestEdge.first)
-            return notPlannedNodeIds.get(nearestUnvisitedNode.second);
+            return nodeIdSet.get(nearestUnvisitedNode.second);
         // don't reroute
         else
             return null;
