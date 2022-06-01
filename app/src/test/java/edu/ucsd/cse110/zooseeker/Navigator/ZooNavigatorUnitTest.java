@@ -128,7 +128,7 @@ public class ZooNavigatorUnitTest {
 
     @Test
     /**
-     * Tests persistence of ZooNavigator
+     * Tests persistence of ZooNavigator, restarts activity
      */
     public void testNavigatorPersistence(){
         ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class);
