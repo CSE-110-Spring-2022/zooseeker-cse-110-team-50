@@ -46,6 +46,22 @@ public class ZooNavigator implements Serializable {
         }
     }
 
+    public ZooNavigator(List<String> ids, Router router){
+        // immutable hash code
+        setInitialPlanListHashCode(ids);
+
+        this.router = router;
+        pastNodes = new ArrayList<>();
+        planList = new ArrayList<>(ids);
+        futureNodes = new ArrayList<>(ids);
+        planList.add("entrance_exit_gate");
+        currentVertex = "entrance_exit_gate";
+        nextVertex = getClosestNode();
+        if(nextVertex == null){
+            nextVertex = "entrance_exit_gate";
+        }
+    }
+
     // Call only from ZooNavigatorJsonMapper
     public ZooNavigator(
             List<String> ids,
