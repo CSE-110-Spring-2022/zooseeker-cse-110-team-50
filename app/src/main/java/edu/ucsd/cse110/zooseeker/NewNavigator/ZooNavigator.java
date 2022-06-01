@@ -147,7 +147,16 @@ public class ZooNavigator implements Serializable {
     }
 
     public String getRoutePreview(){
-        List<String> routePreviewList = new ArrayList<>(planList);
+
+        List<String> routePreviewList = new ArrayList<>();
+        for(String pNode : pastNodes){
+            routePreviewList.add(pNode);
+        }
+        routePreviewList.add(currentVertex);
+        routePreviewList.add(nextVertex);
+        for(String fNode : futureNodes){
+            routePreviewList.add(fNode);
+        }
         routePreviewList.remove("entrance_exit_gate");
         return router.routePreview("entrance_exit_gate", "entrance_exit_gate", routePreviewList);
     }
