@@ -206,7 +206,7 @@ public class Router implements Serializable {
         return PathStringRepresentation.toStringPreview(graphPathList, toVisit);
 
     }
-    
+
     public Pair<List<EdgeWithId>, Double> shortestPathWithDistance(String node1Id, String node2Id) {
         GraphPath<MetaNode, EdgeWithId> graphPath = this.shortestGraphPath(node1Id, node2Id);
         return new Pair<>(graphPath.getEdgeList(), graphPath.getWeight());
@@ -216,5 +216,5 @@ public class Router implements Serializable {
         GraphPath<MetaNode, EdgeWithId> graphPath = this.shortestGraphPath(node1Id, node2Id);
         return graphPath.getEdgeList();
     }
-
+ 
 }
