@@ -88,6 +88,7 @@ public class PlanFragment extends Fragment{
     public RecyclerView getPlanView() { return planList; }
 
     public void startPlan(View view){
+        if (planViewModel.getPlanCount() == 0) return;
         Intent intent = new Intent(getActivity(), RouteActivity.class);
         startActivity(intent);
     }

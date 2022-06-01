@@ -79,7 +79,7 @@ public class ZooNavigatorUnitTest {
                 JSONLoader.loadTestRawGraph(context, "test/t1-ms1-delivery/sample_zoo_graph.json")
         );
         assertNotNull(router);
-        this.zooNavigator = new ZooNavigator(ids, router);
+        this.zooNavigator = new ZooNavigator(ids, router, 0, 0);
     }
 
     @After
