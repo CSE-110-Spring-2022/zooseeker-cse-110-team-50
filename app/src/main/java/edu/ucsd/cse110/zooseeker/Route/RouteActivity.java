@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,13 +14,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.Arrays;
+import java.util.List;
+
 import edu.ucsd.cse110.zooseeker.Location.LocationModel;
 import edu.ucsd.cse110.zooseeker.Location.LocationPermissionChecker;
 import edu.ucsd.cse110.zooseeker.Persistence.MainDatabase;
 import edu.ucsd.cse110.zooseeker.Persistence.PlanItemDao;
 import edu.ucsd.cse110.zooseeker.R;
 import edu.ucsd.cse110.zooseeker.RouteSummary.RouteSummary;
-import edu.ucsd.cse110.zooseeker.Util.Router.Router;
 
 
 public class RouteActivity extends AppCompatActivity implements GPSSettingDialogFragment.DialogListener{
@@ -38,6 +42,7 @@ public class RouteActivity extends AppCompatActivity implements GPSSettingDialog
     TextView routeLatitude;
     TextView routeLongitude;
     TextView uiMessage;
+    TextView locationPermission;
     Button gpsSettingButton;
     Button nextButton;
     Button skipButton;
@@ -46,6 +51,8 @@ public class RouteActivity extends AppCompatActivity implements GPSSettingDialog
     Button toggleDirectionsButton;
     Button deleteAllButton;
     Button rerouteButton;
+
+    LocationPermissionChecker locationPermissionChecker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +71,7 @@ public class RouteActivity extends AppCompatActivity implements GPSSettingDialog
         toTextView = findViewById(R.id.route_to_text);
         routeLatitude = findViewById(R.id.route_latitude);
         routeLongitude = findViewById(R.id.route_longitude);
+        locationPermission = findViewById(R.id.route_permission);
         gpsSettingButton = findViewById(R.id.route_gps_setting_button);
         nextButton = findViewById(R.id.route_next_button);
         backButton = findViewById(R.id.route_back_button);
@@ -74,18 +82,13 @@ public class RouteActivity extends AppCompatActivity implements GPSSettingDialog
         rerouteButton = findViewById(R.id.route_reroute_button);
         uiMessage = findViewById(R.id.route_ui_message);
 
-        // Get location permission from user
-        LocationPermissionChecker locationPermissionChecker = new LocationPermissionChecker(this);
-        boolean perm = locationPermissionChecker.ensurePermissions();
-        Log.d("ROUTE ACTIVITY", "" + perm);
-
         // ViewModels
         routeViewModel = new ViewModelProvider(this).get(RouteViewModel.class);
         locationModel = new ViewModelProvider(this).get(LocationModel.class);
-        var provider = LocationManager.GPS_PROVIDER;
-        var locationManager = (LocationManager) getSystemService(this.LOCATION_SERVICE);
-        locationModel.addLocationProviderSource(locationManager, provider);
 
+        // Get location permission from user
+        locationPermissionChecker = new LocationPermissionChecker(this);
+        askForLocationPermission();
 
         locationModel.getLastKnownCoords().observe(this, lastKnownCoord -> {
             Log.d("ROUTE ACTIVITY", "" + lastKnownCoord.lat + "" + lastKnownCoord.lng);
@@ -93,7 +96,7 @@ public class RouteActivity extends AppCompatActivity implements GPSSettingDialog
         });
 
         routeViewModel.getIsDirectionDetailed().observe(this, isDirectionDetailed -> {
-            String btnText = isDirectionDetailed ? "Detailed\nDirections" : "Brief\nDirections";
+            String btnText = !isDirectionDetailed ? "Detailed\nDirections" : "Brief\nDirections";
             toggleDirectionsButton.setText(btnText);
         });
 
@@ -189,6 +192,39 @@ public class RouteActivity extends AppCompatActivity implements GPSSettingDialog
         startActivity(intent);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        List<String> permList = Arrays.asList(permissions);
+        int fineLocationGranted = permList.indexOf(Manifest.permission.ACCESS_FINE_LOCATION);
+//        int coarseLocationGranted = permList.indexOf(Manifest.permission.ACCESS_COARSE_LOCATION);
+
+        // if permission granted
+        if(fineLocationGranted != -1 &&
+                grantResults[fineLocationGranted] == PackageManager.PERMISSION_GRANTED) {
+            addLocationProvider();
+            locationPermission.setText("Granted");
+        }
+        else if (fineLocationGranted != -1 &&
+                grantResults[fineLocationGranted] == PackageManager.PERMISSION_DENIED) {
+            locationPermission.setText("Denied");
+            routeViewModel.setIsLocationMocked(false);
+        }
+    }
+
+    private void addLocationProvider() {
+        var provider = LocationManager.GPS_PROVIDER;
+        var locationManager = (LocationManager) getSystemService(this.LOCATION_SERVICE);
+        locationModel.addLocationProviderSource(locationManager, provider);
+    }
+
+    private void askForLocationPermission() {
+        boolean isPermissionAlreadyGranted = locationPermissionChecker.ensurePermissions();
+        locationPermission.setText(isPermissionAlreadyGranted ? "Granted" : "Denied");
+        if (isPermissionAlreadyGranted)
+            addLocationProvider();
+    }
+
     public void showGPSSettingDialog() {
         boolean isMock = routeViewModel.getIsLocationMocked().getValue();
         double lat = routeViewModel.getCurrentLocationCoordinate().getValue().first;
@@ -197,12 +233,15 @@ public class RouteActivity extends AppCompatActivity implements GPSSettingDialog
         dialog.show(getSupportFragmentManager(), "GPSSettingDialog");
     }
 
-
     @Override
     public void onDialogPositiveClick(DialogFragment dialog, boolean isMock, double latitude, double longitude) {
         routeViewModel.setIsLocationMocked(isMock);
         if (isMock) {
             routeViewModel.setMockCurrentLocationCoordinate(latitude, longitude);
+        }
+        // if not mock, ensure location permission
+        else {
+            askForLocationPermission();
         }
     }
 

@@ -30,7 +30,8 @@ public class LocationPermissionChecker {
         });
     }
 
-    //Sets up permissions for location
+    // Sets up permissions for location
+    // return true if permission granted false if not
     public boolean ensurePermissions() {
         var requiredPermissions = new String[]{
                 Manifest.permission.ACCESS_FINE_LOCATION,
@@ -41,12 +42,12 @@ public class LocationPermissionChecker {
                 .map(perm -> ContextCompat.checkSelfPermission(activity, perm))
                 .allMatch(status -> status == PackageManager.PERMISSION_DENIED);
 
-        if (hasNoLocationPerms) {
-            requestPermissionLauncher.launch(requiredPermissions);
-            // Note: the activity will be restarted when permission change!
-            // This entire method will be re-run, but we won't get stuck here.
+        if (!hasNoLocationPerms)
             return true;
-        }
-        return false;
+
+        // Does not already have permission so request it
+        requestPermissionLauncher.launch(requiredPermissions);
+
+        return false; // Doesn't have permission yet
     }
 }

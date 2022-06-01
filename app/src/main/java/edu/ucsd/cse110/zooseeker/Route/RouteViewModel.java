@@ -89,7 +89,8 @@ public class RouteViewModel extends AndroidViewModel {
         uiMessage = new MutableLiveData<>("");
         enableReroute = new MutableLiveData<>(false);
         resetUiMessage();
-        setCurrentLocationCoordinate(17.123124123, 17.8787);
+        // set default location to Entrance Exit Gate
+        setCurrentLocationCoordinate(32.73561, -117.14936);
     }
 
     private ZooNavigatorJsonMapper retrieveSerializedZooNavigatorMapper() {
@@ -175,7 +176,7 @@ public class RouteViewModel extends AndroidViewModel {
     }
 
     public void shouldRerouteThrottled(double lat, double log) {
-        int THROTTLE_THRESHOLD = 100;
+        int THROTTLE_THRESHOLD = 5;
         if (SHOULD_REROUTE_THROTTLE % THROTTLE_THRESHOLD == 0) {
             shouldReroute(lat, log);
             SHOULD_REROUTE_THROTTLE = 0;
