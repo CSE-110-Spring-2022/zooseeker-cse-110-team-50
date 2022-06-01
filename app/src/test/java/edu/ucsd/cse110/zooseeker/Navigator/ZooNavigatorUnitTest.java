@@ -7,7 +7,9 @@ import static org.junit.Assert.assertNotNull;
 import android.app.Application;
 
 import androidx.room.Room;
+import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -122,5 +124,20 @@ public class ZooNavigatorUnitTest {
         zooNavigator.skip();
         String skipNode2 = zooNavigator.getNextNode();
         Assert.assertEquals("hippo",skipNode2);
+    }
+
+    @Test
+    /**
+     * Tests persistence of ZooNavigator, restarts activity
+     */
+    public void testNavigatorPersistence(){
+        ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class);
+        scenario.onActivity(activity ->{
+            String currV = zooNavigator.getCurrNode();
+            String nextV = zooNavigator.getNextNode();
+           scenario.recreate();
+           Assert.assertEquals(currV,zooNavigator.getCurrNode());
+           Assert.assertEquals(nextV,zooNavigator.getNextNode());
+        });
     }
 }
