@@ -47,6 +47,18 @@ public class Router implements Serializable {
         this.metaNodeMap = graphWithInfo.second;
     }
 
+
+    public String getNearestNode(double lat, double log, List<String> nodeSet) {
+        Point2D currentLocation = new Point2D(lat, log);
+        List<Point2D> nodeSetCoords = nodeSet
+                .stream()
+                .map(nodeId -> metaNodeMap.get(nodeId).getPoint2DCoord())
+                .collect(Collectors.toList());
+
+        Pair<Double, Integer> closestNodeInfo = NearestObjectUtil.nearestPoint(currentLocation, nodeSetCoords);
+        return nodeSet.get(closestNodeInfo.second);
+    }
+
     public GraphPath<MetaNode, EdgeWithId> shortestGraphPath(String source, String target) {
         DijkstraShortestPath<MetaNode, EdgeWithId> dijkstraShortestPath =
                 new DijkstraShortestPath<MetaNode, EdgeWithId>(graph);

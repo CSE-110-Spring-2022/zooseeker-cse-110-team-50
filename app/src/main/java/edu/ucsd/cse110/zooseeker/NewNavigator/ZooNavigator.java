@@ -37,8 +37,8 @@ public class ZooNavigator implements Serializable {
         pastNodes = new ArrayList<>();
         planList = new ArrayList<>(ids);
         futureNodes = new ArrayList<>(ids);
-        currentVertex = planList.get(0);
-//        currentVertex = getStartNode(lat, log);
+//        currentVertex = planList.get(0);
+        currentVertex = getStartNode(lat, log, ids);
         futureNodes.remove(currentVertex);
         nextVertex = getClosestNode();
         if(nextVertex == null){
@@ -46,6 +46,7 @@ public class ZooNavigator implements Serializable {
         }
     }
 
+    // only for testing
     public ZooNavigator(List<String> ids, Router router){
         // immutable hash code
         setInitialPlanListHashCode(ids);
@@ -84,8 +85,12 @@ public class ZooNavigator implements Serializable {
         }
     }
 
-    private String getStartNode(double lat, double log) {
-        return "";
+    private String getStartNode(double lat, double log, List<String> planList) {
+        String start = router.getNearestNode(lat, log, planList);
+        if (start == null || !planList.contains(start)) {
+            return planList.get(0);
+        }
+        return start;
     }
 
     public int getInitialPlanListHashCode() {

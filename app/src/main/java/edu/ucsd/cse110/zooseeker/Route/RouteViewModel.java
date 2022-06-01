@@ -67,14 +67,23 @@ public class RouteViewModel extends AndroidViewModel {
         uiMessage = new MutableLiveData<>("");
         enableReroute = new MutableLiveData<>(false);
         resetUiMessage();
-        // set default location to Entrance Exit Gate
-        setCurrentLocationCoordinate(32.73561, -117.14936);
-
         double currLat = 32.73561, currLog = -117.14936;
+
+
 
         // Initialize SharePreference file
         zooNavigatorPref =
                 application.getSharedPreferences("ZooNavigator", Context.MODE_PRIVATE);
+
+        try {
+            SharedPreferences locPref = application.getSharedPreferences("LOC", Context.MODE_PRIVATE);
+            currLat = Double.parseDouble(locPref.getString("lat", "32.73561"));
+            currLog = Double.parseDouble(locPref.getString("log", "-117.14936"));
+        }
+        catch (Exception e) { e.printStackTrace(); }
+
+        // set default location to Entrance Exit Gate
+        setCurrentLocationCoordinate(currLat, currLog);
 
         // initialize new router
         Router router = new Router(getApplication());
