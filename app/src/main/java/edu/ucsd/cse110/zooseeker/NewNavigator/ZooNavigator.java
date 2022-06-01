@@ -197,7 +197,9 @@ public class ZooNavigator implements Serializable {
             routePreviewList.add(pNode);
         }
         routePreviewList.add(currentVertex);
-        routePreviewList.add(nextVertex);
+        if(!nextVertex.equals("entrance_exit_gate")){
+            routePreviewList.add(nextVertex);
+        }
         for(String fNode : futureNodes){
             routePreviewList.add(fNode);
         }

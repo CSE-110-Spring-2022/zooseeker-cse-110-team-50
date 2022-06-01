@@ -1,5 +1,7 @@
 package edu.ucsd.cse110.zooseeker.Util.Router;
 
+import android.util.Log;
+
 import org.jgrapht.GraphPath;
 
 import java.io.Serializable;
@@ -76,6 +78,7 @@ public class PathStringRepresentation implements Serializable {
         String stringRep = "";
 
         if (graphPaths.isEmpty()) {
+            Log.d("reached here in graph paths empty", "here");
             return stringRep;
         }
 

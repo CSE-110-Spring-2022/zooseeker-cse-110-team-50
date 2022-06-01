@@ -148,6 +148,7 @@ public class Router implements Serializable {
         List<GraphPath<MetaNode, EdgeWithId>> graphPathList = new ArrayList<>();
 
         if (toVisit.isEmpty()) {
+            graphPathList.add(shortestGraphPath(source, target));
             return graphPathList;
         }
 
